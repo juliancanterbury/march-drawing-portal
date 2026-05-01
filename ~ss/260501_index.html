@@ -87,7 +87,7 @@
     </nav>
     <div class="filterCard">
       LIVE GOOGLE DRIVE FEED
-      <p style="color:#bbb;line-height:1.45">Architectural tab reads directly from your Apps Script / Drive folder.</p>
+      <p style="color:#bbb;line-height:1.45">Architectural and Structural tabs read directly from Google Drive.</p>
     </div>
   </aside>
 
@@ -184,15 +184,31 @@
   - the script editor URL
   - the script.googleusercontent.com temporary echo URL
 */
-const ARCHITECTURAL_API_URL = "https://script.google.com/macros/s/AKfycbznKNG9TJuo3iFBruwAAvEUHmW1-eSS1ZhHNkih8yxcDWM5ZixKYHBlyswtPru3iZtD/exec";
+const DISCIPLINE_APIS = {
+  Architectural: "https://script.google.com/macros/s/AKfycbznKNG9TJuo3iFBruwAAvEUHmW1-eSS1ZhHNkih8yxcDWM5ZixKYHBlyswtPru3iZtD/exec",
+  Structural: "https://script.google.com/macros/s/AKfycbz3iYE9P4NhvBYgV3Bu2OM3dA0l0YotAAmpgshUAYbY_kFr0ZAhmRilNw-k2YdW6P5BCA/exec",
+  Mechanical: "https://script.google.com/macros/s/AKfycbzusG78e7519ZXo7qk9hSbix9mJ_aSv2lE2UdoOyNZDNbAEAO3pbTsZ8xl8e8DrN6CYmg/exec",
+  Landscape: "https://script.google.com/macros/s/AKfycbzKwLXtAnNTNqULUNvb2QuW9G5zTDk0Y2voYeHY7cvqacZTrDtHQeh1oIcDNR5qi8XxGA/exec",
+  Hydraulic: "https://script.google.com/macros/s/AKfycbyFBdFCWIEJq3RoYQ2IUoEWLpbkSPK31_lr4tAR26yH3h5UBD2EMoiVx3Fdfhwmow-Q/exec",
+  Electrical: "https://script.google.com/macros/s/AKfycbxDYp7xfy0lmwbGYaGNKGQs2hbt3YecQZo_R_c-dpA4ynVPqbF4H-Y5p4Bgo4scFLSN/exec",
+  Civil: "https://script.google.com/macros/s/AKfycbyAEuqtQTurIlQQcv3RDjJXOYQ_N8Tu9SNSuFjamDDDf9-ty8o8WMHFbbshXRWfUBxf/exec"
+};
 
-const disciplines = ['Architectural','Structural','Civil','Mechanical','Electrical','Other'];
-
+const disciplines = [
+  'Architectural',
+  'Structural',
+  'Civil',
+  'Mechanical',
+  'Electrical',
+  'Hydraulic',
+  'Landscape',
+  'Other'
+];
 let active = 'Architectural';
 let current = null;
 let selected = new Set();
 let audit = ['Portal opened by client@example.com'];
-let architecturalDrawings = [];
+let liveDrawings = {};
 let fallbackDrawings = [
   {d:'Structural',no:'S001',title:'Structural Notes',rev:'-',date:'-',status:'Current',preview:'assets/drawings/S001.svg',download:'#',notes:'Mock structural placeholder.'},
   {d:'Structural',no:'S101',title:'Framing Plan',rev:'-',date:'-',status:'Current',preview:'assets/drawings/S101.svg',download:'#',notes:'Mock structural placeholder.'},
@@ -208,7 +224,7 @@ function init(){
   ).join('');
   renderRows();
   renderAudit();
-  loadArchitecturalFromAPI();
+  loadDisciplineFromAPI('Architectural');
 }
 
 function setDisc(d){
@@ -219,11 +235,17 @@ function setDisc(d){
     `<button class="${x===active?'active':''}" onclick="setDisc('${x}')">${x}</button>`
   ).join('');
   renderRows();
+
+  if(DISCIPLINE_APIS[d] && !liveDrawings[d]){
+    loadDisciplineFromAPI(d);
+    return;
+  }
+
   const first = filtered()[0];
   if(first) selectDrawing(first);
 }
 
-function parseDrawing(file){
+function parseDrawing(file, discipline){
   const name = file.name || 'Untitled.pdf';
   const clean = name.replace(/\.pdf$/i,'');
   const parts = clean.split(' - ');
@@ -235,7 +257,7 @@ function parseDrawing(file){
   if(revMatch) rev = revMatch[1];
 
   return {
-    d:'Architectural',
+    d:discipline,
     no:no,
     title:title,
     rev:rev,
@@ -249,44 +271,55 @@ function parseDrawing(file){
   };
 }
 
-function loadArchitecturalFromAPI(){
-  if(!ARCHITECTURAL_API_URL || ARCHITECTURAL_API_URL.includes('PASTE_YOUR_APPS_SCRIPT')){
-    showApiMessage('Paste your Apps Script /exec URL into index.html, then commit and push.');
-    architecturalDrawings = [{
-      d:'Architectural', no:'API', title:'Paste your Apps Script URL into index.html', rev:'-', date:'-', status:'Current',
-      preview:'assets/drawings/A000.svg', download:'#', notes:'Waiting for Apps Script URL.'
-    }];
-    renderRows();
-    selectDrawing(architecturalDrawings[0]);
+function loadDisciplineFromAPI(discipline){
+  const apiUrl = DISCIPLINE_APIS[discipline];
+
+  if(!apiUrl){
     return;
   }
 
-  showApiMessage('Loading architectural PDFs from Google Drive...');
+  showApiMessage('Loading ' + discipline + ' PDFs from Google Drive...');
 
-  fetch(ARCHITECTURAL_API_URL)
+  fetch(apiUrl)
     .then(res => {
       if(!res.ok) throw new Error('HTTP ' + res.status);
       return res.json();
     })
     .then(data => {
       if(!Array.isArray(data)) throw new Error('API did not return a JSON array.');
-      architecturalDrawings = data.map(parseDrawing).sort((a,b)=>a.no.localeCompare(b.no, undefined, {numeric:true}));
+
+      liveDrawings[discipline] = data.map(file => parseDrawing(file, discipline))
+        .sort((a,b)=>a.no.localeCompare(b.no, undefined, {numeric:true}));
+
       document.getElementById('errorBox').innerHTML = '';
 
-      if(active === 'Architectural'){
+      if(active === discipline){
         renderRows();
-        if(architecturalDrawings.length) selectDrawing(architecturalDrawings[0]);
-        else showApiMessage('The API worked, but no PDFs were found in the Architectural folder.');
+        if(liveDrawings[discipline].length) {
+          selectDrawing(liveDrawings[discipline][0]);
+        } else {
+          showApiMessage('The API worked, but no PDFs were found in the ' + discipline + ' folder.');
+        }
       }
     })
     .catch(err => {
-      architecturalDrawings = [{
-        d:'Architectural', no:'ERROR', title:'Could not load Google Drive folder', rev:'-', date:'-', status:'Current',
-        preview:'assets/drawings/A000.svg', download:'#', notes:String(err)
+      liveDrawings[discipline] = [{
+        d:discipline,
+        no:'ERROR',
+        title:'Could not load Google Drive folder',
+        rev:'-',
+        date:'-',
+        status:'Current',
+        preview:'assets/drawings/A000.svg',
+        download:'#',
+        notes:String(err)
       }];
-      renderRows();
-      selectDrawing(architecturalDrawings[0]);
-      showApiMessage('Could not load the Google Drive API. Check the Apps Script deployment URL, permissions, and that the URL ends in /exec. Error: ' + err.message);
+
+      if(active === discipline){
+        renderRows();
+        selectDrawing(liveDrawings[discipline][0]);
+        showApiMessage('Could not load the ' + discipline + ' Google Drive API. Check the Apps Script deployment URL, permissions, and that the URL ends in /exec. Error: ' + err.message);
+      }
     });
 }
 
@@ -295,7 +328,7 @@ function showApiMessage(msg){
 }
 
 function filtered(){
-  if(active === 'Architectural') return architecturalDrawings;
+  if(DISCIPLINE_APIS[active]) return liveDrawings[active] || [];
   return fallbackDrawings.filter(x => x.d === active);
 }
 
