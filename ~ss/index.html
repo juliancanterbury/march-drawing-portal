@@ -87,7 +87,7 @@
     </nav>
     <div class="filterCard">
       LIVE GOOGLE DRIVE FEED
-      <p style="color:#bbb;line-height:1.45">Architectural and Structural tabs read directly from Google Drive.</p>
+      <p style="color:#bbb;line-height:1.45">Architectural tab reads directly from your Apps Script / Drive folder.</p>
     </div>
   </aside>
 
@@ -184,10 +184,7 @@
   - the script editor URL
   - the script.googleusercontent.com temporary echo URL
 */
-const DISCIPLINE_APIS = {
-  Architectural: "https://script.google.com/macros/s/AKfycbznKNG9TJuo3iFBruwAAvEUHmW1-eSS1ZhHNkih8yxcDWM5ZixKYHBlyswtPru3iZtD/exec",
-  Structural: "https://script.google.com/macros/s/AKfycbz3iYE9P4NhvBYgV3Bu2OM3dA0l0YotAAmpgshUAYbY_kFr0ZAhmRilNw-k2YdW6P5BCA/exec"
-};
+const ARCHITECTURAL_API_URL = "https://script.google.com/macros/s/AKfycbznKNG9TJuo3iFBruwAAvEUHmW1-eSS1ZhHNkih8yxcDWM5ZixKYHBlyswtPru3iZtD/exec";
 
 const disciplines = ['Architectural','Structural','Civil','Mechanical','Electrical','Other'];
 
@@ -195,7 +192,7 @@ let active = 'Architectural';
 let current = null;
 let selected = new Set();
 let audit = ['Portal opened by client@example.com'];
-let liveDrawings = {};
+let architecturalDrawings = [];
 let fallbackDrawings = [
   {d:'Structural',no:'S001',title:'Structural Notes',rev:'-',date:'-',status:'Current',preview:'assets/drawings/S001.svg',download:'#',notes:'Mock structural placeholder.'},
   {d:'Structural',no:'S101',title:'Framing Plan',rev:'-',date:'-',status:'Current',preview:'assets/drawings/S101.svg',download:'#',notes:'Mock structural placeholder.'},
@@ -211,7 +208,7 @@ function init(){
   ).join('');
   renderRows();
   renderAudit();
-  loadDisciplineFromAPI('Architectural');
+  loadArchitecturalFromAPI();
 }
 
 function setDisc(d){
@@ -222,17 +219,11 @@ function setDisc(d){
     `<button class="${x===active?'active':''}" onclick="setDisc('${x}')">${x}</button>`
   ).join('');
   renderRows();
-
-  if(DISCIPLINE_APIS[d] && !liveDrawings[d]){
-    loadDisciplineFromAPI(d);
-    return;
-  }
-
   const first = filtered()[0];
   if(first) selectDrawing(first);
 }
 
-function parseDrawing(file, discipline){
+function parseDrawing(file){
   const name = file.name || 'Untitled.pdf';
   const clean = name.replace(/\.pdf$/i,'');
   const parts = clean.split(' - ');
@@ -244,7 +235,7 @@ function parseDrawing(file, discipline){
   if(revMatch) rev = revMatch[1];
 
   return {
-    d:discipline,
+    d:'Architectural',
     no:no,
     title:title,
     rev:rev,
@@ -258,55 +249,44 @@ function parseDrawing(file, discipline){
   };
 }
 
-function loadDisciplineFromAPI(discipline){
-  const apiUrl = DISCIPLINE_APIS[discipline];
-
-  if(!apiUrl){
+function loadArchitecturalFromAPI(){
+  if(!ARCHITECTURAL_API_URL || ARCHITECTURAL_API_URL.includes('PASTE_YOUR_APPS_SCRIPT')){
+    showApiMessage('Paste your Apps Script /exec URL into index.html, then commit and push.');
+    architecturalDrawings = [{
+      d:'Architectural', no:'API', title:'Paste your Apps Script URL into index.html', rev:'-', date:'-', status:'Current',
+      preview:'assets/drawings/A000.svg', download:'#', notes:'Waiting for Apps Script URL.'
+    }];
+    renderRows();
+    selectDrawing(architecturalDrawings[0]);
     return;
   }
 
-  showApiMessage('Loading ' + discipline + ' PDFs from Google Drive...');
+  showApiMessage('Loading architectural PDFs from Google Drive...');
 
-  fetch(apiUrl)
+  fetch(ARCHITECTURAL_API_URL)
     .then(res => {
       if(!res.ok) throw new Error('HTTP ' + res.status);
       return res.json();
     })
     .then(data => {
       if(!Array.isArray(data)) throw new Error('API did not return a JSON array.');
-
-      liveDrawings[discipline] = data.map(file => parseDrawing(file, discipline))
-        .sort((a,b)=>a.no.localeCompare(b.no, undefined, {numeric:true}));
-
+      architecturalDrawings = data.map(parseDrawing).sort((a,b)=>a.no.localeCompare(b.no, undefined, {numeric:true}));
       document.getElementById('errorBox').innerHTML = '';
 
-      if(active === discipline){
+      if(active === 'Architectural'){
         renderRows();
-        if(liveDrawings[discipline].length) {
-          selectDrawing(liveDrawings[discipline][0]);
-        } else {
-          showApiMessage('The API worked, but no PDFs were found in the ' + discipline + ' folder.');
-        }
+        if(architecturalDrawings.length) selectDrawing(architecturalDrawings[0]);
+        else showApiMessage('The API worked, but no PDFs were found in the Architectural folder.');
       }
     })
     .catch(err => {
-      liveDrawings[discipline] = [{
-        d:discipline,
-        no:'ERROR',
-        title:'Could not load Google Drive folder',
-        rev:'-',
-        date:'-',
-        status:'Current',
-        preview:'assets/drawings/A000.svg',
-        download:'#',
-        notes:String(err)
+      architecturalDrawings = [{
+        d:'Architectural', no:'ERROR', title:'Could not load Google Drive folder', rev:'-', date:'-', status:'Current',
+        preview:'assets/drawings/A000.svg', download:'#', notes:String(err)
       }];
-
-      if(active === discipline){
-        renderRows();
-        selectDrawing(liveDrawings[discipline][0]);
-        showApiMessage('Could not load the ' + discipline + ' Google Drive API. Check the Apps Script deployment URL, permissions, and that the URL ends in /exec. Error: ' + err.message);
-      }
+      renderRows();
+      selectDrawing(architecturalDrawings[0]);
+      showApiMessage('Could not load the Google Drive API. Check the Apps Script deployment URL, permissions, and that the URL ends in /exec. Error: ' + err.message);
     });
 }
 
@@ -315,7 +295,7 @@ function showApiMessage(msg){
 }
 
 function filtered(){
-  if(DISCIPLINE_APIS[active]) return liveDrawings[active] || [];
+  if(active === 'Architectural') return architecturalDrawings;
   return fallbackDrawings.filter(x => x.d === active);
 }
 
