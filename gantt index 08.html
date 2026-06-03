@@ -86,8 +86,6 @@
   .ganttHeader>div{padding:14px 16px}
   .monthScale{position:relative;height:38px}
   .monthTick{position:absolute;top:0;height:38px;border-left:1px solid rgba(0,0,0,.12);padding-left:7px;display:flex;align-items:center;white-space:nowrap}
-  .dayCell{position:absolute;top:0;bottom:0;border-left:1px solid rgba(0,0,0,.08);font-size:11px;color:#555;display:flex;align-items:flex-start;padding:8px 0 0 6px;white-space:nowrap}
-  .dayCell.weekend{background:rgba(0,0,0,.045)}
   .ganttRow{border-bottom:1px solid #eee;min-height:68px}
   .ganttRow:last-child{border-bottom:0}
   .taskCell{padding:12px 16px;display:grid;grid-template-columns:40px 1fr 74px;gap:10px;align-items:center;background:#fff;position:sticky;left:0;z-index:2;border-right:1px solid #eee}
@@ -142,7 +140,7 @@
     </nav>
     <div class="filterCard">
       LIVE GOOGLE DRIVE FEED
-      <p style="color:#bbb;line-height:1.45">Drawing tabs read directly from Google Drive.</p>
+      <p style="color:#bbb;line-height:1.45">Architectural and Structural tabs read directly from Google Drive.</p>
     </div>
   </aside>
 
@@ -263,12 +261,7 @@
 */
 const DISCIPLINE_APIS = {
   Architectural: "https://script.google.com/macros/s/AKfycbznKNG9TJuo3iFBruwAAvEUHmW1-eSS1ZhHNkih8yxcDWM5ZixKYHBlyswtPru3iZtD/exec",
-  Structural: "https://script.google.com/macros/s/AKfycbz3iYE9P4NhvBYgV3Bu2OM3dA0l0YotAAmpgshUAYbY_kFr0ZAhmRilNw-k2YdW6P5BCA/exec",
-  Civil: "https://script.google.com/macros/s/AKfycbyAEuqtQTurIlQQcv3RDjJXOYQ_N8Tu9SNSuFjamDDDf9-ty8o8WMHFbbshXRWfUBxf/exec",
-  Mechanical: "https://script.google.com/macros/s/AKfycbzusG78e7519ZXo7qk9hSbix9mJ_aSv2lE2UdoOyNZDNbAEAO3pbTsZ8xl8e8DrN6CYmg/exec",
-  Electrical: "https://script.google.com/macros/s/AKfycbxDYp7xfy0lmwbGYaGNKGQs2hbt3YecQZo_R_c-dpA4ynVPqbF4H-Y5p4Bgo4scFLSN/exec",
-  Hydraulic: "https://script.google.com/macros/s/AKfycbyFBdFCWIEJq3RoYQ2IUoEWLpbkSPK31_lr4tAR26yH3h5UBD2EMoiVx3Fdfhwmow-Q/exec",
-  Landscape: "https://script.google.com/macros/s/AKfycbzKwLXtAnNTNqULUNvb2QuW9G5zTDk0Y2voYeHY7cvqacZTrDtHQeh1oIcDNR5qi8XxGA/exec"
+  Structural: "https://script.google.com/macros/s/AKfycbz3iYE9P4NhvBYgV3Bu2OM3dA0l0YotAAmpgshUAYbY_kFr0ZAhmRilNw-k2YdW6P5BCA/exec"
 };
 
 const PROGRAMME_API_URL = "https://script.google.com/macros/s/AKfycbyfp28G7bAbjKlEEMXCaMD37m6pzo7p3mJT6RGJZG5pF29X1uqFUYhh-DZOZ350y_Bp/exec";
@@ -878,7 +871,7 @@ function attachProgrammeDragHandlers(){
       const originalFinish = task.finish.getTime();
       const originalDuration = task.duration;
       const cellWidth = cell.clientWidth;
-      const snap = (programmeZoom === 'year') ? 7 : 1;
+      const snap = (programmeViewMode === 'week' || programmeViewMode === 'selected' || programmeViewMode === 'month') ? 1 : 7;
 
       bar.classList.toggle('resizing', mode !== 'move');
       bar.classList.toggle('dragging', mode === 'move');
