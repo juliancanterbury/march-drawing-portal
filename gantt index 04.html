@@ -112,11 +112,6 @@
   .unsaved{display:none;background:#fff4cf;border:1px solid #e3c56c;color:#5a4310;border-radius:6px;padding:9px 11px;font-size:12px}
   .unsaved.show{display:inline-block}
 
-  .bar.dragging{opacity:.55}
-  .bar.ghost{position:absolute;pointer-events:none;opacity:.45;outline:2px solid rgba(0,0,0,.25)}
-  .ganttRow.selectedTask .taskCell{background:#fff8e8}
-  .dragHint{font-size:11px;color:#777;margin-left:8px}
-
   @media(max-width:1050px){.app{grid-template-columns:1fr}.sidebar{display:none}.content{grid-template-rows:74px 70px 1fr}.main{grid-template-columns:1fr}.viewerPane{border-top:1px solid var(--line)}.preview{height:520px}.tabs{overflow:auto}.meta{grid-template-columns:1fr 1fr}}
 </style>
 </head>
@@ -216,11 +211,10 @@
         </div>
         <div class="programmeTools">
           <span class="unsaved" id="programmeUnsaved">Unsaved local changes</span>
-          <button class="zoomBtn active" onclick="setProgrammeView('full')" id="view-full">Full</button>
-          <button class="zoomBtn" onclick="setProgrammeView('quarter')" id="view-quarter">Quarter</button>
-          <button class="zoomBtn" onclick="setProgrammeView('month')" id="view-month">Month</button>
-          <button class="zoomBtn" onclick="setProgrammeView('week')" id="view-week">Week</button>
-          <button class="zoomBtn" onclick="setProgrammeView('selected')" id="view-selected">Selected</button>
+          <button class="zoomBtn" onclick="setProgrammeZoom('day')" id="zoom-day">Day</button>
+          <button class="zoomBtn active" onclick="setProgrammeZoom('week')" id="zoom-week">Week</button>
+          <button class="zoomBtn" onclick="setProgrammeZoom('month')" id="zoom-month">Month</button>
+          <button class="zoomBtn" onclick="setProgrammeZoom('year')" id="zoom-year">Year</button>
           <button class="btn" onclick="loadProgramme()">Refresh</button>
           <button class="btn dark" onclick="showDrawings()">Back to Drawings</button>
         </div>
@@ -582,10 +576,8 @@ function fmtDate(date){
 }
 
 
-
 let programmeRows = [];
-let programmeViewMode = 'full';
-let selectedProgrammeIndex = null;
+let programmeZoom = 'week';
 
 function normaliseProgrammeRows(rows){
   const parsed = rows
@@ -638,52 +630,43 @@ function enforceDependencies(rows){
   return rows;
 }
 
-function setProgrammeView(mode){
-  programmeViewMode = mode;
-  ['full','quarter','month','week','selected'].forEach(x => {
-    const btn = document.getElementById('view-' + x);
-    if(btn) btn.classList.toggle('active', x === mode);
+function setProgrammeZoom(z){
+  programmeZoom = z;
+  ['day','week','month','year'].forEach(x => {
+    const btn = document.getElementById('zoom-' + x);
+    if(btn) btn.classList.toggle('active', x === z);
   });
   renderProgramme(programmeRows, programmeRows.length);
 }
 
-function programmeWindow(rows){
-  if(!rows.length){
-    const today = new Date();
-    return {min:addDays(today,-30), max:addDays(today,30)};
-  }
-
-  const rawMin = new Date(Math.min(...rows.map(r => r.start.getTime())));
-  const rawMax = new Date(Math.max(...rows.map(r => r.finish.getTime())));
-
-  let centre = new Date();
-  if(programmeViewMode === 'selected' && selectedProgrammeIndex !== null && rows[selectedProgrammeIndex]){
-    const t = rows[selectedProgrammeIndex];
-    centre = new Date((t.start.getTime() + t.finish.getTime()) / 2);
-  }
-
-  if(programmeViewMode === 'week') return {min:addDays(centre,-14), max:addDays(centre,21)};
-  if(programmeViewMode === 'month') return {min:addDays(centre,-21), max:addDays(centre,45)};
-  if(programmeViewMode === 'quarter') return {min:addDays(centre,-45), max:addDays(centre,110)};
-  if(programmeViewMode === 'selected' && selectedProgrammeIndex !== null && rows[selectedProgrammeIndex]){
-    const t = rows[selectedProgrammeIndex];
-    return {min:addDays(t.start,-21), max:addDays(t.finish,35)};
-  }
-
-  return {min:addDays(rawMin,-28), max:addDays(rawMax,28)};
-}
-
-function tickStepDays(totalDays){
-  if(totalDays <= 45) return 7;
-  if(totalDays <= 120) return 14;
-  if(totalDays <= 420) return 30;
+function snapDays(){
+  if(programmeZoom === 'day') return 1;
+  if(programmeZoom === 'week') return 7;
+  if(programmeZoom === 'month') return 30;
   return 91;
 }
 
-function scaleLabel(date, totalDays){
-  if(totalDays <= 80) return date.toLocaleDateString('en-AU', {day:'2-digit', month:'short'});
-  if(totalDays <= 420) return date.toLocaleDateString('en-AU', {month:'short', year:'2-digit'});
+function timelinePaddingDays(){
+  if(programmeZoom === 'day') return 14;
+  if(programmeZoom === 'week') return 28;
+  if(programmeZoom === 'month') return 60;
+  return 180;
+}
+
+function scaleLabel(date){
+  if(programmeZoom === 'day') return date.toLocaleDateString('en-AU', {day:'2-digit', month:'short'});
+  if(programmeZoom === 'week') return date.toLocaleDateString('en-AU', {day:'2-digit', month:'short'});
+  if(programmeZoom === 'month') return date.toLocaleDateString('en-AU', {month:'short', year:'2-digit'});
   return String(date.getFullYear());
+}
+
+function nextTick(date){
+  const d = new Date(date.getTime());
+  if(programmeZoom === 'day') d.setDate(d.getDate() + 1);
+  else if(programmeZoom === 'week') d.setDate(d.getDate() + 7);
+  else if(programmeZoom === 'month') d.setMonth(d.getMonth() + 1);
+  else d.setFullYear(d.getFullYear() + 1);
+  return d;
 }
 
 function markProgrammeUnsaved(){
@@ -719,31 +702,35 @@ function renderProgramme(rows, rawCount){
     return;
   }
 
-  const win = programmeWindow(rows);
-  const minStart = win.min;
-  const maxFinish = win.max;
+  const pad = timelinePaddingDays();
+  const rawMin = new Date(Math.min(...rows.map(r => r.start.getTime())));
+  const rawMax = new Date(Math.max(...rows.map(r => r.finish.getTime())));
+  const minStart = addDays(rawMin, -pad);
+  const maxFinish = addDays(rawMax, pad);
   const totalDays = Math.max(1, Math.round((maxFinish.getTime() - minStart.getTime()) / 86400000));
-  const step = tickStepDays(totalDays);
 
   const ticks = [];
   let tick = new Date(minStart.getTime());
+
+  if(programmeZoom === 'month') tick = new Date(tick.getFullYear(), tick.getMonth(), 1);
+  if(programmeZoom === 'year') tick = new Date(tick.getFullYear(), 0, 1);
+
   while(tick <= maxFinish){
     const left = Math.max(0, Math.min(100, ((tick.getTime() - minStart.getTime()) / 86400000) / totalDays * 100));
-    ticks.push(`<div class="monthTick" style="left:${left}%">${scaleLabel(tick,totalDays)}</div>`);
-    tick = addDays(tick, step);
+    ticks.push(`<div class="monthTick" style="left:${left}%">${scaleLabel(tick)}</div>`);
+    tick = nextTick(tick);
   }
 
   const rowsHtml = rows.map((r, index) => {
-    const left = ((r.start.getTime() - minStart.getTime()) / 86400000) / totalDays * 100;
-    const width = r.duration / totalDays * 100;
+    const left = Math.max(0, ((r.start.getTime() - minStart.getTime()) / 86400000) / totalDays * 100);
+    const width = Math.max(1.5, r.duration / totalDays * 100);
     const st = r.status.toLowerCase();
     const statusClass = st.includes('complete') ? 'complete' : st.includes('progress') ? 'progress' : '';
     const depends = r.depends ? `Depends on: ${escapeHtml(r.depends)}` : '';
     const consultantClass = escapeHtml((r.consultant || 'Consultant').split(' ')[0]);
-    const selectedClass = selectedProgrammeIndex === index ? ' selectedTask' : '';
 
     return `
-      <div class="ganttRow${selectedClass}" onclick="selectProgrammeTask(${index})">
+      <div class="ganttRow">
         <div class="taskCell">
           <div class="taskId">${escapeHtml(r.id)}</div>
           <div>
@@ -753,7 +740,7 @@ function renderProgramme(rows, rawCount){
           <div class="taskDates">${fmtDate(r.start)}<br>${fmtDate(r.finish)}</div>
         </div>
         <div class="timelineCell" data-row="${index}" data-min="${minStart.getTime()}" data-total-days="${totalDays}">
-          <div class="bar ${consultantClass} ${statusClass}" data-row="${index}" style="left:${left}%;width:${Math.max(1.2,width)}%"></div>
+          <div class="bar ${consultantClass} ${statusClass}" data-row="${index}" style="left:${left}%;width:${width}%"></div>
           ${depends ? `<div class="depNote" style="left:${left}%">${depends}</div>` : ''}
         </div>
       </div>
@@ -761,7 +748,7 @@ function renderProgramme(rows, rawCount){
   }).join('');
 
   el.innerHTML = `
-    <p class="ganttSummary">Loaded ${rows.length} task${rows.length === 1 ? '' : 's'} from Google Sheets. Drag bars to test date changes locally; dependent tasks move automatically. <span class="dragHint">Current view: ${programmeViewMode}</span></p>
+    <p class="ganttSummary">Loaded ${rows.length} task${rows.length === 1 ? '' : 's'} from Google Sheets. Drag bars to test date changes locally. Dependent tasks move automatically.</p>
     <div class="ganttWrap">
       <div class="ganttHeader">
         <div>Task</div>
@@ -774,66 +761,45 @@ function renderProgramme(rows, rawCount){
   attachProgrammeDragHandlers();
 }
 
-function selectProgrammeTask(index){
-  selectedProgrammeIndex = index;
-  if(programmeViewMode === 'selected') renderProgramme(programmeRows, programmeRows.length);
-}
-
 function attachProgrammeDragHandlers(){
   document.querySelectorAll('.bar').forEach(bar => {
     bar.addEventListener('pointerdown', ev => {
       ev.preventDefault();
-      ev.stopPropagation();
-
       const rowIndex = Number(bar.dataset.row);
-      selectedProgrammeIndex = rowIndex;
-
       const cell = bar.closest('.timelineCell');
       const minMs = Number(cell.dataset.min);
       const totalDays = Number(cell.dataset.totalDays);
       const startX = ev.clientX;
       const startStart = programmeRows[rowIndex].start.getTime();
       const cellWidth = cell.clientWidth;
-      const originalLeft = bar.style.left;
-      const snap = totalDays <= 60 ? 1 : totalDays <= 180 ? 7 : 14;
-
-      bar.classList.add('dragging');
+      bar.setPointerCapture(ev.pointerId);
 
       function move(e){
         const dx = e.clientX - startX;
         const deltaDaysRaw = (dx / cellWidth) * totalDays;
+        const snap = snapDays();
         const deltaDays = Math.round(deltaDaysRaw / snap) * snap;
-        const newStart = addDays(new Date(startStart), deltaDays);
-        const left = Math.max(-20, Math.min(120, ((newStart.getTime() - minMs) / 86400000) / totalDays * 100));
-        bar.style.left = left + '%';
-      }
-
-      function up(e){
-        const dx = e.clientX - startX;
-        const deltaDaysRaw = (dx / cellWidth) * totalDays;
-        const deltaDays = Math.round(deltaDaysRaw / snap) * snap;
-
         const task = programmeRows[rowIndex];
         task.start = addDays(new Date(startStart), deltaDays);
         task.finish = addDays(task.start, task.duration);
         programmeRows = enforceDependencies(programmeRows);
+        renderProgramme(programmeRows, programmeRows.length);
+        markProgrammeUnsaved();
+      }
 
-        bar.classList.remove('dragging');
+      function up(){
         bar.removeEventListener('pointermove', move);
         bar.removeEventListener('pointerup', up);
         bar.removeEventListener('pointercancel', up);
-
-        markProgrammeUnsaved();
-        renderProgramme(programmeRows, programmeRows.length);
       }
 
-      bar.setPointerCapture(ev.pointerId);
       bar.addEventListener('pointermove', move);
       bar.addEventListener('pointerup', up);
       bar.addEventListener('pointercancel', up);
     });
   });
 }
+
 
 init();
 </script>
