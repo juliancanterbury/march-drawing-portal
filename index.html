@@ -6,525 +6,10 @@
 <title>MARCH Drawing Portal</title>
 <style>
   :root{
-    --ink:#111;
-    --muted:#767676;
-    --line:#dedbd5;
-    --paper:#f6f2ea;
-    --panel:#fffdf8;
-    --soft:#f1ece3;
-    --dark:#111;
-    --dark-2:#1f1f1f;
-    --green:#dfe8dd;
-    --amber:#eadfca;
-    --error:#fff7f2;
-    --error-line:#e6c9b9;
+    --black:#0d0d0d; --ink:#151515; --muted:#777; --line:#dedbd5;
+    --paper:#f7f4ee; --panel:#fffdf8; --sand:#e9e2d6; --green:#dfe8dd; --amber:#eadfca;
   }
-
   *{box-sizing:border-box}
-<<<<<<< Updated upstream
-
-  body{
-    margin:0;
-    font-family:Arial, Helvetica, sans-serif;
-    background:var(--paper);
-    color:var(--ink);
-  }
-
-  button,
-  input,
-  textarea{
-    font:inherit;
-  }
-
-  .app{
-    min-height:100vh;
-    display:grid;
-    grid-template-columns:230px 1fr;
-  }
-
-  .sidebar{
-    background:var(--dark);
-    color:white;
-    padding:26px 22px;
-    display:flex;
-    flex-direction:column;
-    gap:28px;
-  }
-
-  .logo{
-    letter-spacing:15px;
-    font-size:40px;
-    line-height:.9;
-    font-weight:700;
-    white-space:nowrap;
-  }
-
-  .logo small{
-    display:block;
-    letter-spacing:13px;
-    font-size:11px;
-    margin-top:13px;
-    font-weight:400;
-  }
-
-  .project{
-    border-top:1px solid #333;
-    padding-top:24px;
-  }
-
-  .project h1{
-    margin:0 0 6px;
-    font-size:15px;
-  }
-
-  .project p{
-    margin:0;
-    color:#bbb;
-    font-size:13px;
-  }
-
-  .sideNav{
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-  }
-
-  .sideNav button{
-    border:0;
-    border-radius:8px;
-    background:transparent;
-    color:#ddd;
-    text-align:left;
-    padding:13px 12px;
-    font-size:14px;
-    cursor:pointer;
-  }
-
-  .sideNav button.active,
-  .sideNav button:hover{
-    background:#252525;
-    color:#fff;
-  }
-
-  .feedCard{
-    margin-top:auto;
-    border:1px solid #333;
-    border-radius:8px;
-    padding:14px;
-    font-size:12px;
-    line-height:1.45;
-  }
-
-  .feedCard p{
-    margin:8px 0 0;
-    color:#bbb;
-  }
-
-  .content{
-    min-width:0;
-    display:grid;
-    grid-template-rows:88px auto 1fr;
-  }
-
-  .top{
-    background:#151515;
-    color:white;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:24px;
-    padding:0 28px;
-    border-left:1px solid #333;
-  }
-
-  .top strong{
-    display:block;
-    font-size:18px;
-  }
-
-  .top span{
-    display:block;
-    color:#bbb;
-    margin-top:5px;
-    font-size:13px;
-  }
-
-  .tabs{
-    min-height:70px;
-    display:flex;
-    align-items:stretch;
-    gap:28px;
-    border-bottom:1px solid var(--line);
-    padding:0 32px;
-    background:var(--panel);
-    overflow:auto;
-  }
-
-  .tabs button{
-    min-height:70px;
-    border:0;
-    border-bottom:2px solid transparent;
-    background:transparent;
-    text-transform:uppercase;
-    font-size:13px;
-    letter-spacing:.02em;
-    white-space:nowrap;
-    cursor:pointer;
-    color:#333;
-  }
-
-  .tabs button.active{
-    border-bottom-color:#111;
-    color:#000;
-  }
-
-  .main{
-    min-width:0;
-    display:grid;
-    grid-template-columns:minmax(520px,46%) 1fr;
-    background:var(--panel);
-  }
-
-  .listPane,
-  .viewerPane{
-    min-width:0;
-    padding:32px;
-  }
-
-  .listPane{
-    border-right:1px solid var(--line);
-  }
-
-  .toolbar{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:18px;
-    margin-bottom:24px;
-  }
-
-  h2{
-    margin:0;
-    font-size:24px;
-    font-weight:400;
-  }
-
-  .subtle{
-    margin:7px 0 0;
-    color:var(--muted);
-    font-size:13px;
-  }
-
-  .actions{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-  }
-
-  .btn{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-height:34px;
-    border:1px solid #bbb;
-    border-radius:5px;
-    background:white;
-    color:#111;
-    padding:8px 13px;
-    text-decoration:none;
-    text-transform:uppercase;
-    font-size:12px;
-    letter-spacing:.02em;
-    cursor:pointer;
-  }
-
-  .btn.dark{
-    background:#111;
-    border-color:#111;
-    color:white;
-  }
-
-  .btn:hover{
-    filter:brightness(.96);
-  }
-
-  .btn:disabled{
-    opacity:.38;
-    cursor:not-allowed;
-  }
-
-  .message{
-    border:1px solid var(--line);
-    border-radius:6px;
-    padding:14px;
-    margin:0 0 18px;
-    color:#444;
-    background:#fff;
-    font-size:13px;
-    line-height:1.45;
-  }
-
-  .message.error{
-    background:var(--error);
-    border-color:var(--error-line);
-    color:#522;
-  }
-
-  table{
-    width:100%;
-    border-collapse:collapse;
-    font-size:14px;
-  }
-
-  th{
-    padding:12px;
-    border-bottom:1px solid var(--line);
-    text-align:left;
-    color:#444;
-    font-size:12px;
-    font-weight:400;
-  }
-
-  td{
-    padding:14px 12px;
-    border-bottom:1px solid var(--line);
-    vertical-align:middle;
-  }
-
-  tbody tr{
-    cursor:pointer;
-  }
-
-  tbody tr:hover{
-    background:#f5f0e8;
-  }
-
-  tbody tr.selected{
-    background:#eee6da;
-  }
-
-  .check{
-    width:16px;
-    height:16px;
-  }
-
-  .fileIcon{
-    display:inline-block;
-    width:15px;
-    height:18px;
-    border:1px solid #555;
-    border-radius:2px;
-    margin-right:9px;
-    vertical-align:-4px;
-    position:relative;
-  }
-
-  .fileIcon:after{
-    content:"";
-    position:absolute;
-    right:-1px;
-    top:-1px;
-    border-top:6px solid #555;
-    border-left:6px solid transparent;
-  }
-
-  .status{
-    display:inline-block;
-    font-size:11px;
-    background:var(--green);
-    padding:6px 9px;
-    border-radius:5px;
-    white-space:nowrap;
-  }
-
-  .viewerHeader{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:18px;
-    margin-bottom:20px;
-  }
-
-  .viewerHeader h3{
-    margin:14px 0 0;
-    font-size:28px;
-    line-height:1.12;
-    font-weight:400;
-    word-break:break-word;
-  }
-
-  .viewerHeader p{
-    margin:8px 0 0;
-    color:#444;
-    font-size:13px;
-  }
-
-  .previewShell{
-    background:#262626;
-    border-radius:5px;
-    overflow:hidden;
-    box-shadow:0 12px 30px rgba(0,0,0,.12);
-  }
-
-  .pdfbar{
-    height:44px;
-    color:white;
-    display:flex;
-    align-items:center;
-    gap:20px;
-    padding:0 18px;
-    font-size:13px;
-  }
-
-  .pdfbar .grow{
-    flex:1;
-    min-width:0;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
-
-  .preview{
-    height:620px;
-    background:#eee;
-    display:flex;
-    align-items:stretch;
-    justify-content:center;
-  }
-
-  .preview iframe{
-    width:100%;
-    height:100%;
-    border:0;
-    background:white;
-  }
-
-  .placeholder{
-    width:100%;
-    min-height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:40px;
-    color:#555;
-    text-align:center;
-  }
-
-  .meta{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:22px;
-    margin-top:24px;
-    font-size:13px;
-  }
-
-  .meta h4{
-    margin:0 0 8px;
-    color:#777;
-    font-size:11px;
-    text-transform:uppercase;
-    font-weight:400;
-  }
-
-  .meta p{
-    margin:0;
-    line-height:1.5;
-  }
-
-  .audit{
-    margin-top:24px;
-    border-top:1px solid var(--line);
-    padding-top:18px;
-    color:#555;
-    font-size:13px;
-  }
-
-  .audit ul{
-    margin:8px 0 0;
-    padding-left:18px;
-  }
-
-  .drawer{
-    position:fixed;
-    right:22px;
-    bottom:22px;
-    z-index:20;
-    width:360px;
-    max-width:calc(100vw - 44px);
-    display:none;
-    background:#111;
-    color:white;
-    border-radius:8px;
-    box-shadow:0 16px 40px rgba(0,0,0,.25);
-    padding:18px;
-  }
-
-  .drawer.show{
-    display:block;
-  }
-
-  .drawer h3{
-    margin:0 0 10px;
-    font-size:15px;
-  }
-
-  .drawer p{
-    color:#ccc;
-    font-size:13px;
-    line-height:1.45;
-  }
-
-  .drawer textarea{
-    width:100%;
-    height:72px;
-    margin:8px 0 12px;
-    background:#222;
-    color:white;
-    border:1px solid #444;
-    border-radius:4px;
-    padding:8px;
-    resize:vertical;
-  }
-
-  .toast{
-    position:fixed;
-    left:50%;
-    bottom:26px;
-    z-index:30;
-    transform:translateX(-50%);
-    display:none;
-    background:#111;
-    color:white;
-    padding:12px 18px;
-    border-radius:4px;
-    font-size:13px;
-  }
-
-  .toast.show{
-    display:block;
-  }
-
-  @media(max-width:1050px){
-    .app{grid-template-columns:1fr}
-    .sidebar{display:none}
-    .content{grid-template-rows:74px auto 1fr}
-    .main{grid-template-columns:1fr}
-    .viewerPane{border-top:1px solid var(--line)}
-    .preview{height:520px}
-    .meta{grid-template-columns:1fr 1fr}
-  }
-
-  @media(max-width:680px){
-    .top{padding:0 18px}
-    .tabs{padding:0 18px;gap:20px}
-    .listPane,.viewerPane{padding:22px 18px}
-    .toolbar,.viewerHeader{display:block}
-    .actions{margin-top:14px}
-    table{font-size:13px}
-    th:nth-child(4),td:nth-child(4),th:nth-child(5),td:nth-child(5),th:nth-child(6),td:nth-child(6){display:none}
-    .meta{grid-template-columns:1fr}
-  }
-=======
   body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--paper);color:var(--ink);}
   .app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
   .sidebar{background:#111;color:#fff;padding:26px 22px;display:flex;flex-direction:column;gap:28px}
@@ -586,101 +71,59 @@
   .toast.show{display:block}
   .check{width:16px;height:16px}
   .errorBox{background:#fff7f2;border:1px solid #e6c9b9;padding:14px;border-radius:6px;font-size:13px;line-height:1.45;margin-top:14px;color:#522}
-
-  .programmeView{display:none;background:#fffdf8;padding:32px;overflow:auto}
-  .programmeTop{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:24px}
-  .programmeTop h2{font-size:28px;font-weight:400;margin:0}.programmeTop p{margin:7px 0 0;color:#666;font-size:13px}
-  .ganttWrap{border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,.05)}
-  .ganttHeader{display:grid;grid-template-columns:260px 1fr;background:#f6f1e8;border-bottom:1px solid var(--line);font-size:12px;color:#555}
-  .ganttHeader div{padding:14px 16px}.monthScale{position:relative;height:38px}
-  .monthTick{position:absolute;top:0;height:38px;border-left:1px solid rgba(0,0,0,.12);padding-left:7px;display:flex;align-items:center;white-space:nowrap}
-  .ganttRow{display:grid;grid-template-columns:260px 1fr;border-bottom:1px solid #eee;min-height:58px}.ganttRow:last-child{border-bottom:0}
-  .taskCell{padding:12px 16px;display:flex;flex-direction:column;justify-content:center}.taskName{font-size:14px}.taskMeta{font-size:11px;color:#777;margin-top:4px}
-  .timelineCell{position:relative;padding:14px 16px;background:linear-gradient(90deg, rgba(0,0,0,.035) 1px, transparent 1px);background-size:80px 100%}
-  .bar{position:absolute;height:18px;border-radius:999px;top:20px;background:#151515;box-shadow:0 2px 10px rgba(0,0,0,.16)}
-  .bar.complete{background:#8e9b8a}.bar.progress{background:#c8a15a}.bar.waiting{background:#bfc3c7}
-  .todayLine{position:absolute;top:0;bottom:0;width:2px;background:#111;opacity:.18}.depNote{position:absolute;top:40px;font-size:10px;color:#777;white-space:nowrap}
-  .programmeError{margin-top:12px;background:#fff7f2;border:1px solid #e6c9b9;padding:14px;border-radius:6px;font-size:13px;color:#522}
-
   @media(max-width:1050px){.app{grid-template-columns:1fr}.sidebar{display:none}.content{grid-template-rows:74px 70px 1fr}.main{grid-template-columns:1fr}.viewerPane{border-top:1px solid var(--line)}.preview{height:520px}.tabs{overflow:auto}.meta{grid-template-columns:1fr 1fr}}
->>>>>>> Stashed changes
 </style>
 </head>
 <body>
 <div class="app">
   <aside class="sidebar">
     <div class="logo">MARCH<small>STUDIO</small></div>
-<<<<<<< Updated upstream
-    <div class="project">
-      <h1>DOME HOUSE</h1>
-      <p>Drawing Portal</p>
-    </div>
-    <nav class="sideNav">
-      <button class="active" type="button">Drawings</button>
-      <button type="button" onclick="openTransmittal()">Transmittal</button>
-      <button type="button" onclick="showRegister()">Register</button>
-      <button type="button" onclick="showAudit()">Audit Log</button>
-=======
     <div class="project"><h1>DOME HOUSE</h1><p>Drawing Portal POC</p></div>
     <nav class="nav">
-      <button class="active" id="navDrawings" onclick="showDrawings()">Drawings</button>
-      <button id="navProgramme" onclick="showProgramme()">Programme</button>
+      <button class="active">Drawings</button>
       <button onclick="openTransmittal()">Transmittal</button>
       <button onclick="showRegister()">Register</button>
       <button onclick="showAudit()">Audit Log</button>
->>>>>>> Stashed changes
     </nav>
-    <div class="feedCard">
+    <div class="filterCard">
       LIVE GOOGLE DRIVE FEED
-      <p>Discipline tabs are created automatically only when PDFs are found in the linked folder.</p>
+      <p style="color:#bbb;line-height:1.45">Architectural and Structural tabs read directly from Google Drive.</p>
     </div>
   </aside>
 
   <section class="content">
     <header class="top">
-      <div>
-        <strong>DOME HOUSE</strong>
-        <span>Client Drawing Portal</span>
-      </div>
+      <div class="title"><strong>DOME HOUSE</strong><span>Client Drawing Portal</span></div>
       <div>March Studio ▾</div>
     </header>
 
-    <nav class="tabs" id="tabs"></nav>
+    <div class="tabs" id="tabs"></div>
 
-    <main class="main" id="drawingMain">
+    <main class="main">
       <section class="listPane">
         <div class="toolbar">
-          <div>
-            <h2 id="heading">Drawings</h2>
-            <p class="subtle" id="countText">Checking Google Drive folders…</p>
-          </div>
+          <h2 id="heading">Architectural Drawings</h2>
           <div class="actions">
-            <button class="btn" type="button" onclick="showRegister()">Export Register</button>
-            <button class="btn dark" type="button" onclick="openTransmittal()">Create Transmittal</button>
+            <button class="btn" onclick="showRegister()">Export Register</button>
+            <button class="btn dark" onclick="openTransmittal()">Create Transmittal</button>
           </div>
         </div>
 
-        <div id="message" class="message">Loading available disciplines from Google Drive…</div>
-
-        <table aria-label="Drawing register">
+        <table>
           <thead>
             <tr>
-              <th></th>
-              <th>Drawing No.</th>
-              <th>Title</th>
-              <th>Revision</th>
-              <th>Date</th>
-              <th>Status</th>
-              <th>Download</th>
+              <th></th><th>Drawing No.</th><th>Title</th><th>Revision</th><th>Date</th><th>Status</th><th>Download</th>
             </tr>
           </thead>
           <tbody id="rows"></tbody>
         </table>
 
+        <div id="errorBox"></div>
+
         <div class="audit">
-          <strong>Behaviour</strong>
+          <strong>Demo behaviour:</strong>
           <ul>
-            <li>Only disciplines with PDFs are shown as buttons.</li>
+            <li>Architectural drawings are loaded from Google Drive.</li>
             <li>Click a row to load the PDF preview.</li>
             <li>Download opens the original Google Drive file.</li>
           </ul>
@@ -690,13 +133,13 @@
       <section class="viewerPane">
         <div class="viewerHeader">
           <div>
-            <button class="btn" type="button" onclick="backToList()">‹ Back to list</button>
-            <h3 id="vTitle">No drawing selected</h3>
-            <p id="vMeta">Available drawings will appear once the folders have loaded.</p>
+            <button class="btn" onclick="backToList()">‹ Back to list</button>
+            <h3 id="vTitle"></h3>
+            <p id="vMeta"></p>
           </div>
           <div class="actions">
-            <button class="btn dark" type="button" id="downloadCurrentBtn" onclick="downloadCurrent()" disabled>Download</button>
-            <button class="btn" type="button" id="openPreviewBtn" onclick="openPreviewNewTab()" disabled>Open Preview</button>
+            <button class="btn dark" onclick="downloadCurrent()">Download</button>
+            <button class="btn" onclick="openPreviewNewTab()">Open Preview</button>
           </div>
         </div>
 
@@ -706,9 +149,7 @@
             <span class="grow" id="pdfName">PDF preview</span>
             <span>1 / 1</span><span>−</span><span>72%</span><span>＋</span><span>⬇</span>
           </div>
-          <div class="preview" id="previewArea">
-            <div class="placeholder">Waiting for a drawing selection.</div>
-          </div>
+          <div class="preview" id="previewArea"></div>
         </div>
 
         <div class="meta" id="meta"></div>
@@ -719,14 +160,6 @@
         </div>
       </section>
     </main>
-
-    <main class="programmeView" id="programmeView">
-      <div class="programmeTop">
-        <div><h2>Programme</h2><p>Live Gantt-style programme from Google Sheets. Dependencies are read from the “Depends On” column.</p></div>
-        <div class="actions"><button class="btn" onclick="loadProgramme()">Refresh</button><button class="btn dark" onclick="showDrawings()">Back to Drawings</button></div>
-      </div>
-      <div id="programmeContent"><div class="programmeError">Loading programme…</div></div>
-    </main>
   </section>
 </div>
 
@@ -734,408 +167,277 @@
   <h3>Create Transmittal</h3>
   <p id="txSummary"></p>
   <textarea placeholder="Issue note: For information / For construction / Updated structural coordination..."></textarea>
-  <button class="btn dark" type="button" onclick="sendTransmittal()">Send to Client</button>
-  <button class="btn" type="button" onclick="closeDrawer()">Cancel</button>
+  <button class="btn dark" onclick="sendTransmittal()">Send to Client</button>
+  <button class="btn" onclick="closeDrawer()">Cancel</button>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
 /*
-  Master API version:
-  - Uses one Google Apps Script endpoint for every discipline.
-  - Hides discipline tabs with no PDFs.
-  - Selects Architectural first when it exists, otherwise the first non-empty discipline.
-*/
-<<<<<<< Updated upstream
-const MASTER_API = "https://script.google.com/macros/s/AKfycbzCbaGo60xlY70wRUaWmzRjR5FI5Bm8vd-EDLi80Go2HAJRC8rHR6hBuNPMRlhkdu4pUw/exec";
-const DISCIPLINE_ORDER = ["Architectural","Structural","Civil","Mechanical","Electrical","Hydraulic","Landscape"];
+  IMPORTANT:
+  Replace the URL below with your WEB APP deployment URL.
+  It must look like:
+  https://script.google.com/macros/s/AKfycbxxxxxxxxxxxxxxxxxxxx/exec
 
-let active = "Architectural";
-=======
+  Do NOT use:
+  - the script editor URL
+  - the script.googleusercontent.com temporary echo URL
+*/
 const DISCIPLINE_APIS = {
   Architectural: "https://script.google.com/macros/s/AKfycbznKNG9TJuo3iFBruwAAvEUHmW1-eSS1ZhHNkih8yxcDWM5ZixKYHBlyswtPru3iZtD/exec",
-  Structural: "https://script.google.com/macros/s/AKfycbz3iYE9P4NhvBYgV3Bu2OM3dA0l0YotAAmpgshUAYbY_kFr0ZAhmRilNw-k2YdW6P5BCA/exec",
-  Mechanical: "https://script.google.com/macros/s/AKfycbzusG78e7519ZXo7qk9hSbix9mJ_aSv2lE2UdoOyNZDNbAEAO3pbTsZ8xl8e8DrN6CYmg/exec",
-  Landscape: "https://script.google.com/macros/s/AKfycbzKwLXtAnNTNqULUNvb2QuW9G5zTDk0Y2voYeHY7cvqacZTrDtHQeh1oIcDNR5qi8XxGA/exec",
-  Hydraulic: "https://script.google.com/macros/s/AKfycbyFBdFCWIEJq3RoYQ2IUoEWLpbkSPK31_lr4tAR26yH3h5UBD2EMoiVx3Fdfhwmow-Q/exec",
-  Electrical: "https://script.google.com/macros/s/AKfycbxDYp7xfy0lmwbGYaGNKGQs2hbt3YecQZo_R_c-dpA4ynVPqbF4H-Y5p4Bgo4scFLSN/exec",
-  Civil: "https://script.google.com/macros/s/AKfycbyAEuqtQTurIlQQcv3RDjJXOYQ_N8Tu9SNSuFjamDDDf9-ty8o8WMHFbbshXRWfUBxf/exec"
+  Structural: "https://script.google.com/macros/s/AKfycbz3iYE9P4NhvBYgV3Bu2OM3dA0l0YotAAmpgshUAYbY_kFr0ZAhmRilNw-k2YdW6P5BCA/exec"
 };
 
-const PROGRAMME_API_URL = "https://script.google.com/macros/s/AKfycbyfp28G7bAbjKlEEMXCaMD37m6pzo7p3mJT6RGJZG5pF29X1uqFUYhh-DZOZ350y_Bp/exec";
-
-const disciplines = Object.keys(DISCIPLINE_APIS);
+const disciplines = ['Architectural','Structural','Civil','Mechanical','Electrical','Other'];
 
 let active = 'Architectural';
->>>>>>> Stashed changes
 let current = null;
 let selected = new Set();
-let drawingsByDiscipline = {};
-let availableDisciplines = [];
-let masterError = "";
-let audit = ["Portal opened by client@example.com"];
-
-const el = id => document.getElementById(id);
+let audit = ['Portal opened by client@example.com'];
+let liveDrawings = {};
+let fallbackDrawings = [
+  {d:'Structural',no:'S001',title:'Structural Notes',rev:'-',date:'-',status:'Current',preview:'assets/drawings/S001.svg',download:'#',notes:'Mock structural placeholder.'},
+  {d:'Structural',no:'S101',title:'Framing Plan',rev:'-',date:'-',status:'Current',preview:'assets/drawings/S101.svg',download:'#',notes:'Mock structural placeholder.'},
+  {d:'Civil',no:'C100',title:'Drainage Plan',rev:'-',date:'-',status:'Current',preview:'assets/drawings/C100.svg',download:'#',notes:'Mock civil placeholder.'},
+  {d:'Mechanical',no:'M100',title:'Mechanical Layout',rev:'-',date:'-',status:'Current',preview:'assets/drawings/M100.svg',download:'#',notes:'Mock mechanical placeholder.'},
+  {d:'Electrical',no:'E100',title:'Lighting + Power Plan',rev:'-',date:'-',status:'Current',preview:'assets/drawings/E100.svg',download:'#',notes:'Mock electrical placeholder.'},
+  {d:'Other',no:'SK001',title:'Client Sketch Issue',rev:'-',date:'-',status:'Current',preview:'assets/drawings/SK001.svg',download:'#',notes:'Mock other placeholder.'}
+];
 
 function init(){
+  document.getElementById('tabs').innerHTML = disciplines.map(d =>
+    `<button class="${d===active?'active':''}" onclick="setDisc('${d}')">${d}</button>`
+  ).join('');
+  renderRows();
   renderAudit();
-  loadMasterApi();
+  loadDisciplineFromAPI('Architectural');
 }
 
-async function loadMasterApi(){
-  masterError = "";
-  current = null;
-  availableDisciplines = [];
-  drawingsByDiscipline = {};
-  renderLoadingState();
-
-  try{
-    const data = await fetchJson(MASTER_API);
-    if(!data || typeof data !== "object" || Array.isArray(data)){
-      throw new Error("Master API did not return a discipline object.");
-    }
-
-    DISCIPLINE_ORDER.forEach(discipline => addDisciplineFromData(data, discipline));
-    Object.keys(data).forEach(discipline => {
-      if(!DISCIPLINE_ORDER.includes(discipline)) addDisciplineFromData(data, discipline);
-    });
-
-    active = availableDisciplines.includes("Architectural") ? "Architectural" : availableDisciplines[0] || "";
-  } catch(err){
-    masterError = err.message;
-  }
-
-  renderCurrentState();
-}
-
-function addDisciplineFromData(data, discipline){
-  const files = Array.isArray(data[discipline]) ? data[discipline] : [];
-  const parsed = files
-    .map(file => parseDrawing(file, discipline))
-    .filter(item => item.id || item.preview)
-    .sort(sortDrawings);
-
-  if(parsed.length){
-    drawingsByDiscipline[discipline] = parsed;
-    availableDisciplines.push(discipline);
-  }
-}
-
-async function fetchJson(url){
-  const response = await fetch(url, {cache:"no-store"});
-  if(!response.ok) throw new Error("HTTP " + response.status);
-  return response.json();
-}
-
-function renderLoadingState(){
-  el("tabs").innerHTML = '<button type="button" class="active">Loading</button>';
-  el("heading").textContent = "Loading Drawings";
-  el("countText").textContent = "Reading Google Drive folders…";
-  el("rows").innerHTML = "";
-  el("vTitle").textContent = "Loading drawing portal";
-  el("vMeta").textContent = "Reading the master Google Drive API…";
-  el("pdfName").textContent = "PDF preview";
-  el("previewArea").innerHTML = '<div class="placeholder">Loading PDFs from Google Drive…</div>';
-  el("meta").innerHTML = "";
-  el("downloadCurrentBtn").disabled = true;
-  el("openPreviewBtn").disabled = true;
-  setMessage("Loading all drawing folders from the master API…");
-}
-
-function renderCurrentState(){
-  renderTabs();
-
-  if(masterError){
-    el("heading").textContent = "Drawing Portal";
-    el("countText").textContent = "Could not load";
-    el("rows").innerHTML = "";
-    el("vTitle").textContent = "Master API could not be loaded";
-    el("vMeta").textContent = "Check Apps Script deployment permissions and that the URL ends in /exec.";
-    el("pdfName").textContent = "PDF preview";
-    el("previewArea").innerHTML = '<div class="placeholder">Could not load the master Google Drive API.</div>';
-    el("meta").innerHTML = "";
-    el("downloadCurrentBtn").disabled = true;
-    el("openPreviewBtn").disabled = true;
-    setMessage("Master API could not be loaded: " + masterError, "error");
-    return;
-  }
-
-  if(!availableDisciplines.length){
-    el("heading").textContent = "Drawing Portal";
-    el("countText").textContent = "No PDFs found";
-    el("rows").innerHTML = "";
-    el("vTitle").textContent = "No PDFs found";
-    el("vMeta").textContent = "The master API loaded, but no discipline folders returned PDFs.";
-    el("pdfName").textContent = "PDF preview";
-    el("previewArea").innerHTML = '<div class="placeholder">No PDFs found in the configured folders.</div>';
-    el("meta").innerHTML = "";
-    el("downloadCurrentBtn").disabled = true;
-    el("openPreviewBtn").disabled = true;
-    setMessage("The master API worked, but no PDFs were found in the configured folders.");
-    return;
-  }
-
-  setDisc(active);
-}
-
-function setDisc(discipline){
-  active = discipline;
-  current = null;
-  renderTabs();
-  renderDiscipline();
-}
-
-function renderDiscipline(){
-  const rows = filtered();
-  el("heading").textContent = active + " Drawings";
-  el("countText").textContent = rows.length + " PDF" + (rows.length === 1 ? "" : "s") + " found";
+function setDisc(d){
+  active = d;
+  document.getElementById('heading').textContent = d + ' Drawings';
+  document.getElementById('errorBox').innerHTML = '';
+  document.getElementById('tabs').innerHTML = disciplines.map(x =>
+    `<button class="${x===active?'active':''}" onclick="setDisc('${x}')">${x}</button>`
+  ).join('');
   renderRows();
 
-  if(rows.length){
-    setMessage("");
-    selectDrawing(rows[0]);
-  } else {
-    el("vTitle").textContent = "No " + active + " PDFs found";
-    el("vMeta").textContent = "This discipline exists, but no PDFs were returned.";
-    el("pdfName").textContent = "PDF preview";
-    el("previewArea").innerHTML = '<div class="placeholder">No PDFs found in this discipline folder.</div>';
-    el("meta").innerHTML = "";
-    el("downloadCurrentBtn").disabled = true;
-    el("openPreviewBtn").disabled = true;
-    setMessage("No PDFs were found in the " + active + " folder.");
+  if(DISCIPLINE_APIS[d] && !liveDrawings[d]){
+    loadDisciplineFromAPI(d);
+    return;
   }
-}
 
-function renderTabs(){
-  el("tabs").innerHTML = availableDisciplines.map(d => `
-    <button type="button" class="${d === active ? "active" : ""}" onclick="setDisc('${escapeAttr(d)}')">${escapeHtml(d)}</button>
-  `).join("");
-}
-
-function filtered(){
-  return active ? (drawingsByDiscipline[active] || []) : [];
+  const first = filtered()[0];
+  if(first) selectDrawing(first);
 }
 
 function parseDrawing(file, discipline){
-  const rawName = file.name || "Untitled.pdf";
-  const clean = rawName.replace(/\.pdf$/i, "").trim();
-  const withoutRev = clean.replace(/\s*\[[^\]]+\]\s*/g, "").trim();
-  const parts = withoutRev.split(" - ").map(x => x.trim()).filter(Boolean);
-  const no = parts[0] || withoutRev || clean;
-  const title = parts.length > 1 ? parts.slice(1).join(" - ") : withoutRev || clean;
-  const revMatch = clean.match(/\[([^\]]+)\]/);
+  const name = file.name || 'Untitled.pdf';
+  const clean = name.replace(/\.pdf$/i,'');
+  const parts = clean.split(' - ');
+  const no = parts[0] || clean;
+  const title = parts.length > 1 ? parts.slice(1).join(' - ') : clean;
+
+  let rev = '-';
+  const revMatch = clean.match(/\[(.*?)\]/);
+  if(revMatch) rev = revMatch[1];
 
   return {
-    d: discipline,
-    no: no,
-    title: title,
-    rev: revMatch ? revMatch[1] : "-",
-    date: file.date || file.modified || file.modifiedTime || "-",
-    status: file.status || "Current",
-    preview: file.url || (file.id ? "https://drive.google.com/file/d/" + file.id + "/preview" : ""),
-    download: file.download || (file.id ? "https://drive.google.com/file/d/" + file.id + "/view" : (file.url || "#")),
-    id: file.id || "",
-    rawName: rawName,
-    key: discipline + "::" + rawName + "::" + (file.id || ""),
-    notes: "Live PDF imported from Google Drive."
+    d:discipline,
+    no:no,
+    title:title,
+    rev:rev,
+    date:'-',
+    status:'Current',
+    preview:file.url,
+    download:'https://drive.google.com/file/d/' + file.id + '/view',
+    id:file.id,
+    rawName:name,
+    notes:'Live PDF imported from Google Drive.'
   };
 }
 
-function sortDrawings(a,b){
-  return a.no.localeCompare(b.no, undefined, {numeric:true, sensitivity:"base"}) ||
-         a.title.localeCompare(b.title, undefined, {numeric:true, sensitivity:"base"});
+function loadDisciplineFromAPI(discipline){
+  const apiUrl = DISCIPLINE_APIS[discipline];
+
+  if(!apiUrl){
+    return;
+  }
+
+  showApiMessage('Loading ' + discipline + ' PDFs from Google Drive...');
+
+  fetch(apiUrl)
+    .then(res => {
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
+    .then(data => {
+      if(!Array.isArray(data)) throw new Error('API did not return a JSON array.');
+
+      liveDrawings[discipline] = data.map(file => parseDrawing(file, discipline))
+        .sort((a,b)=>a.no.localeCompare(b.no, undefined, {numeric:true}));
+
+      document.getElementById('errorBox').innerHTML = '';
+
+      if(active === discipline){
+        renderRows();
+        if(liveDrawings[discipline].length) {
+          selectDrawing(liveDrawings[discipline][0]);
+        } else {
+          showApiMessage('The API worked, but no PDFs were found in the ' + discipline + ' folder.');
+        }
+      }
+    })
+    .catch(err => {
+      liveDrawings[discipline] = [{
+        d:discipline,
+        no:'ERROR',
+        title:'Could not load Google Drive folder',
+        rev:'-',
+        date:'-',
+        status:'Current',
+        preview:'assets/drawings/A000.svg',
+        download:'#',
+        notes:String(err)
+      }];
+
+      if(active === discipline){
+        renderRows();
+        selectDrawing(liveDrawings[discipline][0]);
+        showApiMessage('Could not load the ' + discipline + ' Google Drive API. Check the Apps Script deployment URL, permissions, and that the URL ends in /exec. Error: ' + err.message);
+      }
+    });
+}
+
+function showApiMessage(msg){
+  document.getElementById('errorBox').innerHTML = `<div class="errorBox">${msg}</div>`;
+}
+
+function filtered(){
+  if(DISCIPLINE_APIS[active]) return liveDrawings[active] || [];
+  return fallbackDrawings.filter(x => x.d === active);
 }
 
 function renderRows(){
   const rows = filtered();
-  el("rows").innerHTML = rows.map((x,i) => `
-    <tr class="${current && current.key === x.key ? "selected" : ""}" onclick="selectDrawingByIndex(${i})">
-      <td><input class="check" type="checkbox" ${selected.has(x.key) ? "checked" : ""} onclick="event.stopPropagation();toggleSelectByIndex(${i})"></td>
+  document.getElementById('rows').innerHTML = rows.map((x,i) => `
+    <tr class="${current && current.rawName===x.rawName ? 'selected' : ''}" onclick="selectDrawingByIndex(${i})">
+      <td><input class="check" type="checkbox" ${selected.has((x.rawName||x.no+x.rev))?'checked':''} onclick="event.stopPropagation();toggleSelect('${(x.rawName||x.no+x.rev).replace(/'/g,'')}')"></td>
       <td><span class="fileIcon"></span>${escapeHtml(x.no)}</td>
       <td>${escapeHtml(x.title)}</td>
-      <td>${x.rev === "-" ? "-" : "Rev " + escapeHtml(x.rev)}</td>
-      <td>${escapeHtml(formatDate(x.date))}</td>
+      <td>${x.rev === '-' ? '-' : 'Rev ' + escapeHtml(x.rev)}</td>
+      <td>${escapeHtml(x.date)}</td>
       <td><span class="status">${escapeHtml(x.status)}</span></td>
-      <td><button class="btn" type="button" onclick="event.stopPropagation();downloadItemByIndex(${i})">⬇</button></td>
+      <td><button class="btn" onclick="event.stopPropagation();downloadItemByIndex(${i})">⬇</button></td>
     </tr>
-  `).join("");
+  `).join('');
 }
 
-function selectDrawingByIndex(i){ selectDrawing(filtered()[i]); }
+function selectDrawingByIndex(i){
+  const x = filtered()[i];
+  selectDrawing(x);
+}
 
 function selectDrawing(x){
   current = x;
   if(!x) return;
 
-  el("vTitle").textContent = x.no + "   " + x.title;
-  el("vMeta").textContent = "Revision " + x.rev + "   |   " + formatDate(x.date) + "   |   " + x.status;
-  el("pdfName").textContent = x.rawName;
-  el("previewArea").innerHTML = `<iframe src="${escapeAttr(x.preview)}" allow="autoplay"></iframe>`;
+  document.getElementById('vTitle').textContent = x.no + '   ' + x.title;
+  document.getElementById('vMeta').textContent = 'Revision ' + x.rev + '   |   ' + x.date + '   |   ' + x.status;
+  document.getElementById('pdfName').textContent = x.rawName || (x.no + '_' + x.title + '_Rev_' + x.rev + '.pdf');
 
-  el("meta").innerHTML = `
-    <div><h4>Description</h4><p>${escapeHtml(x.notes)}</p></div>
+  const previewArea = document.getElementById('previewArea');
+  if(x.preview && x.preview.includes('drive.google.com')){
+    previewArea.innerHTML = `<iframe src="${x.preview}" allow="autoplay"></iframe>`;
+  } else {
+    previewArea.innerHTML = `<img src="${x.preview || ''}" alt="Drawing preview">`;
+  }
+
+  document.getElementById('meta').innerHTML = `
+    <div><h4>Description</h4><p>${escapeHtml(x.notes || '')}</p></div>
     <div><h4>Discipline</h4><p>${escapeHtml(x.d)}</p></div>
     <div><h4>Issued by</h4><p>March Studio</p></div>
-    <div><h4>File</h4><p>${x.id ? "Google Drive PDF<br>ID: " + escapeHtml(x.id.slice(0,8)) + "…" : "Google Drive PDF"}</p></div>
+    <div><h4>File</h4><p>${x.id ? 'Google Drive PDF<br>ID: ' + escapeHtml(x.id.slice(0,8)) + '…' : 'Local mock preview'}</p></div>
   `;
 
-  el("downloadCurrentBtn").disabled = false;
-  el("openPreviewBtn").disabled = false;
   renderRows();
 }
 
-function toggleSelectByIndex(i){
-  const item = filtered()[i];
-  if(!item) return;
-  selected.has(item.key) ? selected.delete(item.key) : selected.add(item.key);
+function toggleSelect(k){
+  selected.has(k) ? selected.delete(k) : selected.add(k);
   renderRows();
 }
 
-function downloadItemByIndex(i){ downloadItem(filtered()[i]); }
+function downloadItemByIndex(i){
+  const x = filtered()[i];
+  downloadItem(x);
+}
 
 function downloadItem(x){
   if(!x) return;
   audit.unshift(`${x.no} Rev ${x.rev} opened/downloaded by client@example.com`);
   renderAudit();
   toast(`${x.no} download logged`);
-  if(x.download && x.download !== "#") window.open(x.download, "_blank");
+  if(x.download && x.download !== '#') window.open(x.download, '_blank');
 }
 
-function downloadCurrent(){ if(current) downloadItem(current); }
-function openPreviewNewTab(){ if(current && current.preview) window.open(current.preview, "_blank"); }
+function downloadCurrent(){
+  if(current) downloadItem(current);
+}
+
+function openPreviewNewTab(){
+  if(current && current.preview) window.open(current.preview, '_blank');
+}
 
 function openTransmittal(){
+  document.getElementById('drawer').classList.add('show');
   const count = selected.size || filtered().length;
-  el("drawer").classList.add("show");
-  el("txSummary").textContent = count
-    ? `${count} drawing${count === 1 ? "" : "s"} ready to issue. In the real version this would email a secure link and freeze the issued set.`
-    : "No drawings are currently available to issue.";
+  document.getElementById('txSummary').textContent =
+    `${count} drawing${count===1?'':'s'} ready to issue to the selected client group. In the real version this would email a secure link and freeze the issued set.`;
 }
 
-function closeDrawer(){ el("drawer").classList.remove("show"); }
+function closeDrawer(){
+  document.getElementById('drawer').classList.remove('show');
+}
 
 function sendTransmittal(){
-  const count = selected.size || filtered().length;
-  audit.unshift(`Transmittal issued: ${count} drawing${count === 1 ? "" : "s"} to client@example.com`);
+  audit.unshift(`Transmittal issued: ${selected.size || filtered().length} drawings to client@example.com`);
   closeDrawer();
   renderAudit();
-  toast("Transmittal sent and logged");
+  toast('Transmittal sent and logged');
 }
 
-function showRegister(){ toast("Register export would download CSV/PDF in the real version"); }
-function showAudit(){ toast("Audit log visible in the right panel"); }
-function renderAudit(){ el("auditList").innerHTML = audit.slice(0,6).map(a => `<li>${escapeHtml(a)}</li>`).join(""); }
-
-function setMessage(text, type){
-  const box = el("message");
-  if(!text){
-    box.style.display = "none";
-    box.textContent = "";
-    return;
-  }
-  box.style.display = "block";
-  box.className = "message" + (type === "error" ? " error" : "");
-  box.textContent = text;
+function showRegister(){
+  toast('Register export would download CSV/PDF in the real version');
 }
 
-function backToList(){ document.querySelector(".listPane").scrollIntoView({behavior:"smooth"}); }
-
-function toast(text){
-  const box = el("toast");
-  box.textContent = text;
-  box.classList.add("show");
-  setTimeout(() => box.classList.remove("show"), 2200);
+function showAudit(){
+  toast('Audit log visible in the right panel');
 }
 
-function formatDate(value){
-  if(!value || value === "-") return "-";
-  const d = new Date(value);
-  if(Number.isNaN(d.getTime())) return value;
-  return d.toLocaleDateString("en-AU", {day:"2-digit", month:"short", year:"numeric"});
+function renderAudit(){
+  document.getElementById('auditList').innerHTML = audit.slice(0,6).map(a => `<li>${escapeHtml(a)}</li>`).join('');
 }
 
-function escapeHtml(value){
-  return String(value).replace(/[&<>"']/g, char => ({
-    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
-  }[char]));
+function backToList(){
+  document.querySelector('.listPane').scrollIntoView({behavior:'smooth'});
 }
 
-function escapeAttr(value){ return escapeHtml(value).replace(/`/g, "&#96;"); }
+function toast(t){
+  const el = document.getElementById('toast');
+  el.textContent = t;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2200);
+}
 
-
-function showDrawings(){
-  document.getElementById('tabs').style.display = 'flex';
-  document.getElementById('drawingMain').style.display = 'grid';
-  document.getElementById('programmeView').style.display = 'none';
-  document.getElementById('navDrawings').classList.add('active');
-  document.getElementById('navProgramme').classList.remove('active');
-}
-function showProgramme(){
-  document.getElementById('tabs').style.display = 'none';
-  document.getElementById('drawingMain').style.display = 'none';
-  document.getElementById('programmeView').style.display = 'block';
-  document.getElementById('navDrawings').classList.remove('active');
-  document.getElementById('navProgramme').classList.add('active');
-  loadProgramme();
-}
-function parseSheetDate(value){
-  const s = String(value || '').trim();
-  if(!s) return null;
-  if(/^\d{4}-\d{2}-\d{2}/.test(s)) return new Date(s.slice(0,10) + 'T00:00:00');
-  const dmy = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
-  if(dmy){
-    const yyyy = dmy[3].length === 2 ? '20' + dmy[3] : dmy[3];
-    return new Date(`${yyyy}-${dmy[2].padStart(2,'0')}-${dmy[1].padStart(2,'0')}T00:00:00`);
-  }
-  const d = new Date(s);
-  return isNaN(d.getTime()) ? null : d;
-}
-function addDays(date, days){ const d = new Date(date); d.setDate(d.getDate() + Number(days || 0)); return d; }
-function daysBetween(a,b){ return Math.round((b - a) / 86400000); }
-function fmtDate(date){ return date ? date.toLocaleDateString('en-AU', {day:'2-digit', month:'short', year:'numeric'}) : '-'; }
-function normaliseProgrammeRows(rows){
-  return rows.filter(r => r && (r.ID || r.Task)).map(r => {
-    const start = parseSheetDate(r.Start);
-    const duration = Number(r.Duration || 1);
-    return {id:String(r.ID||'').trim(), task:String(r.Task||'').trim(), start, duration, finish:start?addDays(start,duration):null, depends:String(r['Depends On']||'').trim(), consultant:String(r.Consultant||'').trim(), status:String(r.Status||'').trim()};
-  }).filter(r => r.task && r.start);
-}
-function loadProgramme(){
-  const el = document.getElementById('programmeContent');
-  el.innerHTML = '<div class="programmeError">Loading programme from Google Sheets…</div>';
-  fetch(PROGRAMME_API_URL).then(res => { if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); })
-    .then(data => renderProgramme(normaliseProgrammeRows(data)))
-    .catch(err => { el.innerHTML = '<div class="programmeError">Could not load Programme API. Check deployment permissions and /exec URL. Error: '+escapeHtml(err.message)+'</div>'; });
-}
-function renderProgramme(rows){
-  const el = document.getElementById('programmeContent');
-  if(!rows.length){ el.innerHTML = '<div class="programmeError">Programme API loaded, but no rows were found. Check headings: ID, Task, Start, Duration, Depends On, Consultant, Status.</div>'; return; }
-  const minStart = new Date(Math.min(...rows.map(r => r.start.getTime())));
-  const maxFinish = new Date(Math.max(...rows.map(r => r.finish.getTime())));
-  const totalDays = Math.max(1, daysBetween(minStart, maxFinish));
-  const monthTicks = [];
-  let tick = new Date(minStart.getFullYear(), minStart.getMonth(), 1);
-  if(tick < minStart) tick = new Date(tick.getFullYear(), tick.getMonth()+1, 1);
-  while(tick <= maxFinish){
-    const left = Math.max(0, Math.min(100, daysBetween(minStart, tick) / totalDays * 100));
-    monthTicks.push(`<div class="monthTick" style="left:${left}%">${tick.toLocaleDateString('en-AU',{month:'short',year:'2-digit'})}</div>`);
-    tick = new Date(tick.getFullYear(), tick.getMonth()+1, 1);
-  }
-  const today = new Date();
-  const todayLeft = (today >= minStart && today <= maxFinish) ? `<div class="todayLine" style="left:${daysBetween(minStart,today)/totalDays*100}%"></div>` : '';
-  const rowsHtml = rows.map(r => {
-    const left = daysBetween(minStart, r.start) / totalDays * 100;
-    const width = Math.max(1, r.duration / totalDays * 100);
-    const statusClass = r.status.toLowerCase().includes('complete') ? 'complete' : r.status.toLowerCase().includes('progress') ? 'progress' : 'waiting';
-    const depends = r.depends ? `Depends on: ${escapeHtml(r.depends)}` : '';
-    return `<div class="ganttRow"><div class="taskCell"><div class="taskName">${escapeHtml(r.task)}</div><div class="taskMeta">${escapeHtml(r.consultant||'—')} · ${escapeHtml(r.status||'—')} · ${fmtDate(r.start)} → ${fmtDate(r.finish)}</div></div><div class="timelineCell">${todayLeft}<div class="bar ${statusClass}" style="left:${left}%;width:${width}%"></div>${depends ? `<div class="depNote" style="left:${left}%">${depends}</div>` : ''}</div></div>`;
-  }).join('');
-  el.innerHTML = `<div class="ganttWrap"><div class="ganttHeader"><div>Task</div><div class="monthScale">${monthTicks.join('')}</div></div>${rowsHtml}</div>`;
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, s => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[s]));
 }
 
 init();
 </script>
-
 </body>
 </html>
