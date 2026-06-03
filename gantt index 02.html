@@ -72,22 +72,22 @@
   .check{width:16px;height:16px}
   .errorBox{background:#fff7f2;border:1px solid #e6c9b9;padding:14px;border-radius:6px;font-size:13px;line-height:1.45;margin-top:14px;color:#522}
 
-  .programmeView{display:none;background:#fffdf8;padding:32px;overflow:visible;min-height:calc(100vh - 88px)}
-  .programmeTop{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:18px}
+  .programmeView{display:none;background:#fffdf8;padding:32px;overflow:auto}
+  .programmeTop{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:24px}
   .programmeTop h2{font-size:28px;font-weight:400;margin:0}
   .programmeTop p{margin:7px 0 0;color:#666;font-size:13px}
   .ganttSummary{font-size:13px;color:#555;margin:0 0 14px}
-  .ganttWrap{border:1px solid var(--line);border-radius:12px;background:#fff;overflow-x:auto;overflow-y:visible;box-shadow:0 12px 32px rgba(0,0,0,.05);max-width:100%}
-  .ganttHeader{display:grid;grid-template-columns:280px minmax(760px,1fr);background:#f6f1e8;border-bottom:1px solid var(--line);font-size:12px;color:#555;min-width:1040px}
+  .ganttWrap{border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,.05)}
+  .ganttHeader{display:grid;grid-template-columns:280px 1fr;background:#f6f1e8;border-bottom:1px solid var(--line);font-size:12px;color:#555}
   .ganttHeader div{padding:14px 16px}
-  .monthScale{position:relative;height:38px}
+  .monthScale{position:relative;height:38px;min-width:760px}
   .monthTick{position:absolute;top:0;height:38px;border-left:1px solid rgba(0,0,0,.12);padding-left:7px;display:flex;align-items:center;white-space:nowrap}
-  .ganttRow{display:grid;grid-template-columns:280px minmax(760px,1fr);border-bottom:1px solid #eee;min-height:64px;min-width:1040px}
+  .ganttRow{display:grid;grid-template-columns:280px 1fr;border-bottom:1px solid #eee;min-height:64px}
   .ganttRow:last-child{border-bottom:0}
-  .taskCell{padding:12px 16px;display:flex;flex-direction:column;justify-content:center;background:#fff}
+  .taskCell{padding:12px 16px;display:flex;flex-direction:column;justify-content:center}
   .taskName{font-size:14px}
   .taskMeta{font-size:11px;color:#777;margin-top:4px;line-height:1.35}
-  .timelineCell{position:relative;padding:14px 16px;background:linear-gradient(90deg, rgba(0,0,0,.035) 1px, transparent 1px);background-size:80px 100%;min-height:64px}
+  .timelineCell{position:relative;padding:14px 16px;min-width:760px;background:linear-gradient(90deg, rgba(0,0,0,.035) 1px, transparent 1px);background-size:80px 100%}
   .bar{position:absolute;height:18px;border-radius:999px;top:18px;background:#151515;box-shadow:0 2px 10px rgba(0,0,0,.16)}
   .bar.complete{background:#8e9b8a}
   .bar.progress{background:#c8a15a}
@@ -198,7 +198,7 @@
         </div>
       </div>
       <div id="programmeContent">
-        <div class="programmeError">Programme ready. Loading from Google Sheets…</div>
+        <div class="programmeError">Click Refresh if the programme does not load automatically.</div>
       </div>
     </main>
   </section>
@@ -482,23 +482,19 @@ function escapeHtml(str){
 
 
 function showDrawings(){
-  document.querySelector('.content').style.gridTemplateRows = '88px 70px 1fr';
   document.getElementById('tabs').style.display = 'flex';
   document.getElementById('drawingMain').style.display = 'grid';
   document.getElementById('programmeView').style.display = 'none';
   document.getElementById('navDrawings').classList.add('active');
   document.getElementById('navProgramme').classList.remove('active');
-  window.scrollTo(0,0);
 }
 
 function showProgramme(){
-  document.querySelector('.content').style.gridTemplateRows = '88px 1fr';
   document.getElementById('tabs').style.display = 'none';
   document.getElementById('drawingMain').style.display = 'none';
   document.getElementById('programmeView').style.display = 'block';
   document.getElementById('navDrawings').classList.remove('active');
   document.getElementById('navProgramme').classList.add('active');
-  window.scrollTo(0,0);
   loadProgramme();
 }
 
