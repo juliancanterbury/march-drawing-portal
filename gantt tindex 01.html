@@ -76,23 +76,23 @@
   .programmeTop{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:24px}
   .programmeTop h2{font-size:28px;font-weight:400;margin:0}
   .programmeTop p{margin:7px 0 0;color:#666;font-size:13px}
-  .ganttSummary{font-size:13px;color:#555;margin:0 0 14px}
   .ganttWrap{border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,.05)}
-  .ganttHeader{display:grid;grid-template-columns:280px 1fr;background:#f6f1e8;border-bottom:1px solid var(--line);font-size:12px;color:#555}
+  .ganttHeader{display:grid;grid-template-columns:260px 1fr;background:#f6f1e8;border-bottom:1px solid var(--line);font-size:12px;color:#555}
   .ganttHeader div{padding:14px 16px}
-  .monthScale{position:relative;height:38px;min-width:760px}
+  .monthScale{position:relative;height:38px}
   .monthTick{position:absolute;top:0;height:38px;border-left:1px solid rgba(0,0,0,.12);padding-left:7px;display:flex;align-items:center;white-space:nowrap}
-  .ganttRow{display:grid;grid-template-columns:280px 1fr;border-bottom:1px solid #eee;min-height:64px}
+  .ganttRow{display:grid;grid-template-columns:260px 1fr;border-bottom:1px solid #eee;min-height:58px}
   .ganttRow:last-child{border-bottom:0}
   .taskCell{padding:12px 16px;display:flex;flex-direction:column;justify-content:center}
   .taskName{font-size:14px}
-  .taskMeta{font-size:11px;color:#777;margin-top:4px;line-height:1.35}
-  .timelineCell{position:relative;padding:14px 16px;min-width:760px;background:linear-gradient(90deg, rgba(0,0,0,.035) 1px, transparent 1px);background-size:80px 100%}
-  .bar{position:absolute;height:18px;border-radius:999px;top:18px;background:#151515;box-shadow:0 2px 10px rgba(0,0,0,.16)}
+  .taskMeta{font-size:11px;color:#777;margin-top:4px}
+  .timelineCell{position:relative;padding:14px 16px;background:linear-gradient(90deg, rgba(0,0,0,.035) 1px, transparent 1px);background-size:80px 100%}
+  .bar{position:absolute;height:18px;border-radius:999px;top:20px;background:#151515;box-shadow:0 2px 10px rgba(0,0,0,.16)}
   .bar.complete{background:#8e9b8a}
   .bar.progress{background:#c8a15a}
   .bar.waiting{background:#bfc3c7}
-  .depNote{position:absolute;top:42px;font-size:10px;color:#777;white-space:nowrap}
+  .todayLine{position:absolute;top:0;bottom:0;width:2px;background:#111;opacity:.18}
+  .depNote{position:absolute;top:40px;font-size:10px;color:#777;white-space:nowrap}
   .programmeError{margin-top:12px;background:#fff7f2;border:1px solid #e6c9b9;padding:14px;border-radius:6px;font-size:13px;color:#522}
 
   @media(max-width:1050px){.app{grid-template-columns:1fr}.sidebar{display:none}.content{grid-template-rows:74px 70px 1fr}.main{grid-template-columns:1fr}.viewerPane{border-top:1px solid var(--line)}.preview{height:520px}.tabs{overflow:auto}.meta{grid-template-columns:1fr 1fr}}
@@ -198,7 +198,7 @@
         </div>
       </div>
       <div id="programmeContent">
-        <div class="programmeError">Click Refresh if the programme does not load automatically.</div>
+        <div class="programmeError">Loading programme…</div>
       </div>
     </main>
   </section>
@@ -485,64 +485,44 @@ function showDrawings(){
   document.getElementById('tabs').style.display = 'flex';
   document.getElementById('drawingMain').style.display = 'grid';
   document.getElementById('programmeView').style.display = 'none';
-  document.getElementById('navDrawings').classList.add('active');
-  document.getElementById('navProgramme').classList.remove('active');
+  const drawBtn = document.getElementById('navDrawings');
+  const progBtn = document.getElementById('navProgramme');
+  if(drawBtn) drawBtn.classList.add('active');
+  if(progBtn) progBtn.classList.remove('active');
 }
 
 function showProgramme(){
   document.getElementById('tabs').style.display = 'none';
   document.getElementById('drawingMain').style.display = 'none';
   document.getElementById('programmeView').style.display = 'block';
-  document.getElementById('navDrawings').classList.remove('active');
-  document.getElementById('navProgramme').classList.add('active');
+  const drawBtn = document.getElementById('navDrawings');
+  const progBtn = document.getElementById('navProgramme');
+  if(drawBtn) drawBtn.classList.remove('active');
+  if(progBtn) progBtn.classList.add('active');
   loadProgramme();
 }
 
-function parseProgrammeDate(value){
-  if(value === null || value === undefined || value === '') return null;
-
-  if(typeof value === 'number'){
-    const d = new Date(Math.round((value - 25569) * 86400 * 1000));
-    return isNaN(d.getTime()) ? null : d;
-  }
-
-  const s = String(value).trim();
+function parseSheetDate(value){
+  const s = String(value || '').trim();
   if(!s) return null;
-
-  if(/^\d{4}-\d{2}-\d{2}/.test(s)){
-    const d = new Date(s);
-    return isNaN(d.getTime()) ? null : d;
-  }
-
+  if(/^\d{4}-\d{2}-\d{2}/.test(s)) return new Date(s.slice(0,10) + 'T00:00:00');
   const dmy = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
   if(dmy){
     const yyyy = dmy[3].length === 2 ? '20' + dmy[3] : dmy[3];
-    const d = new Date(`${yyyy}-${dmy[2].padStart(2,'0')}-${dmy[1].padStart(2,'0')}T00:00:00`);
-    return isNaN(d.getTime()) ? null : d;
+    return new Date(`${yyyy}-${dmy[2].padStart(2,'0')}-${dmy[1].padStart(2,'0')}T00:00:00`);
   }
-
-  const ddMmm = s.match(/^(\d{1,2})-([A-Za-z]{3})-(\d{4})$/);
-  if(ddMmm){
-    const months = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
-    const month = months[ddMmm[2].toLowerCase()];
-    if(month !== undefined){
-      const d = new Date(Number(ddMmm[3]), month, Number(ddMmm[1]));
-      return isNaN(d.getTime()) ? null : d;
-    }
-  }
-
   const d = new Date(s);
   return isNaN(d.getTime()) ? null : d;
 }
 
 function addDays(date, days){
-  const d = new Date(date.getTime());
+  const d = new Date(date);
   d.setDate(d.getDate() + Number(days || 0));
   return d;
 }
 
 function daysBetween(a,b){
-  return Math.max(0, Math.round((b.getTime() - a.getTime()) / 86400000));
+  return Math.round((b - a) / 86400000);
 }
 
 function fmtDate(date){
@@ -553,8 +533,8 @@ function normaliseProgrammeRows(rows){
   return rows
     .filter(r => r && (r.ID || r.Task))
     .map(r => {
-      const start = parseProgrammeDate(r.Start);
-      const duration = Math.max(1, Number(r.Duration || 1));
+      const start = parseSheetDate(r.Start);
+      const duration = Number(r.Duration || 1);
       return {
         id:String(r.ID || '').trim(),
         task:String(r.Task || '').trim(),
@@ -566,7 +546,7 @@ function normaliseProgrammeRows(rows){
         status:String(r.Status || '').trim()
       };
     })
-    .filter(r => r.task && r.start && r.finish);
+    .filter(r => r.task && r.start);
 }
 
 function loadProgramme(){
@@ -578,38 +558,42 @@ function loadProgramme(){
       if(!res.ok) throw new Error('HTTP ' + res.status);
       return res.json();
     })
-    .then(data => {
-      const rows = normaliseProgrammeRows(data);
-      renderProgramme(rows, data.length);
-    })
+    .then(data => renderProgramme(normaliseProgrammeRows(data)))
     .catch(err => {
-      el.innerHTML = '<div class="programmeError">Could not load Programme API. Error: ' + escapeHtml(err.message) + '</div>';
+      el.innerHTML = '<div class="programmeError">Could not load Programme API. Check the Apps Script deployment permissions and /exec URL. Error: ' + escapeHtml(err.message) + '</div>';
     });
 }
 
-function renderProgramme(rows, rawCount){
+function renderProgramme(rows){
   const el = document.getElementById('programmeContent');
 
   if(!rows.length){
-    el.innerHTML = '<div class="programmeError">Programme API loaded ' + rawCount + ' row(s), but none had readable Task + Start + Duration values. Check date format in the Start column.</div>';
+    el.innerHTML = '<div class="programmeError">Programme API loaded, but no rows were found. Check the sheet headings: ID, Task, Start, Duration, Depends On, Consultant, Status.</div>';
     return;
   }
 
   const minStart = new Date(Math.min(...rows.map(r => r.start.getTime())));
   const maxFinish = new Date(Math.max(...rows.map(r => r.finish.getTime())));
-  const totalDays = Math.max(1, Math.round((maxFinish.getTime() - minStart.getTime()) / 86400000));
+  const totalDays = Math.max(1, daysBetween(minStart, maxFinish));
 
   const monthTicks = [];
   let tick = new Date(minStart.getFullYear(), minStart.getMonth(), 1);
+  if(tick < minStart) tick = new Date(tick.getFullYear(), tick.getMonth()+1, 1);
+
   while(tick <= maxFinish){
-    const left = Math.max(0, Math.min(100, ((tick.getTime() - minStart.getTime()) / 86400000) / totalDays * 100));
+    const left = Math.max(0, Math.min(100, daysBetween(minStart, tick) / totalDays * 100));
     monthTicks.push(`<div class="monthTick" style="left:${left}%">${tick.toLocaleDateString('en-AU', {month:'short', year:'2-digit'})}</div>`);
     tick = new Date(tick.getFullYear(), tick.getMonth()+1, 1);
   }
 
+  const today = new Date();
+  const todayLeft = (today >= minStart && today <= maxFinish)
+    ? `<div class="todayLine" style="left:${daysBetween(minStart, today) / totalDays * 100}%"></div>`
+    : '';
+
   const rowsHtml = rows.map(r => {
-    const left = Math.max(0, ((r.start.getTime() - minStart.getTime()) / 86400000) / totalDays * 100);
-    const width = Math.max(2, r.duration / totalDays * 100);
+    const left = daysBetween(minStart, r.start) / totalDays * 100;
+    const width = Math.max(1, r.duration / totalDays * 100);
     const statusClass = r.status.toLowerCase().includes('complete') ? 'complete' :
       r.status.toLowerCase().includes('progress') ? 'progress' : 'waiting';
     const depends = r.depends ? `Depends on: ${escapeHtml(r.depends)}` : '';
@@ -621,6 +605,7 @@ function renderProgramme(rows, rawCount){
           <div class="taskMeta">${escapeHtml(r.consultant || '—')} · ${escapeHtml(r.status || '—')} · ${fmtDate(r.start)} → ${fmtDate(r.finish)}</div>
         </div>
         <div class="timelineCell">
+          ${todayLeft}
           <div class="bar ${statusClass}" style="left:${left}%;width:${width}%"></div>
           ${depends ? `<div class="depNote" style="left:${left}%">${depends}</div>` : ''}
         </div>
@@ -629,7 +614,6 @@ function renderProgramme(rows, rawCount){
   }).join('');
 
   el.innerHTML = `
-    <p class="ganttSummary">Loaded ${rows.length} task${rows.length === 1 ? '' : 's'} from Google Sheets.</p>
     <div class="ganttWrap">
       <div class="ganttHeader">
         <div>Task</div>
