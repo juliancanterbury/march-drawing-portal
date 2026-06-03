@@ -117,12 +117,6 @@
   .ganttRow.selectedTask .taskCell{background:#fff8e8}
   .dragHint{font-size:11px;color:#777;margin-left:8px}
 
-  .bar .resizeHandle{position:absolute;top:-4px;width:10px;height:28px;border-radius:6px;background:rgba(255,255,255,.65);box-shadow:0 0 0 1px rgba(0,0,0,.22);opacity:0;transition:opacity .12s}
-  .bar:hover .resizeHandle{opacity:1}
-  .bar .resizeStart{left:-5px;cursor:w-resize}
-  .bar .resizeEnd{right:-5px;cursor:e-resize}
-  .bar.resizing{opacity:.75}
-
   @media(max-width:1050px){.app{grid-template-columns:1fr}.sidebar{display:none}.content{grid-template-rows:74px 70px 1fr}.main{grid-template-columns:1fr}.viewerPane{border-top:1px solid var(--line)}.preview{height:520px}.tabs{overflow:auto}.meta{grid-template-columns:1fr 1fr}}
 </style>
 </head>
@@ -759,10 +753,7 @@ function renderProgramme(rows, rawCount){
           <div class="taskDates">${fmtDate(r.start)}<br>${fmtDate(r.finish)}</div>
         </div>
         <div class="timelineCell" data-row="${index}" data-min="${minStart.getTime()}" data-total-days="${totalDays}">
-          <div class="bar ${consultantClass} ${statusClass}" data-row="${index}" style="left:${left}%;width:${Math.max(1.2,width)}%">
-            <span class="resizeHandle resizeStart" data-edge="start"></span>
-            <span class="resizeHandle resizeEnd" data-edge="end"></span>
-          </div>
+          <div class="bar ${consultantClass} ${statusClass}" data-row="${index}" style="left:${left}%;width:${Math.max(1.2,width)}%"></div>
           ${depends ? `<div class="depNote" style="left:${left}%">${depends}</div>` : ''}
         </div>
       </div>
@@ -794,9 +785,6 @@ function attachProgrammeDragHandlers(){
       ev.preventDefault();
       ev.stopPropagation();
 
-      const handle = ev.target.closest('.resizeHandle');
-      const mode = handle ? handle.dataset.edge : 'move';
-
       const rowIndex = Number(bar.dataset.row);
       selectedProgrammeIndex = rowIndex;
 
@@ -804,79 +792,33 @@ function attachProgrammeDragHandlers(){
       const minMs = Number(cell.dataset.min);
       const totalDays = Number(cell.dataset.totalDays);
       const startX = ev.clientX;
-      const task = programmeRows[rowIndex];
-      const originalStart = task.start.getTime();
-      const originalFinish = task.finish.getTime();
-      const originalDuration = task.duration;
+      const startStart = programmeRows[rowIndex].start.getTime();
       const cellWidth = cell.clientWidth;
+      const originalLeft = bar.style.left;
       const snap = totalDays <= 60 ? 1 : totalDays <= 180 ? 7 : 14;
 
-      bar.classList.toggle('resizing', mode !== 'move');
-      bar.classList.toggle('dragging', mode === 'move');
-
-      function daysFromDx(e){
-        const dx = e.clientX - startX;
-        const deltaDaysRaw = (dx / cellWidth) * totalDays;
-        return Math.round(deltaDaysRaw / snap) * snap;
-      }
-
-      function previewTask(deltaDays){
-        let newStart = new Date(originalStart);
-        let newDuration = originalDuration;
-
-        if(mode === 'move'){
-          newStart = addDays(new Date(originalStart), deltaDays);
-        }
-
-        if(mode === 'end'){
-          newDuration = Math.max(1, originalDuration + deltaDays);
-        }
-
-        if(mode === 'start'){
-          newStart = addDays(new Date(originalStart), deltaDays);
-          newDuration = Math.max(1, originalDuration - deltaDays);
-        }
-
-        const previewFinish = addDays(newStart, newDuration);
-        const left = ((newStart.getTime() - minMs) / 86400000) / totalDays * 100;
-        const width = ((previewFinish.getTime() - newStart.getTime()) / 86400000) / totalDays * 100;
-
-        bar.style.left = Math.max(-20, Math.min(120, left)) + '%';
-        bar.style.width = Math.max(1.2, width) + '%';
-      }
-
-      function applyTask(deltaDays){
-        const task = programmeRows[rowIndex];
-
-        if(mode === 'move'){
-          task.start = addDays(new Date(originalStart), deltaDays);
-          task.finish = addDays(task.start, task.duration);
-        }
-
-        if(mode === 'end'){
-          task.duration = Math.max(1, originalDuration + deltaDays);
-          task.start = new Date(originalStart);
-          task.finish = addDays(task.start, task.duration);
-        }
-
-        if(mode === 'start'){
-          task.start = addDays(new Date(originalStart), deltaDays);
-          task.duration = Math.max(1, originalDuration - deltaDays);
-          task.finish = addDays(task.start, task.duration);
-        }
-
-        programmeRows = enforceDependencies(programmeRows);
-      }
+      bar.classList.add('dragging');
 
       function move(e){
-        previewTask(daysFromDx(e));
+        const dx = e.clientX - startX;
+        const deltaDaysRaw = (dx / cellWidth) * totalDays;
+        const deltaDays = Math.round(deltaDaysRaw / snap) * snap;
+        const newStart = addDays(new Date(startStart), deltaDays);
+        const left = Math.max(-20, Math.min(120, ((newStart.getTime() - minMs) / 86400000) / totalDays * 100));
+        bar.style.left = left + '%';
       }
 
       function up(e){
-        applyTask(daysFromDx(e));
+        const dx = e.clientX - startX;
+        const deltaDaysRaw = (dx / cellWidth) * totalDays;
+        const deltaDays = Math.round(deltaDaysRaw / snap) * snap;
+
+        const task = programmeRows[rowIndex];
+        task.start = addDays(new Date(startStart), deltaDays);
+        task.finish = addDays(task.start, task.duration);
+        programmeRows = enforceDependencies(programmeRows);
 
         bar.classList.remove('dragging');
-        bar.classList.remove('resizing');
         bar.removeEventListener('pointermove', move);
         bar.removeEventListener('pointerup', up);
         bar.removeEventListener('pointercancel', up);
