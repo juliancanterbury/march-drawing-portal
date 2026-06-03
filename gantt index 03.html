@@ -76,41 +76,24 @@
   .programmeTop{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:18px}
   .programmeTop h2{font-size:28px;font-weight:400;margin:0}
   .programmeTop p{margin:7px 0 0;color:#666;font-size:13px}
-  .programmeTools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-  .zoomBtn{border:1px solid #bbb;background:white;padding:8px 10px;border-radius:6px;font-size:11px;cursor:pointer;text-transform:uppercase}
-  .zoomBtn.active{background:#111;color:#fff;border-color:#111}
   .ganttSummary{font-size:13px;color:#555;margin:0 0 14px}
-  .ganttWrap{border:1px solid var(--line);border-radius:12px;background:#fff;overflow:auto;box-shadow:0 12px 32px rgba(0,0,0,.05);max-width:100%}
-  .ganttHeader,.ganttRow{display:grid;grid-template-columns:330px minmax(900px,1fr);min-width:1230px}
-  .ganttHeader{background:#f6f1e8;border-bottom:1px solid var(--line);font-size:12px;color:#555;position:sticky;top:0;z-index:3}
-  .ganttHeader>div{padding:14px 16px}
+  .ganttWrap{border:1px solid var(--line);border-radius:12px;background:#fff;overflow-x:auto;overflow-y:visible;box-shadow:0 12px 32px rgba(0,0,0,.05);max-width:100%}
+  .ganttHeader{display:grid;grid-template-columns:280px minmax(760px,1fr);background:#f6f1e8;border-bottom:1px solid var(--line);font-size:12px;color:#555;min-width:1040px}
+  .ganttHeader div{padding:14px 16px}
   .monthScale{position:relative;height:38px}
   .monthTick{position:absolute;top:0;height:38px;border-left:1px solid rgba(0,0,0,.12);padding-left:7px;display:flex;align-items:center;white-space:nowrap}
-  .ganttRow{border-bottom:1px solid #eee;min-height:68px}
+  .ganttRow{display:grid;grid-template-columns:280px minmax(760px,1fr);border-bottom:1px solid #eee;min-height:64px;min-width:1040px}
   .ganttRow:last-child{border-bottom:0}
-  .taskCell{padding:12px 16px;display:grid;grid-template-columns:40px 1fr 74px;gap:10px;align-items:center;background:#fff;position:sticky;left:0;z-index:2;border-right:1px solid #eee}
-  .taskId{font-size:11px;color:#777}
-  .taskName{font-size:14px;font-weight:600}
+  .taskCell{padding:12px 16px;display:flex;flex-direction:column;justify-content:center;background:#fff}
+  .taskName{font-size:14px}
   .taskMeta{font-size:11px;color:#777;margin-top:4px;line-height:1.35}
-  .taskDates{text-align:right;font-size:11px;color:#555;line-height:1.35}
-  .timelineCell{position:relative;padding:14px 16px;background:linear-gradient(90deg, rgba(0,0,0,.035) 1px, transparent 1px);background-size:80px 100%;min-height:68px}
-  .bar{position:absolute;height:20px;border-radius:999px;top:18px;background:#151515;box-shadow:0 2px 10px rgba(0,0,0,.16);cursor:grab;user-select:none}
-  .bar:active{cursor:grabbing}
-  .bar.Architect{background:#c99a47}
-  .bar.Structural{background:#40566b}
-  .bar.Mechanical{background:#b75f45}
-  .bar.Electrical{background:#d6b13f}
-  .bar.Hydraulic{background:#4c83a5}
-  .bar.Landscape{background:#708b5b}
-  .bar.Builder{background:#9a9a93}
-  .bar.Client{background:#75536b}
-  .bar.Consultant{background:#777}
-  .bar.complete{opacity:.82}
-  .bar.progress{box-shadow:0 0 0 3px rgba(201,154,71,.16),0 2px 10px rgba(0,0,0,.16)}
-  .depNote{position:absolute;top:43px;font-size:10px;color:#777;white-space:nowrap}
+  .timelineCell{position:relative;padding:14px 16px;background:linear-gradient(90deg, rgba(0,0,0,.035) 1px, transparent 1px);background-size:80px 100%;min-height:64px}
+  .bar{position:absolute;height:18px;border-radius:999px;top:18px;background:#151515;box-shadow:0 2px 10px rgba(0,0,0,.16)}
+  .bar.complete{background:#8e9b8a}
+  .bar.progress{background:#c8a15a}
+  .bar.waiting{background:#bfc3c7}
+  .depNote{position:absolute;top:42px;font-size:10px;color:#777;white-space:nowrap}
   .programmeError{margin-top:12px;background:#fff7f2;border:1px solid #e6c9b9;padding:14px;border-radius:6px;font-size:13px;color:#522}
-  .unsaved{display:none;background:#fff4cf;border:1px solid #e3c56c;color:#5a4310;border-radius:6px;padding:9px 11px;font-size:12px}
-  .unsaved.show{display:inline-block}
 
   @media(max-width:1050px){.app{grid-template-columns:1fr}.sidebar{display:none}.content{grid-template-rows:74px 70px 1fr}.main{grid-template-columns:1fr}.viewerPane{border-top:1px solid var(--line)}.preview{height:520px}.tabs{overflow:auto}.meta{grid-template-columns:1fr 1fr}}
 </style>
@@ -209,12 +192,7 @@
           <h2>Programme</h2>
           <p>Live Gantt-style programme from Google Sheets. Dependencies are read from the “Depends On” column.</p>
         </div>
-        <div class="programmeTools">
-          <span class="unsaved" id="programmeUnsaved">Unsaved local changes</span>
-          <button class="zoomBtn" onclick="setProgrammeZoom('day')" id="zoom-day">Day</button>
-          <button class="zoomBtn active" onclick="setProgrammeZoom('week')" id="zoom-week">Week</button>
-          <button class="zoomBtn" onclick="setProgrammeZoom('month')" id="zoom-month">Month</button>
-          <button class="zoomBtn" onclick="setProgrammeZoom('year')" id="zoom-year">Year</button>
+        <div class="actions">
           <button class="btn" onclick="loadProgramme()">Refresh</button>
           <button class="btn dark" onclick="showDrawings()">Back to Drawings</button>
         </div>
@@ -254,7 +232,7 @@ const DISCIPLINE_APIS = {
 
 const PROGRAMME_API_URL = "https://script.google.com/macros/s/AKfycbyfp28G7bAbjKlEEMXCaMD37m6pzo7p3mJT6RGJZG5pF29X1uqFUYhh-DZOZ350y_Bp/exec";
 
-const disciplines = Object.keys(DISCIPLINE_APIS);
+const disciplines = ['Architectural','Structural','Civil','Mechanical','Electrical','Other'];
 
 let active = 'Architectural';
 let current = null;
@@ -535,26 +513,26 @@ function parseProgrammeDate(value){
   const s = String(value).trim();
   if(!s) return null;
 
-  // Australian primary format: dd-mm-yyyy or dd-mm-yy
-  const dmyDash = s.match(/^(\d{1,2})-(\d{1,2})-(\d{2,4})$/);
-  if(dmyDash){
-    const yyyy = dmyDash[3].length === 2 ? '20' + dmyDash[3] : dmyDash[3];
-    const d = new Date(`${yyyy}-${dmyDash[2].padStart(2,'0')}-${dmyDash[1].padStart(2,'0')}T00:00:00`);
-    return isNaN(d.getTime()) ? null : d;
-  }
-
-  // Australian slash format: dd/mm/yyyy or dd/mm/yy
-  const dmySlash = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
-  if(dmySlash){
-    const yyyy = dmySlash[3].length === 2 ? '20' + dmySlash[3] : dmySlash[3];
-    const d = new Date(`${yyyy}-${dmySlash[2].padStart(2,'0')}-${dmySlash[1].padStart(2,'0')}T00:00:00`);
-    return isNaN(d.getTime()) ? null : d;
-  }
-
-  // ISO from Apps Script.
   if(/^\d{4}-\d{2}-\d{2}/.test(s)){
     const d = new Date(s);
     return isNaN(d.getTime()) ? null : d;
+  }
+
+  const dmy = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+  if(dmy){
+    const yyyy = dmy[3].length === 2 ? '20' + dmy[3] : dmy[3];
+    const d = new Date(`${yyyy}-${dmy[2].padStart(2,'0')}-${dmy[1].padStart(2,'0')}T00:00:00`);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  const ddMmm = s.match(/^(\d{1,2})-([A-Za-z]{3})-(\d{4})$/);
+  if(ddMmm){
+    const months = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+    const month = months[ddMmm[2].toLowerCase()];
+    if(month !== undefined){
+      const d = new Date(Number(ddMmm[3]), month, Number(ddMmm[1]));
+      return isNaN(d.getTime()) ? null : d;
+    }
   }
 
   const d = new Date(s);
@@ -575,12 +553,8 @@ function fmtDate(date){
   return date ? date.toLocaleDateString('en-AU', {day:'2-digit', month:'short', year:'numeric'}) : '-';
 }
 
-
-let programmeRows = [];
-let programmeZoom = 'week';
-
 function normaliseProgrammeRows(rows){
-  const parsed = rows
+  return rows
     .filter(r => r && (r.ID || r.Task))
     .map(r => {
       const start = parseProgrammeDate(r.Start);
@@ -592,86 +566,11 @@ function normaliseProgrammeRows(rows){
         duration:duration,
         finish:start ? addDays(start, duration) : null,
         depends:String(r['Depends On'] || '').trim(),
-        consultant:String(r.Consultant || '').trim() || 'Consultant',
+        consultant:String(r.Consultant || '').trim(),
         status:String(r.Status || '').trim()
       };
     })
     .filter(r => r.task && r.start && r.finish);
-
-  return enforceDependencies(parsed);
-}
-
-function dependencyIds(task){
-  return String(task.depends || '').split(',').map(x => x.trim()).filter(Boolean);
-}
-
-function enforceDependencies(rows){
-  const byId = Object.fromEntries(rows.map(r => [r.id, r]));
-  let changed = true;
-  let guard = 0;
-
-  while(changed && guard < 50){
-    changed = false;
-    guard++;
-
-    rows.forEach(task => {
-      const deps = dependencyIds(task).map(id => byId[id]).filter(Boolean);
-      if(!deps.length) return;
-
-      const latestFinish = new Date(Math.max(...deps.map(d => d.finish.getTime())));
-      if(task.start < latestFinish){
-        task.start = new Date(latestFinish.getTime());
-        task.finish = addDays(task.start, task.duration);
-        changed = true;
-      }
-    });
-  }
-
-  return rows;
-}
-
-function setProgrammeZoom(z){
-  programmeZoom = z;
-  ['day','week','month','year'].forEach(x => {
-    const btn = document.getElementById('zoom-' + x);
-    if(btn) btn.classList.toggle('active', x === z);
-  });
-  renderProgramme(programmeRows, programmeRows.length);
-}
-
-function snapDays(){
-  if(programmeZoom === 'day') return 1;
-  if(programmeZoom === 'week') return 7;
-  if(programmeZoom === 'month') return 30;
-  return 91;
-}
-
-function timelinePaddingDays(){
-  if(programmeZoom === 'day') return 14;
-  if(programmeZoom === 'week') return 28;
-  if(programmeZoom === 'month') return 60;
-  return 180;
-}
-
-function scaleLabel(date){
-  if(programmeZoom === 'day') return date.toLocaleDateString('en-AU', {day:'2-digit', month:'short'});
-  if(programmeZoom === 'week') return date.toLocaleDateString('en-AU', {day:'2-digit', month:'short'});
-  if(programmeZoom === 'month') return date.toLocaleDateString('en-AU', {month:'short', year:'2-digit'});
-  return String(date.getFullYear());
-}
-
-function nextTick(date){
-  const d = new Date(date.getTime());
-  if(programmeZoom === 'day') d.setDate(d.getDate() + 1);
-  else if(programmeZoom === 'week') d.setDate(d.getDate() + 7);
-  else if(programmeZoom === 'month') d.setMonth(d.getMonth() + 1);
-  else d.setFullYear(d.getFullYear() + 1);
-  return d;
-}
-
-function markProgrammeUnsaved(){
-  const el = document.getElementById('programmeUnsaved');
-  if(el) el.classList.add('show');
 }
 
 function loadProgramme(){
@@ -684,10 +583,8 @@ function loadProgramme(){
       return res.json();
     })
     .then(data => {
-      programmeRows = normaliseProgrammeRows(data);
-      const unsaved = document.getElementById('programmeUnsaved');
-      if(unsaved) unsaved.classList.remove('show');
-      renderProgramme(programmeRows, data.length);
+      const rows = normaliseProgrammeRows(data);
+      renderProgramme(rows, data.length);
     })
     .catch(err => {
       el.innerHTML = '<div class="programmeError">Could not load Programme API. Error: ' + escapeHtml(err.message) + '</div>';
@@ -702,45 +599,33 @@ function renderProgramme(rows, rawCount){
     return;
   }
 
-  const pad = timelinePaddingDays();
-  const rawMin = new Date(Math.min(...rows.map(r => r.start.getTime())));
-  const rawMax = new Date(Math.max(...rows.map(r => r.finish.getTime())));
-  const minStart = addDays(rawMin, -pad);
-  const maxFinish = addDays(rawMax, pad);
+  const minStart = new Date(Math.min(...rows.map(r => r.start.getTime())));
+  const maxFinish = new Date(Math.max(...rows.map(r => r.finish.getTime())));
   const totalDays = Math.max(1, Math.round((maxFinish.getTime() - minStart.getTime()) / 86400000));
 
-  const ticks = [];
-  let tick = new Date(minStart.getTime());
-
-  if(programmeZoom === 'month') tick = new Date(tick.getFullYear(), tick.getMonth(), 1);
-  if(programmeZoom === 'year') tick = new Date(tick.getFullYear(), 0, 1);
-
+  const monthTicks = [];
+  let tick = new Date(minStart.getFullYear(), minStart.getMonth(), 1);
   while(tick <= maxFinish){
     const left = Math.max(0, Math.min(100, ((tick.getTime() - minStart.getTime()) / 86400000) / totalDays * 100));
-    ticks.push(`<div class="monthTick" style="left:${left}%">${scaleLabel(tick)}</div>`);
-    tick = nextTick(tick);
+    monthTicks.push(`<div class="monthTick" style="left:${left}%">${tick.toLocaleDateString('en-AU', {month:'short', year:'2-digit'})}</div>`);
+    tick = new Date(tick.getFullYear(), tick.getMonth()+1, 1);
   }
 
-  const rowsHtml = rows.map((r, index) => {
+  const rowsHtml = rows.map(r => {
     const left = Math.max(0, ((r.start.getTime() - minStart.getTime()) / 86400000) / totalDays * 100);
-    const width = Math.max(1.5, r.duration / totalDays * 100);
-    const st = r.status.toLowerCase();
-    const statusClass = st.includes('complete') ? 'complete' : st.includes('progress') ? 'progress' : '';
+    const width = Math.max(2, r.duration / totalDays * 100);
+    const statusClass = r.status.toLowerCase().includes('complete') ? 'complete' :
+      r.status.toLowerCase().includes('progress') ? 'progress' : 'waiting';
     const depends = r.depends ? `Depends on: ${escapeHtml(r.depends)}` : '';
-    const consultantClass = escapeHtml((r.consultant || 'Consultant').split(' ')[0]);
 
     return `
       <div class="ganttRow">
         <div class="taskCell">
-          <div class="taskId">${escapeHtml(r.id)}</div>
-          <div>
-            <div class="taskName">${escapeHtml(r.task)}</div>
-            <div class="taskMeta">${escapeHtml(r.consultant || '—')} · ${escapeHtml(r.status || '—')}</div>
-          </div>
-          <div class="taskDates">${fmtDate(r.start)}<br>${fmtDate(r.finish)}</div>
+          <div class="taskName">${escapeHtml(r.task)}</div>
+          <div class="taskMeta">${escapeHtml(r.consultant || '—')} · ${escapeHtml(r.status || '—')} · ${fmtDate(r.start)} → ${fmtDate(r.finish)}</div>
         </div>
-        <div class="timelineCell" data-row="${index}" data-min="${minStart.getTime()}" data-total-days="${totalDays}">
-          <div class="bar ${consultantClass} ${statusClass}" data-row="${index}" style="left:${left}%;width:${width}%"></div>
+        <div class="timelineCell">
+          <div class="bar ${statusClass}" style="left:${left}%;width:${width}%"></div>
           ${depends ? `<div class="depNote" style="left:${left}%">${depends}</div>` : ''}
         </div>
       </div>
@@ -748,58 +633,16 @@ function renderProgramme(rows, rawCount){
   }).join('');
 
   el.innerHTML = `
-    <p class="ganttSummary">Loaded ${rows.length} task${rows.length === 1 ? '' : 's'} from Google Sheets. Drag bars to test date changes locally. Dependent tasks move automatically.</p>
+    <p class="ganttSummary">Loaded ${rows.length} task${rows.length === 1 ? '' : 's'} from Google Sheets.</p>
     <div class="ganttWrap">
       <div class="ganttHeader">
         <div>Task</div>
-        <div class="monthScale">${ticks.join('')}</div>
+        <div class="monthScale">${monthTicks.join('')}</div>
       </div>
       ${rowsHtml}
     </div>
   `;
-
-  attachProgrammeDragHandlers();
 }
-
-function attachProgrammeDragHandlers(){
-  document.querySelectorAll('.bar').forEach(bar => {
-    bar.addEventListener('pointerdown', ev => {
-      ev.preventDefault();
-      const rowIndex = Number(bar.dataset.row);
-      const cell = bar.closest('.timelineCell');
-      const minMs = Number(cell.dataset.min);
-      const totalDays = Number(cell.dataset.totalDays);
-      const startX = ev.clientX;
-      const startStart = programmeRows[rowIndex].start.getTime();
-      const cellWidth = cell.clientWidth;
-      bar.setPointerCapture(ev.pointerId);
-
-      function move(e){
-        const dx = e.clientX - startX;
-        const deltaDaysRaw = (dx / cellWidth) * totalDays;
-        const snap = snapDays();
-        const deltaDays = Math.round(deltaDaysRaw / snap) * snap;
-        const task = programmeRows[rowIndex];
-        task.start = addDays(new Date(startStart), deltaDays);
-        task.finish = addDays(task.start, task.duration);
-        programmeRows = enforceDependencies(programmeRows);
-        renderProgramme(programmeRows, programmeRows.length);
-        markProgrammeUnsaved();
-      }
-
-      function up(){
-        bar.removeEventListener('pointermove', move);
-        bar.removeEventListener('pointerup', up);
-        bar.removeEventListener('pointercancel', up);
-      }
-
-      bar.addEventListener('pointermove', move);
-      bar.addEventListener('pointerup', up);
-      bar.addEventListener('pointercancel', up);
-    });
-  });
-}
-
 
 init();
 </script>
