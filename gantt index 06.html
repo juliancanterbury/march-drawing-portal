@@ -788,68 +788,6 @@ function selectProgrammeTask(index){
   if(programmeViewMode === 'selected') renderProgramme(programmeRows, programmeRows.length);
 }
 
-
-function formatDateForSheet(date){
-  const dd = String(date.getDate()).padStart(2,'0');
-  const mm = String(date.getMonth() + 1).padStart(2,'0');
-  const yyyy = date.getFullYear();
-  return `${dd}-${mm}-${yyyy}`;
-}
-
-function saveProgrammeTask(task){
-  const payload = {
-    id: task.id,
-    start: formatDateForSheet(task.start),
-    duration: task.duration
-  };
-
-  const unsaved = document.getElementById('programmeUnsaved');
-  if(unsaved){
-    unsaved.textContent = 'Saving…';
-    unsaved.classList.add('show');
-  }
-
-  return fetch(PROGRAMME_API_URL, {
-    method: 'POST',
-    body: JSON.stringify(payload)
-  })
-  .then(res => {
-    if(!res.ok) throw new Error('HTTP ' + res.status);
-    return res.json();
-  })
-  .then(result => {
-    if(!result.ok) throw new Error(result.error || 'Save failed');
-    return result;
-  });
-}
-
-function saveProgrammeRows(){
-  const unsaved = document.getElementById('programmeUnsaved');
-  if(unsaved){
-    unsaved.textContent = 'Saving…';
-    unsaved.classList.add('show');
-  }
-
-  return Promise.all(programmeRows.map(t => saveProgrammeTask(t)))
-    .then(() => {
-      if(unsaved){
-        unsaved.textContent = 'Saved to Google Sheet';
-        setTimeout(() => {
-          unsaved.classList.remove('show');
-          unsaved.textContent = 'Unsaved local changes';
-        }, 1800);
-      }
-      loadProgramme();
-    })
-    .catch(err => {
-      if(unsaved){
-        unsaved.textContent = 'Save failed';
-        unsaved.classList.add('show');
-      }
-      alert('Could not save programme change to Google Sheets: ' + err.message);
-    });
-}
-
 function attachProgrammeDragHandlers(){
   document.querySelectorAll('.bar').forEach(bar => {
     bar.addEventListener('pointerdown', ev => {
@@ -871,7 +809,7 @@ function attachProgrammeDragHandlers(){
       const originalFinish = task.finish.getTime();
       const originalDuration = task.duration;
       const cellWidth = cell.clientWidth;
-      const snap = (programmeViewMode === 'week' || programmeViewMode === 'selected' || programmeViewMode === 'month') ? 1 : 7;
+      const snap = totalDays <= 60 ? 1 : totalDays <= 180 ? 7 : 14;
 
       bar.classList.toggle('resizing', mode !== 'move');
       bar.classList.toggle('dragging', mode === 'move');
@@ -945,7 +883,6 @@ function attachProgrammeDragHandlers(){
 
         markProgrammeUnsaved();
         renderProgramme(programmeRows, programmeRows.length);
-        saveProgrammeRows();
       }
 
       bar.setPointerCapture(ev.pointerId);
