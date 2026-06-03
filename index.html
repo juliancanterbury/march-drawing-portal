@@ -21,6 +21,7 @@
   }
 
   *{box-sizing:border-box}
+<<<<<<< Updated upstream
 
   body{
     margin:0;
@@ -523,12 +524,93 @@
     th:nth-child(4),td:nth-child(4),th:nth-child(5),td:nth-child(5),th:nth-child(6),td:nth-child(6){display:none}
     .meta{grid-template-columns:1fr}
   }
+=======
+  body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--paper);color:var(--ink);}
+  .app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+  .sidebar{background:#111;color:#fff;padding:26px 22px;display:flex;flex-direction:column;gap:28px}
+  .logo{letter-spacing:15px;font-size:40px;line-height:.9;font-weight:700;white-space:nowrap}
+  .logo small{display:block;letter-spacing:13px;font-size:11px;margin-top:13px;font-weight:400}
+  .project{border-top:1px solid #333;padding-top:24px}
+  .project h1{font-size:15px;margin:0 0 6px}
+  .project p{margin:0;color:#bbb;font-size:13px}
+  .nav{display:flex;flex-direction:column;gap:4px}
+  .nav button{background:transparent;color:#ddd;border:0;text-align:left;padding:13px 12px;font-size:14px;border-radius:8px;cursor:pointer}
+  .nav button.active,.nav button:hover{background:#252525;color:#fff}
+  .filterCard{margin-top:auto;border:1px solid #333;border-radius:8px;padding:14px;font-size:12px}
+  .filterCard label{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+  .content{display:grid;grid-template-rows:88px 70px 1fr}
+  .top{background:#151515;color:white;display:flex;align-items:center;justify-content:space-between;padding:0 28px;border-left:1px solid #333}
+  .top .title strong{display:block;font-size:18px}.top .title span{display:block;color:#bbb;margin-top:5px}
+  .tabs{display:flex;gap:34px;border-bottom:1px solid var(--line);padding:0 32px;background:#fffdf8}
+  .tabs button{height:70px;border:0;background:transparent;border-bottom:2px solid transparent;text-transform:uppercase;font-size:13px;letter-spacing:.02em;cursor:pointer}
+  .tabs button.active{border-bottom-color:#111}
+  .main{display:grid;grid-template-columns:minmax(520px,46%) 1fr;background:#fffdf8}
+  .listPane{padding:32px;border-right:1px solid var(--line)}
+  .viewerPane{padding:32px;min-width:0}
+  .toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:28px}
+  .toolbar h2{font-size:24px;margin:0;font-weight:400}
+  .actions{display:flex;gap:10px;flex-wrap:wrap}
+  .btn{border:1px solid #bbb;background:white;padding:9px 13px;border-radius:5px;font-size:12px;cursor:pointer;text-transform:uppercase;letter-spacing:.02em;text-decoration:none;color:#111;display:inline-block}
+  .btn.dark{background:#111;color:#fff;border-color:#111}
+  .btn:hover{filter:brightness(.95)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{text-align:left;font-weight:400;color:#333;padding:12px;border-bottom:1px solid var(--line);font-size:12px}
+  td{padding:14px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+  tr{cursor:pointer}
+  tr:hover{background:#f5f0e8}
+  tr.selected{background:#eee6da}
+  .status{font-size:11px;background:var(--green);padding:6px 9px;border-radius:5px}
+  .status.sup{background:var(--amber)}
+  .fileIcon{display:inline-block;width:15px;height:18px;border:1px solid #555;border-radius:2px;margin-right:9px;vertical-align:-4px;position:relative}
+  .fileIcon:after{content:"";position:absolute;right:-1px;top:-1px;border-top:6px solid #555;border-left:6px solid transparent}
+  .viewerHeader{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:20px}
+  .viewerHeader h3{margin:0;font-size:28px;font-weight:400;word-break:break-word}
+  .viewerHeader p{margin:6px 0 0;color:#444}
+  .previewShell{background:#262626;border-radius:5px;overflow:hidden;box-shadow:0 12px 30px rgba(0,0,0,.12)}
+  .pdfbar{height:44px;color:#fff;display:flex;align-items:center;gap:20px;padding:0 18px;font-size:13px}
+  .pdfbar .grow{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .preview{height:620px;background:#eee;display:flex;align-items:stretch;justify-content:center}
+  .preview iframe{width:100%;height:100%;border:0;background:white}
+  .preview img{max-width:100%;max-height:100%;object-fit:contain;padding:18px}
+  .meta{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:24px;font-size:13px}
+  .meta h4{font-size:11px;text-transform:uppercase;color:#777;margin:0 0 8px;font-weight:400}
+  .meta p{margin:0;line-height:1.5}
+  .audit{margin-top:24px;border-top:1px solid var(--line);padding-top:18px;color:#555;font-size:13px}
+  .audit ul{margin:8px 0 0;padding-left:18px}
+  .drawer{position:fixed;right:22px;bottom:22px;background:#111;color:white;border-radius:8px;box-shadow:0 16px 40px rgba(0,0,0,.25);width:360px;max-width:calc(100vw - 44px);padding:18px;display:none}
+  .drawer.show{display:block}
+  .drawer h3{margin:0 0 10px;font-size:15px}
+  .drawer p{color:#ccc;font-size:13px;line-height:1.45}
+  .drawer textarea{width:100%;height:72px;margin:8px 0 12px;background:#222;color:#fff;border:1px solid #444;border-radius:4px;padding:8px}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#111;color:white;padding:12px 18px;border-radius:4px;display:none;font-size:13px;z-index:10}
+  .toast.show{display:block}
+  .check{width:16px;height:16px}
+  .errorBox{background:#fff7f2;border:1px solid #e6c9b9;padding:14px;border-radius:6px;font-size:13px;line-height:1.45;margin-top:14px;color:#522}
+
+  .programmeView{display:none;background:#fffdf8;padding:32px;overflow:auto}
+  .programmeTop{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:24px}
+  .programmeTop h2{font-size:28px;font-weight:400;margin:0}.programmeTop p{margin:7px 0 0;color:#666;font-size:13px}
+  .ganttWrap{border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,.05)}
+  .ganttHeader{display:grid;grid-template-columns:260px 1fr;background:#f6f1e8;border-bottom:1px solid var(--line);font-size:12px;color:#555}
+  .ganttHeader div{padding:14px 16px}.monthScale{position:relative;height:38px}
+  .monthTick{position:absolute;top:0;height:38px;border-left:1px solid rgba(0,0,0,.12);padding-left:7px;display:flex;align-items:center;white-space:nowrap}
+  .ganttRow{display:grid;grid-template-columns:260px 1fr;border-bottom:1px solid #eee;min-height:58px}.ganttRow:last-child{border-bottom:0}
+  .taskCell{padding:12px 16px;display:flex;flex-direction:column;justify-content:center}.taskName{font-size:14px}.taskMeta{font-size:11px;color:#777;margin-top:4px}
+  .timelineCell{position:relative;padding:14px 16px;background:linear-gradient(90deg, rgba(0,0,0,.035) 1px, transparent 1px);background-size:80px 100%}
+  .bar{position:absolute;height:18px;border-radius:999px;top:20px;background:#151515;box-shadow:0 2px 10px rgba(0,0,0,.16)}
+  .bar.complete{background:#8e9b8a}.bar.progress{background:#c8a15a}.bar.waiting{background:#bfc3c7}
+  .todayLine{position:absolute;top:0;bottom:0;width:2px;background:#111;opacity:.18}.depNote{position:absolute;top:40px;font-size:10px;color:#777;white-space:nowrap}
+  .programmeError{margin-top:12px;background:#fff7f2;border:1px solid #e6c9b9;padding:14px;border-radius:6px;font-size:13px;color:#522}
+
+  @media(max-width:1050px){.app{grid-template-columns:1fr}.sidebar{display:none}.content{grid-template-rows:74px 70px 1fr}.main{grid-template-columns:1fr}.viewerPane{border-top:1px solid var(--line)}.preview{height:520px}.tabs{overflow:auto}.meta{grid-template-columns:1fr 1fr}}
+>>>>>>> Stashed changes
 </style>
 </head>
 <body>
 <div class="app">
   <aside class="sidebar">
     <div class="logo">MARCH<small>STUDIO</small></div>
+<<<<<<< Updated upstream
     <div class="project">
       <h1>DOME HOUSE</h1>
       <p>Drawing Portal</p>
@@ -538,6 +620,15 @@
       <button type="button" onclick="openTransmittal()">Transmittal</button>
       <button type="button" onclick="showRegister()">Register</button>
       <button type="button" onclick="showAudit()">Audit Log</button>
+=======
+    <div class="project"><h1>DOME HOUSE</h1><p>Drawing Portal POC</p></div>
+    <nav class="nav">
+      <button class="active" id="navDrawings" onclick="showDrawings()">Drawings</button>
+      <button id="navProgramme" onclick="showProgramme()">Programme</button>
+      <button onclick="openTransmittal()">Transmittal</button>
+      <button onclick="showRegister()">Register</button>
+      <button onclick="showAudit()">Audit Log</button>
+>>>>>>> Stashed changes
     </nav>
     <div class="feedCard">
       LIVE GOOGLE DRIVE FEED
@@ -556,7 +647,7 @@
 
     <nav class="tabs" id="tabs"></nav>
 
-    <main class="main">
+    <main class="main" id="drawingMain">
       <section class="listPane">
         <div class="toolbar">
           <div>
@@ -628,6 +719,14 @@
         </div>
       </section>
     </main>
+
+    <main class="programmeView" id="programmeView">
+      <div class="programmeTop">
+        <div><h2>Programme</h2><p>Live Gantt-style programme from Google Sheets. Dependencies are read from the “Depends On” column.</p></div>
+        <div class="actions"><button class="btn" onclick="loadProgramme()">Refresh</button><button class="btn dark" onclick="showDrawings()">Back to Drawings</button></div>
+      </div>
+      <div id="programmeContent"><div class="programmeError">Loading programme…</div></div>
+    </main>
   </section>
 </div>
 
@@ -648,10 +747,28 @@
   - Hides discipline tabs with no PDFs.
   - Selects Architectural first when it exists, otherwise the first non-empty discipline.
 */
+<<<<<<< Updated upstream
 const MASTER_API = "https://script.google.com/macros/s/AKfycbzCbaGo60xlY70wRUaWmzRjR5FI5Bm8vd-EDLi80Go2HAJRC8rHR6hBuNPMRlhkdu4pUw/exec";
 const DISCIPLINE_ORDER = ["Architectural","Structural","Civil","Mechanical","Electrical","Hydraulic","Landscape"];
 
 let active = "Architectural";
+=======
+const DISCIPLINE_APIS = {
+  Architectural: "https://script.google.com/macros/s/AKfycbznKNG9TJuo3iFBruwAAvEUHmW1-eSS1ZhHNkih8yxcDWM5ZixKYHBlyswtPru3iZtD/exec",
+  Structural: "https://script.google.com/macros/s/AKfycbz3iYE9P4NhvBYgV3Bu2OM3dA0l0YotAAmpgshUAYbY_kFr0ZAhmRilNw-k2YdW6P5BCA/exec",
+  Mechanical: "https://script.google.com/macros/s/AKfycbzusG78e7519ZXo7qk9hSbix9mJ_aSv2lE2UdoOyNZDNbAEAO3pbTsZ8xl8e8DrN6CYmg/exec",
+  Landscape: "https://script.google.com/macros/s/AKfycbzKwLXtAnNTNqULUNvb2QuW9G5zTDk0Y2voYeHY7cvqacZTrDtHQeh1oIcDNR5qi8XxGA/exec",
+  Hydraulic: "https://script.google.com/macros/s/AKfycbyFBdFCWIEJq3RoYQ2IUoEWLpbkSPK31_lr4tAR26yH3h5UBD2EMoiVx3Fdfhwmow-Q/exec",
+  Electrical: "https://script.google.com/macros/s/AKfycbxDYp7xfy0lmwbGYaGNKGQs2hbt3YecQZo_R_c-dpA4ynVPqbF4H-Y5p4Bgo4scFLSN/exec",
+  Civil: "https://script.google.com/macros/s/AKfycbyAEuqtQTurIlQQcv3RDjJXOYQ_N8Tu9SNSuFjamDDDf9-ty8o8WMHFbbshXRWfUBxf/exec"
+};
+
+const PROGRAMME_API_URL = "https://script.google.com/macros/s/AKfycbyfp28G7bAbjKlEEMXCaMD37m6pzo7p3mJT6RGJZG5pF29X1uqFUYhh-DZOZ350y_Bp/exec";
+
+const disciplines = Object.keys(DISCIPLINE_APIS);
+
+let active = 'Architectural';
+>>>>>>> Stashed changes
 let current = null;
 let selected = new Set();
 let drawingsByDiscipline = {};
@@ -945,6 +1062,77 @@ function escapeHtml(value){
 }
 
 function escapeAttr(value){ return escapeHtml(value).replace(/`/g, "&#96;"); }
+
+
+function showDrawings(){
+  document.getElementById('tabs').style.display = 'flex';
+  document.getElementById('drawingMain').style.display = 'grid';
+  document.getElementById('programmeView').style.display = 'none';
+  document.getElementById('navDrawings').classList.add('active');
+  document.getElementById('navProgramme').classList.remove('active');
+}
+function showProgramme(){
+  document.getElementById('tabs').style.display = 'none';
+  document.getElementById('drawingMain').style.display = 'none';
+  document.getElementById('programmeView').style.display = 'block';
+  document.getElementById('navDrawings').classList.remove('active');
+  document.getElementById('navProgramme').classList.add('active');
+  loadProgramme();
+}
+function parseSheetDate(value){
+  const s = String(value || '').trim();
+  if(!s) return null;
+  if(/^\d{4}-\d{2}-\d{2}/.test(s)) return new Date(s.slice(0,10) + 'T00:00:00');
+  const dmy = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+  if(dmy){
+    const yyyy = dmy[3].length === 2 ? '20' + dmy[3] : dmy[3];
+    return new Date(`${yyyy}-${dmy[2].padStart(2,'0')}-${dmy[1].padStart(2,'0')}T00:00:00`);
+  }
+  const d = new Date(s);
+  return isNaN(d.getTime()) ? null : d;
+}
+function addDays(date, days){ const d = new Date(date); d.setDate(d.getDate() + Number(days || 0)); return d; }
+function daysBetween(a,b){ return Math.round((b - a) / 86400000); }
+function fmtDate(date){ return date ? date.toLocaleDateString('en-AU', {day:'2-digit', month:'short', year:'numeric'}) : '-'; }
+function normaliseProgrammeRows(rows){
+  return rows.filter(r => r && (r.ID || r.Task)).map(r => {
+    const start = parseSheetDate(r.Start);
+    const duration = Number(r.Duration || 1);
+    return {id:String(r.ID||'').trim(), task:String(r.Task||'').trim(), start, duration, finish:start?addDays(start,duration):null, depends:String(r['Depends On']||'').trim(), consultant:String(r.Consultant||'').trim(), status:String(r.Status||'').trim()};
+  }).filter(r => r.task && r.start);
+}
+function loadProgramme(){
+  const el = document.getElementById('programmeContent');
+  el.innerHTML = '<div class="programmeError">Loading programme from Google Sheets…</div>';
+  fetch(PROGRAMME_API_URL).then(res => { if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); })
+    .then(data => renderProgramme(normaliseProgrammeRows(data)))
+    .catch(err => { el.innerHTML = '<div class="programmeError">Could not load Programme API. Check deployment permissions and /exec URL. Error: '+escapeHtml(err.message)+'</div>'; });
+}
+function renderProgramme(rows){
+  const el = document.getElementById('programmeContent');
+  if(!rows.length){ el.innerHTML = '<div class="programmeError">Programme API loaded, but no rows were found. Check headings: ID, Task, Start, Duration, Depends On, Consultant, Status.</div>'; return; }
+  const minStart = new Date(Math.min(...rows.map(r => r.start.getTime())));
+  const maxFinish = new Date(Math.max(...rows.map(r => r.finish.getTime())));
+  const totalDays = Math.max(1, daysBetween(minStart, maxFinish));
+  const monthTicks = [];
+  let tick = new Date(minStart.getFullYear(), minStart.getMonth(), 1);
+  if(tick < minStart) tick = new Date(tick.getFullYear(), tick.getMonth()+1, 1);
+  while(tick <= maxFinish){
+    const left = Math.max(0, Math.min(100, daysBetween(minStart, tick) / totalDays * 100));
+    monthTicks.push(`<div class="monthTick" style="left:${left}%">${tick.toLocaleDateString('en-AU',{month:'short',year:'2-digit'})}</div>`);
+    tick = new Date(tick.getFullYear(), tick.getMonth()+1, 1);
+  }
+  const today = new Date();
+  const todayLeft = (today >= minStart && today <= maxFinish) ? `<div class="todayLine" style="left:${daysBetween(minStart,today)/totalDays*100}%"></div>` : '';
+  const rowsHtml = rows.map(r => {
+    const left = daysBetween(minStart, r.start) / totalDays * 100;
+    const width = Math.max(1, r.duration / totalDays * 100);
+    const statusClass = r.status.toLowerCase().includes('complete') ? 'complete' : r.status.toLowerCase().includes('progress') ? 'progress' : 'waiting';
+    const depends = r.depends ? `Depends on: ${escapeHtml(r.depends)}` : '';
+    return `<div class="ganttRow"><div class="taskCell"><div class="taskName">${escapeHtml(r.task)}</div><div class="taskMeta">${escapeHtml(r.consultant||'—')} · ${escapeHtml(r.status||'—')} · ${fmtDate(r.start)} → ${fmtDate(r.finish)}</div></div><div class="timelineCell">${todayLeft}<div class="bar ${statusClass}" style="left:${left}%;width:${width}%"></div>${depends ? `<div class="depNote" style="left:${left}%">${depends}</div>` : ''}</div></div>`;
+  }).join('');
+  el.innerHTML = `<div class="ganttWrap"><div class="ganttHeader"><div>Task</div><div class="monthScale">${monthTicks.join('')}</div></div>${rowsHtml}</div>`;
+}
 
 init();
 </script>

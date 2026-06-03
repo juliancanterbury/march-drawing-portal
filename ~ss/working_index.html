@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MARCH Drawing Portal</title>
+<style>
+  :root{
+    --black:#0d0d0d; --ink:#151515; --muted:#777; --line:#dedbd5;
+    --paper:#f7f4ee; --panel:#fffdf8; --sand:#e9e2d6; --green:#dfe8dd; --amber:#eadfca;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--paper);color:var(--ink);}
+  .app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+  .sidebar{background:#111;color:#fff;padding:26px 22px;display:flex;flex-direction:column;gap:28px}
+  .logo{letter-spacing:15px;font-size:40px;line-height:.9;font-weight:700;white-space:nowrap}
+  .logo small{display:block;letter-spacing:13px;font-size:11px;margin-top:13px;font-weight:400}
+  .project{border-top:1px solid #333;padding-top:24px}
+  .project h1{font-size:15px;margin:0 0 6px}
+  .project p{margin:0;color:#bbb;font-size:13px}
+  .nav{display:flex;flex-direction:column;gap:4px}
+  .nav button{background:transparent;color:#ddd;border:0;text-align:left;padding:13px 12px;font-size:14px;border-radius:8px;cursor:pointer}
+  .nav button.active,.nav button:hover{background:#252525;color:#fff}
+  .filterCard{margin-top:auto;border:1px solid #333;border-radius:8px;padding:14px;font-size:12px}
+  .filterCard label{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+  .content{display:grid;grid-template-rows:88px 70px 1fr}
+  .top{background:#151515;color:white;display:flex;align-items:center;justify-content:space-between;padding:0 28px;border-left:1px solid #333}
+  .top .title strong{display:block;font-size:18px}.top .title span{display:block;color:#bbb;margin-top:5px}
+  .tabs{display:flex;gap:34px;border-bottom:1px solid var(--line);padding:0 32px;background:#fffdf8}
+  .tabs button{height:70px;border:0;background:transparent;border-bottom:2px solid transparent;text-transform:uppercase;font-size:13px;letter-spacing:.02em;cursor:pointer}
+  .tabs button.active{border-bottom-color:#111}
+  .main{display:grid;grid-template-columns:minmax(520px,46%) 1fr;background:#fffdf8}
+  .listPane{padding:32px;border-right:1px solid var(--line)}
+  .viewerPane{padding:32px;min-width:0}
+  .toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:28px}
+  .toolbar h2{font-size:24px;margin:0;font-weight:400}
+  .actions{display:flex;gap:10px;flex-wrap:wrap}
+  .btn{border:1px solid #bbb;background:white;padding:9px 13px;border-radius:5px;font-size:12px;cursor:pointer;text-transform:uppercase;letter-spacing:.02em;text-decoration:none;color:#111;display:inline-block}
+  .btn.dark{background:#111;color:#fff;border-color:#111}
+  .btn:hover{filter:brightness(.95)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{text-align:left;font-weight:400;color:#333;padding:12px;border-bottom:1px solid var(--line);font-size:12px}
+  td{padding:14px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+  tr{cursor:pointer}
+  tr:hover{background:#f5f0e8}
+  tr.selected{background:#eee6da}
+  .status{font-size:11px;background:var(--green);padding:6px 9px;border-radius:5px}
+  .status.sup{background:var(--amber)}
+  .fileIcon{display:inline-block;width:15px;height:18px;border:1px solid #555;border-radius:2px;margin-right:9px;vertical-align:-4px;position:relative}
+  .fileIcon:after{content:"";position:absolute;right:-1px;top:-1px;border-top:6px solid #555;border-left:6px solid transparent}
+  .viewerHeader{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:20px}
+  .viewerHeader h3{margin:0;font-size:28px;font-weight:400;word-break:break-word}
+  .viewerHeader p{margin:6px 0 0;color:#444}
+  .previewShell{background:#262626;border-radius:5px;overflow:hidden;box-shadow:0 12px 30px rgba(0,0,0,.12)}
+  .pdfbar{height:44px;color:#fff;display:flex;align-items:center;gap:20px;padding:0 18px;font-size:13px}
+  .pdfbar .grow{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .preview{height:620px;background:#eee;display:flex;align-items:stretch;justify-content:center}
+  .preview iframe{width:100%;height:100%;border:0;background:white}
+  .preview img{max-width:100%;max-height:100%;object-fit:contain;padding:18px}
+  .meta{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:24px;font-size:13px}
+  .meta h4{font-size:11px;text-transform:uppercase;color:#777;margin:0 0 8px;font-weight:400}
+  .meta p{margin:0;line-height:1.5}
+  .audit{margin-top:24px;border-top:1px solid var(--line);padding-top:18px;color:#555;font-size:13px}
+  .audit ul{margin:8px 0 0;padding-left:18px}
+  .drawer{position:fixed;right:22px;bottom:22px;background:#111;color:white;border-radius:8px;box-shadow:0 16px 40px rgba(0,0,0,.25);width:360px;max-width:calc(100vw - 44px);padding:18px;display:none}
+  .drawer.show{display:block}
+  .drawer h3{margin:0 0 10px;font-size:15px}
+  .drawer p{color:#ccc;font-size:13px;line-height:1.45}
+  .drawer textarea{width:100%;height:72px;margin:8px 0 12px;background:#222;color:#fff;border:1px solid #444;border-radius:4px;padding:8px}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#111;color:white;padding:12px 18px;border-radius:4px;display:none;font-size:13px;z-index:10}
+  .toast.show{display:block}
+  .check{width:16px;height:16px}
+  .errorBox{background:#fff7f2;border:1px solid #e6c9b9;padding:14px;border-radius:6px;font-size:13px;line-height:1.45;margin-top:14px;color:#522}
+  @media(max-width:1050px){.app{grid-template-columns:1fr}.sidebar{display:none}.content{grid-template-rows:74px 70px 1fr}.main{grid-template-columns:1fr}.viewerPane{border-top:1px solid var(--line)}.preview{height:520px}.tabs{overflow:auto}.meta{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">MARCH<small>STUDIO</small></div>
+    <div class="project"><h1>DOME HOUSE</h1><p>Drawing Portal POC</p></div>
+    <nav class="nav">
+      <button class="active">Drawings</button>
+      <button onclick="openTransmittal()">Transmittal</button>
+      <button onclick="showRegister()">Register</button>
+      <button onclick="showAudit()">Audit Log</button>
+    </nav>
+    <div class="filterCard">
+      LIVE GOOGLE DRIVE FEED
+      <p style="color:#bbb;line-height:1.45">Architectural and Structural tabs read directly from Google Drive.</p>
+    </div>
+  </aside>
+
+  <section class="content">
+    <header class="top">
+      <div class="title"><strong>DOME HOUSE</strong><span>Client Drawing Portal</span></div>
+      <div>March Studio ▾</div>
+    </header>
+
+    <div class="tabs" id="tabs"></div>
+
+    <main class="main">
+      <section class="listPane">
+        <div class="toolbar">
+          <h2 id="heading">Architectural Drawings</h2>
+          <div class="actions">
+            <button class="btn" onclick="showRegister()">Export Register</button>
+            <button class="btn dark" onclick="openTransmittal()">Create Transmittal</button>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th></th><th>Drawing No.</th><th>Title</th><th>Revision</th><th>Date</th><th>Status</th><th>Download</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+
+        <div id="errorBox"></div>
+
+        <div class="audit">
+          <strong>Demo behaviour:</strong>
+          <ul>
+            <li>Architectural drawings are loaded from Google Drive.</li>
+            <li>Click a row to load the PDF preview.</li>
+            <li>Download opens the original Google Drive file.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="viewerPane">
+        <div class="viewerHeader">
+          <div>
+            <button class="btn" onclick="backToList()">‹ Back to list</button>
+            <h3 id="vTitle"></h3>
+            <p id="vMeta"></p>
+          </div>
+          <div class="actions">
+            <button class="btn dark" onclick="downloadCurrent()">Download</button>
+            <button class="btn" onclick="openPreviewNewTab()">Open Preview</button>
+          </div>
+        </div>
+
+        <div class="previewShell">
+          <div class="pdfbar">
+            <span>☰</span>
+            <span class="grow" id="pdfName">PDF preview</span>
+            <span>1 / 1</span><span>−</span><span>72%</span><span>＋</span><span>⬇</span>
+          </div>
+          <div class="preview" id="previewArea"></div>
+        </div>
+
+        <div class="meta" id="meta"></div>
+
+        <div class="audit">
+          <strong>Recent activity</strong>
+          <ul id="auditList"></ul>
+        </div>
+      </section>
+    </main>
+  </section>
+</div>
+
+<div class="drawer" id="drawer">
+  <h3>Create Transmittal</h3>
+  <p id="txSummary"></p>
+  <textarea placeholder="Issue note: For information / For construction / Updated structural coordination..."></textarea>
+  <button class="btn dark" onclick="sendTransmittal()">Send to Client</button>
+  <button class="btn" onclick="closeDrawer()">Cancel</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/*
+  IMPORTANT:
+  Replace the URL below with your WEB APP deployment URL.
+  It must look like:
+  https://script.google.com/macros/s/AKfycbxxxxxxxxxxxxxxxxxxxx/exec
+
+  Do NOT use:
+  - the script editor URL
+  - the script.googleusercontent.com temporary echo URL
+*/
+const DISCIPLINE_APIS = {
+  Architectural: "https://script.google.com/macros/s/AKfycbznKNG9TJuo3iFBruwAAvEUHmW1-eSS1ZhHNkih8yxcDWM5ZixKYHBlyswtPru3iZtD/exec",
+  Structural: "https://script.google.com/macros/s/AKfycbz3iYE9P4NhvBYgV3Bu2OM3dA0l0YotAAmpgshUAYbY_kFr0ZAhmRilNw-k2YdW6P5BCA/exec"
+};
+
+const disciplines = ['Architectural','Structural','Civil','Mechanical','Electrical','Other'];
+
+let active = 'Architectural';
+let current = null;
+let selected = new Set();
+let audit = ['Portal opened by client@example.com'];
+let liveDrawings = {};
+let fallbackDrawings = [
+  {d:'Structural',no:'S001',title:'Structural Notes',rev:'-',date:'-',status:'Current',preview:'assets/drawings/S001.svg',download:'#',notes:'Mock structural placeholder.'},
+  {d:'Structural',no:'S101',title:'Framing Plan',rev:'-',date:'-',status:'Current',preview:'assets/drawings/S101.svg',download:'#',notes:'Mock structural placeholder.'},
+  {d:'Civil',no:'C100',title:'Drainage Plan',rev:'-',date:'-',status:'Current',preview:'assets/drawings/C100.svg',download:'#',notes:'Mock civil placeholder.'},
+  {d:'Mechanical',no:'M100',title:'Mechanical Layout',rev:'-',date:'-',status:'Current',preview:'assets/drawings/M100.svg',download:'#',notes:'Mock mechanical placeholder.'},
+  {d:'Electrical',no:'E100',title:'Lighting + Power Plan',rev:'-',date:'-',status:'Current',preview:'assets/drawings/E100.svg',download:'#',notes:'Mock electrical placeholder.'},
+  {d:'Other',no:'SK001',title:'Client Sketch Issue',rev:'-',date:'-',status:'Current',preview:'assets/drawings/SK001.svg',download:'#',notes:'Mock other placeholder.'}
+];
+
+function init(){
+  document.getElementById('tabs').innerHTML = disciplines.map(d =>
+    `<button class="${d===active?'active':''}" onclick="setDisc('${d}')">${d}</button>`
+  ).join('');
+  renderRows();
+  renderAudit();
+  loadDisciplineFromAPI('Architectural');
+}
+
+function setDisc(d){
+  active = d;
+  document.getElementById('heading').textContent = d + ' Drawings';
+  document.getElementById('errorBox').innerHTML = '';
+  document.getElementById('tabs').innerHTML = disciplines.map(x =>
+    `<button class="${x===active?'active':''}" onclick="setDisc('${x}')">${x}</button>`
+  ).join('');
+  renderRows();
+
+  if(DISCIPLINE_APIS[d] && !liveDrawings[d]){
+    loadDisciplineFromAPI(d);
+    return;
+  }
+
+  const first = filtered()[0];
+  if(first) selectDrawing(first);
+}
+
+function parseDrawing(file, discipline){
+  const name = file.name || 'Untitled.pdf';
+  const clean = name.replace(/\.pdf$/i,'');
+  const parts = clean.split(' - ');
+  const no = parts[0] || clean;
+  const title = parts.length > 1 ? parts.slice(1).join(' - ') : clean;
+
+  let rev = '-';
+  const revMatch = clean.match(/\[(.*?)\]/);
+  if(revMatch) rev = revMatch[1];
+
+  return {
+    d:discipline,
+    no:no,
+    title:title,
+    rev:rev,
+    date:'-',
+    status:'Current',
+    preview:file.url,
+    download:'https://drive.google.com/file/d/' + file.id + '/view',
+    id:file.id,
+    rawName:name,
+    notes:'Live PDF imported from Google Drive.'
+  };
+}
+
+function loadDisciplineFromAPI(discipline){
+  const apiUrl = DISCIPLINE_APIS[discipline];
+
+  if(!apiUrl){
+    return;
+  }
+
+  showApiMessage('Loading ' + discipline + ' PDFs from Google Drive...');
+
+  fetch(apiUrl)
+    .then(res => {
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
+    .then(data => {
+      if(!Array.isArray(data)) throw new Error('API did not return a JSON array.');
+
+      liveDrawings[discipline] = data.map(file => parseDrawing(file, discipline))
+        .sort((a,b)=>a.no.localeCompare(b.no, undefined, {numeric:true}));
+
+      document.getElementById('errorBox').innerHTML = '';
+
+      if(active === discipline){
+        renderRows();
+        if(liveDrawings[discipline].length) {
+          selectDrawing(liveDrawings[discipline][0]);
+        } else {
+          showApiMessage('The API worked, but no PDFs were found in the ' + discipline + ' folder.');
+        }
+      }
+    })
+    .catch(err => {
+      liveDrawings[discipline] = [{
+        d:discipline,
+        no:'ERROR',
+        title:'Could not load Google Drive folder',
+        rev:'-',
+        date:'-',
+        status:'Current',
+        preview:'assets/drawings/A000.svg',
+        download:'#',
+        notes:String(err)
+      }];
+
+      if(active === discipline){
+        renderRows();
+        selectDrawing(liveDrawings[discipline][0]);
+        showApiMessage('Could not load the ' + discipline + ' Google Drive API. Check the Apps Script deployment URL, permissions, and that the URL ends in /exec. Error: ' + err.message);
+      }
+    });
+}
+
+function showApiMessage(msg){
+  document.getElementById('errorBox').innerHTML = `<div class="errorBox">${msg}</div>`;
+}
+
+function filtered(){
+  if(DISCIPLINE_APIS[active]) return liveDrawings[active] || [];
+  return fallbackDrawings.filter(x => x.d === active);
+}
+
+function renderRows(){
+  const rows = filtered();
+  document.getElementById('rows').innerHTML = rows.map((x,i) => `
+    <tr class="${current && current.rawName===x.rawName ? 'selected' : ''}" onclick="selectDrawingByIndex(${i})">
+      <td><input class="check" type="checkbox" ${selected.has((x.rawName||x.no+x.rev))?'checked':''} onclick="event.stopPropagation();toggleSelect('${(x.rawName||x.no+x.rev).replace(/'/g,'')}')"></td>
+      <td><span class="fileIcon"></span>${escapeHtml(x.no)}</td>
+      <td>${escapeHtml(x.title)}</td>
+      <td>${x.rev === '-' ? '-' : 'Rev ' + escapeHtml(x.rev)}</td>
+      <td>${escapeHtml(x.date)}</td>
+      <td><span class="status">${escapeHtml(x.status)}</span></td>
+      <td><button class="btn" onclick="event.stopPropagation();downloadItemByIndex(${i})">⬇</button></td>
+    </tr>
+  `).join('');
+}
+
+function selectDrawingByIndex(i){
+  const x = filtered()[i];
+  selectDrawing(x);
+}
+
+function selectDrawing(x){
+  current = x;
+  if(!x) return;
+
+  document.getElementById('vTitle').textContent = x.no + '   ' + x.title;
+  document.getElementById('vMeta').textContent = 'Revision ' + x.rev + '   |   ' + x.date + '   |   ' + x.status;
+  document.getElementById('pdfName').textContent = x.rawName || (x.no + '_' + x.title + '_Rev_' + x.rev + '.pdf');
+
+  const previewArea = document.getElementById('previewArea');
+  if(x.preview && x.preview.includes('drive.google.com')){
+    previewArea.innerHTML = `<iframe src="${x.preview}" allow="autoplay"></iframe>`;
+  } else {
+    previewArea.innerHTML = `<img src="${x.preview || ''}" alt="Drawing preview">`;
+  }
+
+  document.getElementById('meta').innerHTML = `
+    <div><h4>Description</h4><p>${escapeHtml(x.notes || '')}</p></div>
+    <div><h4>Discipline</h4><p>${escapeHtml(x.d)}</p></div>
+    <div><h4>Issued by</h4><p>March Studio</p></div>
+    <div><h4>File</h4><p>${x.id ? 'Google Drive PDF<br>ID: ' + escapeHtml(x.id.slice(0,8)) + '…' : 'Local mock preview'}</p></div>
+  `;
+
+  renderRows();
+}
+
+function toggleSelect(k){
+  selected.has(k) ? selected.delete(k) : selected.add(k);
+  renderRows();
+}
+
+function downloadItemByIndex(i){
+  const x = filtered()[i];
+  downloadItem(x);
+}
+
+function downloadItem(x){
+  if(!x) return;
+  audit.unshift(`${x.no} Rev ${x.rev} opened/downloaded by client@example.com`);
+  renderAudit();
+  toast(`${x.no} download logged`);
+  if(x.download && x.download !== '#') window.open(x.download, '_blank');
+}
+
+function downloadCurrent(){
+  if(current) downloadItem(current);
+}
+
+function openPreviewNewTab(){
+  if(current && current.preview) window.open(current.preview, '_blank');
+}
+
+function openTransmittal(){
+  document.getElementById('drawer').classList.add('show');
+  const count = selected.size || filtered().length;
+  document.getElementById('txSummary').textContent =
+    `${count} drawing${count===1?'':'s'} ready to issue to the selected client group. In the real version this would email a secure link and freeze the issued set.`;
+}
+
+function closeDrawer(){
+  document.getElementById('drawer').classList.remove('show');
+}
+
+function sendTransmittal(){
+  audit.unshift(`Transmittal issued: ${selected.size || filtered().length} drawings to client@example.com`);
+  closeDrawer();
+  renderAudit();
+  toast('Transmittal sent and logged');
+}
+
+function showRegister(){
+  toast('Register export would download CSV/PDF in the real version');
+}
+
+function showAudit(){
+  toast('Audit log visible in the right panel');
+}
+
+function renderAudit(){
+  document.getElementById('auditList').innerHTML = audit.slice(0,6).map(a => `<li>${escapeHtml(a)}</li>`).join('');
+}
+
+function backToList(){
+  document.querySelector('.listPane').scrollIntoView({behavior:'smooth'});
+}
+
+function toast(t){
+  const el = document.getElementById('toast');
+  el.textContent = t;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2200);
+}
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, s => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[s]));
+}
+
+init();
+</script>
+</body>
+</html>
