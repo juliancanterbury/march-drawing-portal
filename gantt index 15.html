@@ -139,61 +139,19 @@
   .bar .resizeEnd{right:-5px;cursor:e-resize}
   .bar.resizing{opacity:.75}
 
+  .programmeView{padding:0 32px 32px}
+  .programmeTop{position:sticky;top:0;z-index:30;background:#fffdf8;margin:0 -32px 14px;padding:28px 32px 18px;border-bottom:1px solid var(--line)}
+  .ganttWrap{max-height:calc(100vh - 235px);position:relative}
+  .yearBand{position:absolute;top:0;height:24px;border-left:1px solid rgba(0,0,0,.22);padding-left:6px;font-size:12px;font-weight:700;color:#222;background:rgba(246,241,232,.85);white-space:nowrap}
+  .monthBand{top:24px;height:24px;font-size:10px}
+  .dayBand{top:48px;height:26px}
+  .timelineHeader{height:74px}
+  .ganttHeader{position:sticky;top:0;z-index:20}
+  .dependencyWarn{outline:2px solid #cf3b22}
+  .warnNote{position:absolute;top:43px;font-size:10px;color:#b03920;white-space:nowrap}
+  .dragTooltip{position:fixed;z-index:9999;pointer-events:none;background:#111;color:#fff;border-radius:4px;padding:6px 8px;font-size:11px;box-shadow:0 6px 16px rgba(0,0,0,.25);display:none;white-space:nowrap}
+
   @media(max-width:1050px){.app{grid-template-columns:1fr}.sidebar{display:none}.content{grid-template-rows:74px 70px 1fr}.main{grid-template-columns:1fr}.viewerPane{border-top:1px solid var(--line)}.preview{height:520px}.tabs{overflow:auto}.meta{grid-template-columns:1fr 1fr}}
-
-/* v13 stable programme merge: keeps full portal, uses stable gantt layout */
-.programmeView{display:none;background:#fffdf8;padding:0;overflow:auto;min-height:calc(100vh - 88px)}
-.programmeTop{position:sticky;top:0;z-index:40;background:#fffdf8;border-bottom:1px solid var(--line);padding:24px 24px 14px;margin:0;display:block}
-.programmeTop h2{font-size:23px;font-weight:400;margin:0 0 6px}
-.programmeTop p{font-size:11px;color:#555;margin:0 0 14px}
-.programmeTools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-start;max-width:100%;margin:0}
-.zoomBtn{border:1px solid #bbb;background:white;padding:7px 10px;border-radius:5px;font-size:10px;cursor:pointer;text-transform:uppercase}
-.zoomBtn.active{background:#111;color:#fff;border-color:#111}
-.scaleControl{font-size:10px;color:#444;display:flex;gap:8px;align-items:center}
-.scaleControl input{width:100px;max-width:30vw}
-#programmeContent{padding:0 24px 32px}
-.ganttSummary{font-size:11px;color:#555;margin:12px 0}
-.ganttWrap{border:1px solid var(--line);border-radius:8px 0 0 8px;background:#fff;overflow:auto;max-height:calc(100vh - 235px);position:relative;box-shadow:none}
-.gantt{position:relative;min-width:max-content}
-.ganttRow,.ganttHeader{display:grid;grid-template-columns:250px 1fr;min-height:54px;border-bottom:1px solid #ece8df;min-width:max-content}
-.ganttHeader{position:sticky;top:0;z-index:30;min-height:44px;background:#f1ece3;color:#333;font-size:10px}
-.ganttHeader .taskHead{position:sticky;left:0;z-index:35;background:#f1ece3;padding:13px 12px;border-right:1px solid var(--line)}
-.taskCell{position:sticky;left:0;z-index:10;background:#fff;display:grid;grid-template-columns:30px 1fr 65px;gap:8px;align-items:center;padding:9px 12px;border-right:1px solid var(--line);font-size:10px}
-.taskId{color:#53718b;font-size:10px}
-.taskName{font-weight:700;font-size:12px;line-height:1.05}
-.taskMeta{font-size:10px;color:#53606c;margin-top:4px}
-.taskDates{font-size:10px;color:#333;line-height:1.25;text-align:right}
-.timelineCell{position:relative;background-image:linear-gradient(to right,rgba(0,0,0,.055) 1px,transparent 1px);background-size:var(--programme-daypx,14px) 100%;height:54px;padding:0}
-.dateHeader{height:54px;position:relative;background:#f4efe6;overflow:hidden}
-.dayTick{position:absolute;top:30px;height:24px;border-left:1px solid rgba(0,0,0,.08)}
-.weekend{position:absolute;top:30px;height:24px;background:rgba(0,0,0,.035)}
-.yearLabel{position:absolute;top:4px;font-size:11px;font-weight:700;color:#222;border-left:1px solid rgba(0,0,0,.22);padding-left:4px;white-space:nowrap}
-.monthLabel{position:absolute;top:20px;font-size:10px;color:#555;border-left:1px solid rgba(0,0,0,.12);padding-left:4px;white-space:nowrap}
-.bar{position:absolute;top:14px;height:16px;border-radius:12px;background:#d7a64c;box-shadow:0 2px 8px rgba(0,0,0,.18);cursor:grab;touch-action:none;user-select:none}
-.bar.dragging{cursor:grabbing;box-shadow:0 4px 14px rgba(0,0,0,.3)}
-.bar.warn{outline:2px solid #cf3b22}
-.bar[data-colour="blue"]{background:#34495e}
-.bar[data-colour="red"]{background:#c76449}
-.bar[data-colour="grey"]{background:#96968f}
-.bar[data-colour="gold"]{background:#d7a64c}
-.handle{position:absolute;top:-3px;width:14px;height:22px;border-radius:7px;background:rgba(255,255,255,.72);border:1px solid rgba(0,0,0,.18);opacity:0}
-.bar:hover .handle,.bar.dragging .handle{opacity:1}
-.handle.left{left:-6px;cursor:ew-resize}
-.handle.right{right:-6px;cursor:ew-resize}
-.depNote,.warningText{position:absolute;top:33px;font-size:9px;white-space:nowrap}
-.depNote{color:#667}.warningText{color:#b03920}
-.dateTooltip{position:fixed;z-index:1000;pointer-events:none;background:#111;color:#fff;border-radius:4px;padding:6px 8px;font-size:11px;box-shadow:0 6px 16px rgba(0,0,0,.25);display:none;white-space:nowrap}
-.unsaved{display:none;background:#fff4cf;border:1px solid #e3c56c;color:#5a4310;border-radius:6px;padding:7px 10px;font-size:11px}
-.unsaved.show{display:inline-block}
-@media(max-width:760px){
-  .programmeTop{padding:18px 12px 10px}
-  #programmeContent{padding:0 12px 24px}
-  .ganttWrap{max-height:calc(100vh - 210px)}
-  .ganttRow,.ganttHeader{grid-template-columns:220px 1fr}
-  .taskCell{grid-template-columns:24px 1fr 58px;padding:8px}
-  .taskName{font-size:11px}
-}
-
 </style>
 </head>
 <body>
@@ -297,7 +255,7 @@
           <button class="zoomBtn" onclick="setProgrammeScale('month')" id="scale-month">Month</button>
           <button class="zoomBtn" onclick="setProgrammeScale('week')" id="scale-week">Week</button>
           <label class="scaleControl">Day size
-            <input id="dayScale" type="range" min="2" max="40" value="14" oninput="setDayScale(this.value)">
+            <input id="dayScale" type="range" min="3" max="70" value="10" oninput="setDayScale(this.value)">
           </label>
           <button class="btn" onclick="loadProgramme()">Refresh</button>
           <button class="btn dark" onclick="showDrawings()">Back to Drawings</button>
@@ -306,7 +264,6 @@
       <div id="programmeContent">
         <div class="programmeError">Programme ready. Loading from Google Sheets…</div>
       </div>
-      <div class="dateTooltip" id="dateTooltip"></div>
     </main>
   </section>
 </div>
@@ -320,6 +277,7 @@
 </div>
 
 <div class="toast" id="toast"></div>
+<div class="dragTooltip" id="dragTooltip"></div>
 
 <script>
 /*
@@ -593,7 +551,6 @@ function escapeHtml(str){
 }
 
 
-
 function showDrawings(){
   document.querySelector('.content').style.gridTemplateRows = '88px 70px 1fr';
   document.getElementById('tabs').style.display = 'flex';
@@ -615,44 +572,41 @@ function showProgramme(){
   loadProgramme();
 }
 
-/* Stable Gantt programme v13.
-   This keeps the full Drawing Portal, but uses the simpler stable Gantt renderer from the file that tested well.
-   Slider no longer re-renders the wider page; scroll position is preserved while zooming.
-*/
-const MS_DAY = 86400000;
-let programmeRows = [];
-let programmeDayPx = 14;
-let programmeScaleMode = "overview";
-let chartStart = null;
-let chartEnd = null;
-let dragState = null;
+function parseProgrammeDate(value){
+  if(value === null || value === undefined || value === '') return null;
 
-function parseProgrammeDate(v){
-  if(v instanceof Date) return stripProgrammeTime(v);
-  if(typeof v === 'number'){
-    const d = new Date(Math.round((v - 25569) * 86400 * 1000));
-    return isNaN(d.getTime()) ? null : stripProgrammeTime(d);
+  if(typeof value === 'number'){
+    const d = new Date(Math.round((value - 25569) * 86400 * 1000));
+    return isNaN(d.getTime()) ? null : d;
   }
-  let s = String(v || '').trim();
-  if(!s) return null;
-  if(/^\d{4}-\d{2}-\d{2}/.test(s)) return stripProgrammeTime(new Date(s.slice(0,10) + 'T00:00:00'));
 
-  let m = s.match(/^(\d{1,2})[\/\- ]([A-Za-z]{3,}|\d{1,2})[\/\- ](\d{2,4})$/);
-  if(m){
-    let d = +m[1], y = +m[3];
-    if(y < 100) y += 2000;
-    let mo = isNaN(+m[2])
-      ? ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'].indexOf(m[2].slice(0,3).toLowerCase()) + 1
-      : +m[2];
-    return stripProgrammeTime(new Date(y, mo - 1, d));
+  const s = String(value).trim();
+  if(!s) return null;
+
+  // Australian primary format: dd-mm-yyyy or dd-mm-yy
+  const dmyDash = s.match(/^(\d{1,2})-(\d{1,2})-(\d{2,4})$/);
+  if(dmyDash){
+    const yyyy = dmyDash[3].length === 2 ? '20' + dmyDash[3] : dmyDash[3];
+    const d = new Date(`${yyyy}-${dmyDash[2].padStart(2,'0')}-${dmyDash[1].padStart(2,'0')}T00:00:00`);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  // Australian slash format: dd/mm/yyyy or dd/mm/yy
+  const dmySlash = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+  if(dmySlash){
+    const yyyy = dmySlash[3].length === 2 ? '20' + dmySlash[3] : dmySlash[3];
+    const d = new Date(`${yyyy}-${dmySlash[2].padStart(2,'0')}-${dmySlash[1].padStart(2,'0')}T00:00:00`);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  // ISO from Apps Script.
+  if(/^\d{4}-\d{2}-\d{2}/.test(s)){
+    const d = new Date(s);
+    return isNaN(d.getTime()) ? null : d;
   }
 
   const d = new Date(s);
-  return isNaN(d.getTime()) ? null : stripProgrammeTime(d);
-}
-
-function stripProgrammeTime(d){
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  return isNaN(d.getTime()) ? null : d;
 }
 
 function addDays(date, days){
@@ -661,72 +615,98 @@ function addDays(date, days){
   return d;
 }
 
-function diffDays(a,b){
-  return Math.round((stripProgrammeTime(b) - stripProgrammeTime(a)) / MS_DAY);
-}
-
-function isoProgrammeDate(d){
-  return d.toISOString().slice(0,10);
+function daysBetween(a,b){
+  return Math.max(0, Math.round((b.getTime() - a.getTime()) / 86400000));
 }
 
 function fmtDate(date){
   return date ? date.toLocaleDateString('en-AU', {day:'2-digit', month:'short', year:'numeric'}) : '-';
 }
 
-function formatDateForSheet(date){
-  const dd = String(date.getDate()).padStart(2,'0');
-  const mm = String(date.getMonth() + 1).padStart(2,'0');
-  const yyyy = date.getFullYear();
-  return `${dd}-${mm}-${yyyy}`;
-}
 
-function normaliseProgrammeTask(row, i){
-  const id = String(row.ID ?? row.Id ?? row.id ?? row.No ?? row.no ?? row['Task ID'] ?? i + 1).trim();
-  const start = parseProgrammeDate(row.Start ?? row.start ?? row['Start Date'] ?? row['Start']);
-  let end = parseProgrammeDate(row.End ?? row.end ?? row['End Date'] ?? row['Finish'] ?? row.Finish);
-  const duration = Math.max(1, Number(row.Duration || row.duration || 0));
 
-  if(!end && start && duration) end = addDays(start, duration);
-  if(end && start && end <= start) end = addDays(start, Math.max(1, duration || 1));
 
-  return {
-    raw: row,
-    rowIndex: i,
-    id: id || String(i + 1),
-    task: String(row.Task ?? row.task ?? row.Name ?? row.name ?? 'Task ' + (i + 1)),
-    discipline: String(row.Discipline ?? row.discipline ?? row.Consultant ?? row.consultant ?? row.Role ?? ''),
-    status: String(row.Status ?? row.status ?? ''),
-    start: start,
-    end: end,
-    depends: String(row['Depends On'] ?? row.Depends ?? row.depends ?? row.Predecessors ?? '').trim()
-  };
-}
+let programmeRows = [];
+let dayPixels = 10;
+let selectedProgrammeIndex = null;
+let programmeScaleMode = 'overview';
+let programmeChartStart = null;
+let programmeChartEnd = null;
 
 function setDayScale(value){
-  programmeDayPx = Math.max(2, Number(value || 14));
+  dayPixels = Math.max(2, Number(value || 10));
   programmeScaleMode = 'custom';
-  updateScaleButtons('');
-  renderProgramme(programmeRows, programmeRows.length, true);
+  ['overview','year','month','week'].forEach(x => {
+    const btn = document.getElementById('scale-' + x);
+    if(btn) btn.classList.remove('active');
+  });
+  renderProgramme(programmeRows, programmeRows.length);
 }
 
 function setProgrammeScale(mode){
   programmeScaleMode = mode;
-  if(mode === 'year') programmeDayPx = 4;
-  if(mode === 'month') programmeDayPx = 18;
-  if(mode === 'week') programmeDayPx = 30;
+  if(mode === 'overview') dayPixels = 0;
+  if(mode === 'year') dayPixels = 4;
+  if(mode === 'month') dayPixels = 14;
+  if(mode === 'week') dayPixels = 42;
 
   const slider = document.getElementById('dayScale');
-  if(mode !== 'overview' && slider) slider.value = programmeDayPx;
+  if(slider && mode !== 'overview') slider.value = dayPixels;
 
-  updateScaleButtons(mode);
-  renderProgramme(programmeRows, programmeRows.length, true);
-}
-
-function updateScaleButtons(activeMode){
   ['overview','year','month','week'].forEach(x => {
     const btn = document.getElementById('scale-' + x);
-    if(btn) btn.classList.toggle('active', x === activeMode);
+    if(btn) btn.classList.toggle('active', x === mode);
   });
+
+  renderProgramme(programmeRows, programmeRows.length);
+}
+
+function normaliseProgrammeRows(rows){
+  return rows
+    .filter(r => r && (r.ID || r.Task))
+    .map(r => {
+      const start = parseProgrammeDate(r.Start);
+      const duration = Math.max(1, Number(r.Duration || 1));
+      const finishFromSheet = parseProgrammeDate(r.Finish || r.End || r['End Date']);
+      const finish = finishFromSheet || (start ? addDays(start, duration) : null);
+      const actualDuration = start && finish ? Math.max(1, daysBetween(start, finish)) : duration;
+      return {
+        id:String(r.ID || '').trim(),
+        task:String(r.Task || '').trim(),
+        start:start,
+        duration:actualDuration,
+        finish:finish,
+        depends:String(r['Depends On'] || '').trim(),
+        consultant:String(r.Consultant || r.Discipline || '').trim() || 'Consultant',
+        status:String(r.Status || '').trim()
+      };
+    })
+    .filter(r => r.task && r.start && r.finish);
+}
+
+function dependencyIds(task){
+  return String(task.depends || '').split(/[,; ]+/).map(x => x.trim()).filter(Boolean);
+}
+
+function predecessorFinish(task){
+  const byId = Object.fromEntries(programmeRows.map(r => [r.id, r]));
+  const finishes = dependencyIds(task).map(id => byId[id]).filter(Boolean).map(t => t.finish.getTime());
+  return finishes.length ? new Date(Math.max(...finishes)) : null;
+}
+
+function minimumStart(task){
+  const finish = predecessorFinish(task);
+  return finish ? addDays(finish, 1) : null;
+}
+
+function dependencyWarning(task){
+  const min = minimumStart(task);
+  return min && task.start < min ? 'Starts before dependency finish. Earliest: ' + fmtDate(min) : '';
+}
+
+function markProgrammeUnsaved(){
+  const el = document.getElementById('programmeUnsaved');
+  if(el) el.classList.add('show');
 }
 
 function loadProgramme(){
@@ -739,350 +719,303 @@ function loadProgramme(){
       return res.json();
     })
     .then(data => {
-      if(!Array.isArray(data)) throw new Error('Programme API did not return a JSON array.');
-      programmeRows = data.map(normaliseProgrammeTask).filter(t => t.task && t.start && t.end);
+      programmeRows = normaliseProgrammeRows(data);
       const unsaved = document.getElementById('programmeUnsaved');
-      if(unsaved) {
-        unsaved.classList.remove('show');
-        unsaved.textContent = 'Unsaved local changes';
-      }
-      renderProgramme(programmeRows, data.length, false);
+      if(unsaved) unsaved.classList.remove('show');
+      renderProgramme(programmeRows, data.length);
     })
     .catch(err => {
       el.innerHTML = '<div class="programmeError">Could not load Programme API. Error: ' + escapeHtml(err.message) + '</div>';
     });
 }
 
-function depsOf(task){
-  return String(task.depends || '').split(/[,; ]+/).map(x => x.trim()).filter(Boolean);
-}
-
-function predecessorEnd(task){
-  const ends = depsOf(task)
-    .map(id => (programmeRows.find(x => x.id === id) || {}).end)
-    .filter(Boolean);
-  return ends.length ? new Date(Math.max(...ends.map(d => d.getTime()))) : null;
-}
-
-function minStartFor(task){
-  const pe = predecessorEnd(task);
-  return pe ? addDays(pe, 1) : null;
-}
-
-function dependencyWarning(task){
-  const min = minStartFor(task);
-  return min && task.start < min ? 'Starts before dependency finish. Earliest: ' + fmtDate(min) : '';
-}
-
-function colourFor(task){
-  const d = (task.discipline || '').toLowerCase();
-  if(d.includes('struct')) return 'blue';
-  if(d.includes('mech') || d.includes('elect') || d.includes('service')) return 'red';
-  if(d.includes('build') || d.includes('construct')) return 'grey';
-  return 'gold';
-}
-
-function renderProgramme(rows, rawCount, preserveScroll){
+function renderProgramme(rows, rawCount){
   const el = document.getElementById('programmeContent');
+
   if(!rows.length){
-    el.innerHTML = '<div class="programmeError">Programme API loaded ' + rawCount + ' row(s), but none had readable Task + Start + Finish/Duration values. Check the date format in the Start column.</div>';
+    el.innerHTML = '<div class="programmeError">Programme API loaded ' + rawCount + ' row(s), but none had readable Task + Start + Duration values. Check date format in the Start column.</div>';
     return;
   }
 
-  const oldWrap = el.querySelector('.ganttWrap');
-  const oldScrollLeft = oldWrap ? oldWrap.scrollLeft : 0;
-  const oldScrollTop = oldWrap ? oldWrap.scrollTop : 0;
-
-  const min = new Date(Math.min(...rows.map(t => t.start.getTime())));
-  const max = new Date(Math.max(...rows.map(t => t.end.getTime())));
-  chartStart = addDays(min, -14);
-  chartEnd = addDays(max, 30);
-  const totalDays = diffDays(chartStart, chartEnd) + 1;
+  const rawMin = new Date(Math.min(...rows.map(r => r.start.getTime())));
+  const rawMax = new Date(Math.max(...rows.map(r => r.finish.getTime())));
+  const minStart = addDays(rawMin, -14);
+  const maxFinish = addDays(rawMax, 30);
+  programmeChartStart = minStart;
+  programmeChartEnd = maxFinish;
+  const totalDays = Math.max(1, Math.round((maxFinish.getTime() - minStart.getTime()) / 86400000) + 1);
 
   if(programmeScaleMode === 'overview'){
-    const taskCol = window.matchMedia('(max-width:760px)').matches ? 220 : 250;
-    const viewWidth = Math.max(320, (oldWrap?.clientWidth || el.clientWidth || window.innerWidth) - taskCol - 8);
-    programmeDayPx = Math.max(2, Math.min(10, Math.floor(viewWidth / totalDays)));
+    const taskCol = 330;
+    const view = document.getElementById('programmeContent') || document.body;
+    const available = Math.max(320, view.clientWidth - taskCol - 28);
+    dayPixels = Math.max(2, Math.min(10, Math.floor(available / totalDays)));
     const slider = document.getElementById('dayScale');
-    if(slider) slider.value = programmeDayPx;
-    updateScaleButtons('overview');
+    if(slider) slider.value = dayPixels;
   }
 
-  const width = totalDays * programmeDayPx;
-  const taskCol = window.matchMedia('(max-width:760px)').matches ? 220 : 250;
-  const totalWidth = taskCol + width;
-  document.documentElement.style.setProperty('--programme-daypx', programmeDayPx + 'px');
+  const timelinePx = Math.max(320, totalDays * dayPixels);
+  const totalWidth = 330 + timelinePx;
+  const headerItems = [];
 
-  let html = `
-    <p class="ganttSummary">${summaryLine(rows)}</p>
-    <div class="ganttWrap">
-      <div class="gantt">
-        <div class="ganttHeader" style="grid-template-columns:${taskCol}px ${width}px;min-width:${totalWidth}px">
-          <div class="taskHead">Task</div>
-          <div class="timelineCell dateHeader" style="width:${width}px">${renderProgrammeDateHeader(totalDays)}</div>
-        </div>
-  `;
+  let yCursor = new Date(minStart.getFullYear(), 0, 1);
+  if(yCursor < minStart) yCursor = new Date(yCursor.getFullYear() + 1, 0, 1);
+  if(yCursor > minStart){
+    headerItems.push(`<div class="yearBand" style="left:0px;width:${Math.max(40, ((Math.min(yCursor.getTime(), maxFinish.getTime()) - minStart.getTime()) / 86400000) * dayPixels)}px">${minStart.getFullYear()}</div>`);
+  }
+  while(yCursor <= maxFinish){
+    const next = new Date(yCursor.getFullYear() + 1, 0, 1);
+    const left = Math.max(0, ((yCursor.getTime() - minStart.getTime()) / 86400000) * dayPixels);
+    const width = Math.max(40, ((Math.min(next.getTime(), maxFinish.getTime()) - yCursor.getTime()) / 86400000) * dayPixels);
+    headerItems.push(`<div class="yearBand" style="left:${left}px;width:${width}px">${yCursor.getFullYear()}</div>`);
+    yCursor = next;
+  }
 
-  rows.forEach((t,i) => {
-    const left = diffDays(chartStart, t.start) * programmeDayPx;
-    const w = Math.max(programmeDayPx, diffDays(t.start, t.end) * programmeDayPx);
-    const warn = dependencyWarning(t);
+  let mCursor = new Date(minStart.getFullYear(), minStart.getMonth(), 1);
+  if(mCursor < minStart) mCursor = new Date(mCursor.getFullYear(), mCursor.getMonth() + 1, 1);
+  while(mCursor <= maxFinish){
+    const next = new Date(mCursor.getFullYear(), mCursor.getMonth() + 1, 1);
+    const left = Math.max(0, ((mCursor.getTime() - minStart.getTime()) / 86400000) * dayPixels);
+    const width = Math.max(24, ((Math.min(next.getTime(), maxFinish.getTime()) - mCursor.getTime()) / 86400000) * dayPixels);
+    const show = dayPixels >= 10 || mCursor.getMonth() % 2 === 0 || mCursor.getDate() === 1;
+    if(show) headerItems.push(`<div class="monthBand" style="left:${left}px;width:${width}px">${mCursor.toLocaleDateString('en-AU', {month:'short'})}</div>`);
+    mCursor = next;
+  }
 
-    html += `
-      <div class="ganttRow" style="grid-template-columns:${taskCol}px ${width}px;min-width:${totalWidth}px">
+  let day = new Date(minStart.getTime());
+  while(day <= maxFinish){
+    const left = ((day.getTime() - minStart.getTime()) / 86400000) * dayPixels;
+    const weekend = day.getDay() === 0 || day.getDay() === 6;
+    const label = dayPixels >= 18 ? ['S','M','T','W','T','F','S'][day.getDay()] : '';
+    const title = day.toLocaleDateString('en-AU', {weekday:'short', day:'2-digit', month:'short', year:'numeric'});
+    headerItems.push(`<div class="dayBand ${weekend ? 'weekend' : ''}" title="${title}" style="left:${left}px;width:${dayPixels}px">${label}</div>`);
+    day = addDays(day, 1);
+  }
+
+  const rowsHtml = rows.map((r, index) => {
+    const leftPx = ((r.start.getTime() - minStart.getTime()) / 86400000) * dayPixels;
+    const widthPx = Math.max(dayPixels, daysBetween(r.start, r.finish) * dayPixels);
+    const st = r.status.toLowerCase();
+    const statusClass = st.includes('complete') ? 'complete' : st.includes('progress') ? 'progress' : '';
+    const depends = r.depends ? `Depends on: ${escapeHtml(r.depends)}` : '';
+    const consultantClass = escapeHtml((r.consultant || 'Consultant').split(' ')[0]);
+    const selectedClass = selectedProgrammeIndex === index ? ' selectedTask' : '';
+    const warn = dependencyWarning(r);
+
+    return `
+      <div class="ganttRow${selectedClass}" onclick="selectProgrammeTask(${index})" style="grid-template-columns:330px ${timelinePx}px;min-width:${totalWidth}px">
         <div class="taskCell">
-          <div class="taskId">${escapeHtml(t.id)}</div>
+          <div class="taskId">${escapeHtml(r.id)}</div>
           <div>
-            <div class="taskName">${escapeHtml(t.task)}</div>
-            <div class="taskMeta">${escapeHtml(t.discipline || '—')} · ${escapeHtml(t.status || '—')}</div>
+            <div class="taskName">${escapeHtml(r.task)}</div>
+            <div class="taskMeta">${escapeHtml(r.consultant || '—')} · ${escapeHtml(r.status || '—')}</div>
           </div>
-          <div class="taskDates">${fmtDate(t.start)}<br>${fmtDate(t.end)}</div>
+          <div class="taskDates">${fmtDate(r.start)}<br>${fmtDate(r.finish)}</div>
         </div>
-        <div class="timelineCell" style="width:${width}px">
-          <div class="bar ${warn ? 'warn' : ''}" data-index="${i}" data-colour="${colourFor(t)}" style="left:${left}px;width:${w}px">
-            <span class="handle left" data-mode="start"></span>
-            <span class="handle right" data-mode="end"></span>
+        <div class="timelineCell" data-row="${index}" data-day-pixels="${dayPixels}" style="width:${timelinePx}px;background-size:${dayPixels}px 100%">
+          <div class="bar ${consultantClass} ${statusClass} ${warn ? 'dependencyWarn' : ''}" data-row="${index}" style="left:${leftPx}px;width:${widthPx}px" title="${fmtDate(r.start)} – ${fmtDate(r.finish)}">
+            <span class="resizeHandle resizeStart" data-edge="start"></span>
+            <span class="resizeHandle resizeEnd" data-edge="end"></span>
           </div>
-          ${t.depends ? `<div class="depNote" style="left:${left}px">Depends on: ${escapeHtml(t.depends)}</div>` : ''}
-          ${warn ? `<div class="warningText" style="left:${left}px">${escapeHtml(warn)}</div>` : ''}
+          ${depends ? `<div class="depNote" style="left:${leftPx}px">${depends}</div>` : ''}
+          ${warn ? `<div class="warnNote" style="left:${leftPx}px">${escapeHtml(warn)}</div>` : ''}
         </div>
       </div>
     `;
-  });
+  }).join('');
 
-  html += '</div></div>';
-  el.innerHTML = html;
-  bindProgrammeBars();
-
-  const wrap = el.querySelector('.ganttWrap');
-  if(wrap && preserveScroll){
-    wrap.scrollLeft = oldScrollLeft;
-    wrap.scrollTop = oldScrollTop;
-  }
-}
-
-function summaryLine(rows){
   const broken = rows.filter(dependencyWarning).length;
-  const zoomText =
-    programmeScaleMode === 'overview' ? `Overview auto-fit (${programmeDayPx}px/day)` :
-    programmeScaleMode === 'year' ? `Year view (${programmeDayPx}px/day)` :
-    programmeScaleMode === 'month' ? `Month view (${programmeDayPx}px/day)` :
-    programmeScaleMode === 'week' ? `Week view (${programmeDayPx}px/day)` :
-    `Day size: ${programmeDayPx}px`;
+  const zoomText = programmeScaleMode === 'overview' ? `Overview auto-fit (${dayPixels}px/day)` : programmeScaleMode === 'year' ? `Year view (${dayPixels}px/day)` : programmeScaleMode === 'month' ? `Month view (${dayPixels}px/day)` : programmeScaleMode === 'week' ? `Week view (${dayPixels}px/day)` : `Day size: ${dayPixels}px`;
 
-  return `Loaded ${rows.length} tasks from Google Sheets. Drag bars or handles; changes save back to the sheet. ${zoomText}.` +
-    (broken ? ` ${broken} dependency warning(s).` : '');
+  el.innerHTML = `
+    <p class="ganttSummary">Loaded ${rows.length} task${rows.length === 1 ? '' : 's'} from Google Sheets. Drag bars or handles; changes save back to the sheet. ${zoomText}.${broken ? ' ' + broken + ' dependency warning(s).' : ''}</p>
+    <div class="ganttWrap">
+      <div class="ganttHeader" style="grid-template-columns:330px ${timelinePx}px;min-width:${totalWidth}px">
+        <div>Task</div>
+        <div class="timelineHeader" style="width:${timelinePx}px">${headerItems.join('')}</div>
+      </div>
+      ${rowsHtml}
+    </div>
+  `;
+
+  attachProgrammeDragHandlers();
 }
 
-function renderProgrammeDateHeader(totalDays){
-  let out = '';
-  for(let i=0; i<totalDays; i++){
-    const d = addDays(chartStart, i);
-    const left = i * programmeDayPx;
-
-    if(d.getDay() === 0 || d.getDay() === 6){
-      out += `<span class="weekend" style="left:${left}px;width:${programmeDayPx}px"></span>`;
-    }
-
-    if(programmeDayPx >= 6){
-      out += `<span class="dayTick" style="left:${left}px"></span>`;
-    }
-
-    const first = i === 0;
-    const jan = d.getMonth() === 0 && d.getDate() === 1;
-    if(first || jan){
-      out += `<span class="yearLabel" style="left:${left}px">${d.getFullYear()}</span>`;
-    }
-
-    let showMonth = false;
-    if(programmeDayPx >= 12) showMonth = d.getDate() === 1 || first;
-    else if(programmeDayPx >= 6) showMonth = (d.getDate() === 1 && (d.getMonth() % 2 === 0)) || first;
-    else showMonth = (d.getDate() === 1 && (d.getMonth() % 3 === 0)) || first;
-
-    if(showMonth){
-      out += `<span class="monthLabel" style="left:${left}px">${d.toLocaleDateString('en-AU', {month:'short'})}</span>`;
-    }
-  }
-  return out;
+function selectProgrammeTask(index){
+  selectedProgrammeIndex = index;
 }
 
-function bindProgrammeBars(){
-  document.querySelectorAll('#programmeContent .bar').forEach(bar => {
-    bar.addEventListener('pointerdown', startProgrammeDrag);
-    bar.addEventListener('mouseenter', showProgrammeHoverTip);
-    bar.addEventListener('mousemove', moveProgrammeTip);
-    bar.addEventListener('mouseleave', hideProgrammeTip);
-  });
-
-  document.querySelectorAll('#programmeContent .handle').forEach(h => {
-    h.addEventListener('mouseenter', showProgrammeHoverTip);
-    h.addEventListener('mousemove', moveProgrammeTip);
-  });
+function formatDateForSheet(date){
+  const dd = String(date.getDate()).padStart(2,'0');
+  const mm = String(date.getMonth() + 1).padStart(2,'0');
+  const yyyy = date.getFullYear();
+  return `${dd}-${mm}-${yyyy}`;
 }
 
-function showProgrammeHoverTip(e){
-  const bar = e.target.closest('.bar');
-  if(!bar) return;
-  const t = programmeRows[Number(bar.dataset.index)];
-  const mode = e.target.dataset.mode || 'move';
-  const text = mode === 'start' ? fmtDate(t.start) : mode === 'end' ? fmtDate(t.end) : `${fmtDate(t.start)} – ${fmtDate(t.end)}`;
-  showProgrammeTip(e, text);
-}
-
-function moveProgrammeTip(e){
-  if(dragState) return;
-  showProgrammeHoverTip(e);
-}
-
-function showProgrammeTip(e, text){
-  const tt = document.getElementById('dateTooltip');
-  if(!tt) return;
-  tt.textContent = text;
-  tt.style.left = (e.clientX + 12) + 'px';
-  tt.style.top = (e.clientY - 34) + 'px';
-  tt.style.display = 'block';
-}
-
-function hideProgrammeTip(){
-  if(!dragState){
-    const tt = document.getElementById('dateTooltip');
-    if(tt) tt.style.display = 'none';
-  }
-}
-
-function startProgrammeDrag(e){
-  e.preventDefault();
-  e.stopPropagation();
-
-  const bar = e.target.closest('.bar');
-  const idx = Number(bar.dataset.index);
-  const task = programmeRows[idx];
-  const mode = e.target.dataset.mode || 'move';
-
-  dragState = {
-    idx,
-    mode,
-    startX: e.clientX,
-    origStart: new Date(task.start),
-    origEnd: new Date(task.end),
-    bar
+function saveProgrammeTask(task){
+  const payload = {
+    id: task.id,
+    start: formatDateForSheet(task.start),
+    duration: task.duration
   };
 
-  bar.classList.add('dragging');
-  bar.setPointerCapture(e.pointerId);
-  bar.addEventListener('pointermove', onProgrammeDrag);
-  bar.addEventListener('pointerup', endProgrammeDrag, {once:true});
-  bar.addEventListener('pointercancel', endProgrammeDrag, {once:true});
-}
-
-function onProgrammeDrag(e){
-  const ds = dragState;
-  if(!ds) return;
-
-  const task = programmeRows[ds.idx];
-  const delta = Math.round((e.clientX - ds.startX) / programmeDayPx);
-  let ns = new Date(ds.origStart);
-  let ne = new Date(ds.origEnd);
-
-  if(ds.mode === 'move'){
-    ns = addDays(ds.origStart, delta);
-    ne = addDays(ds.origEnd, delta);
-  } else if(ds.mode === 'start'){
-    ns = addDays(ds.origStart, delta);
-    if(ns >= ne) ns = addDays(ne, -1);
-  } else {
-    ne = addDays(ds.origEnd, delta);
-    if(ne <= ns) ne = addDays(ns, 1);
-  }
-
-  const min = minStartFor(task);
-  if(min && ns < min){
-    const dur = diffDays(ns, ne);
-    ns = min;
-    if(ds.mode === 'move') ne = addDays(ns, dur);
-    if(ds.mode === 'start' && ns >= ne) ns = addDays(ne, -1);
-  }
-
-  task.start = ns;
-  task.end = ne;
-
-  const left = diffDays(chartStart, task.start) * programmeDayPx;
-  const w = Math.max(programmeDayPx, diffDays(task.start, task.end) * programmeDayPx);
-  ds.bar.style.left = left + 'px';
-  ds.bar.style.width = w + 'px';
-
-  showProgrammeTip(e, ds.mode === 'start' ? fmtDate(task.start) : ds.mode === 'end' ? fmtDate(task.end) : `${fmtDate(task.start)} – ${fmtDate(task.end)}`);
-}
-
-async function endProgrammeDrag(e){
-  const ds = dragState;
-  if(!ds) return;
-
-  ds.bar.classList.remove('dragging');
-  ds.bar.removeEventListener('pointermove', onProgrammeDrag);
-
-  const task = programmeRows[ds.idx];
-  dragState = null;
-  hideProgrammeTip();
-  renderProgramme(programmeRows, programmeRows.length, true);
-  await saveProgrammeTask(task);
-}
-
-function markProgrammeUnsaved(){
-  const el = document.getElementById('programmeUnsaved');
-  if(el) el.classList.add('show');
-}
-
-async function saveProgrammeTask(task){
   const unsaved = document.getElementById('programmeUnsaved');
   if(unsaved){
     unsaved.textContent = 'Saving…';
     unsaved.classList.add('show');
   }
 
-  const payloads = [
-    {action:'updateTask', id:task.id, rowIndex:task.rowIndex, task:task.task, start:isoProgrammeDate(task.start), end:isoProgrammeDate(task.end)},
-    {id:task.id, start:formatDateForSheet(task.start), duration:Math.max(1, diffDays(task.start, task.end))}
-  ];
+  return fetch(PROGRAMME_API_URL, {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  })
+  .then(res => {
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  })
+  .then(result => {
+    if(!result.ok) throw new Error(result.error || 'Save failed');
+    return result;
+  });
+}
 
-  let lastError = null;
-  for(const payload of payloads){
-    try{
-      const res = await fetch(PROGRAMME_API_URL, {
-        method:'POST',
-        headers:{'Content-Type':'text/plain;charset=utf-8'},
-        body:JSON.stringify(payload)
-      });
-      if(!res.ok) throw new Error('HTTP ' + res.status);
-      const text = await res.text();
-      let result = {};
-      try{ result = JSON.parse(text); }catch(e){}
-      if(result && result.ok === false) throw new Error(result.error || 'Save failed');
-      if(unsaved){
-        unsaved.textContent = 'Saved to Google Sheet';
-        setTimeout(() => {
-          unsaved.classList.remove('show');
-          unsaved.textContent = 'Unsaved local changes';
-        }, 1800);
+function showDragTooltip(ev, text){
+  const tt = document.getElementById('dragTooltip');
+  if(!tt) return;
+  tt.textContent = text;
+  tt.style.left = (ev.clientX + 12) + 'px';
+  tt.style.top = (ev.clientY - 34) + 'px';
+  tt.style.display = 'block';
+}
+
+function hideDragTooltip(){
+  const tt = document.getElementById('dragTooltip');
+  if(tt) tt.style.display = 'none';
+}
+
+function attachProgrammeDragHandlers(){
+  document.querySelectorAll('.bar').forEach(bar => {
+    bar.addEventListener('mouseenter', ev => {
+      const task = programmeRows[Number(bar.dataset.row)];
+      showDragTooltip(ev, fmtDate(task.start) + ' – ' + fmtDate(task.finish));
+    });
+    bar.addEventListener('mousemove', ev => {
+      const task = programmeRows[Number(bar.dataset.row)];
+      const handle = ev.target.closest('.resizeHandle');
+      const text = handle && handle.dataset.edge === 'start' ? fmtDate(task.start) : handle && handle.dataset.edge === 'end' ? fmtDate(task.finish) : fmtDate(task.start) + ' – ' + fmtDate(task.finish);
+      showDragTooltip(ev, text);
+    });
+    bar.addEventListener('mouseleave', hideDragTooltip);
+
+    bar.addEventListener('pointerdown', ev => {
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      const handle = ev.target.closest('.resizeHandle');
+      const mode = handle ? handle.dataset.edge : 'move';
+      const rowIndex = Number(bar.dataset.row);
+      selectedProgrammeIndex = rowIndex;
+
+      const cell = bar.closest('.timelineCell');
+      const pixelsPerDay = Number(cell.dataset.dayPixels || dayPixels || 10);
+      const startX = ev.clientX;
+      const task = programmeRows[rowIndex];
+      const originalStart = new Date(task.start.getTime());
+      const originalFinish = new Date(task.finish.getTime());
+      const originalDuration = task.duration;
+
+      bar.classList.add('dragging');
+
+      function deltaDaysFromPointer(e){
+        return Math.round((e.clientX - startX) / pixelsPerDay);
       }
-      return;
-    }catch(err){
-      lastError = err;
-    }
-  }
 
-  if(unsaved){
-    unsaved.textContent = 'Save failed';
-    unsaved.classList.add('show');
-  }
-  alert('Could not save programme change to Google Sheets: ' + (lastError ? lastError.message : 'Unknown error'));
+      function apply(deltaDays, pointerEvent){
+        const t = programmeRows[rowIndex];
+        let newStart = new Date(originalStart.getTime());
+        let newFinish = new Date(originalFinish.getTime());
+
+        if(mode === 'move'){
+          newStart = addDays(originalStart, deltaDays);
+          newFinish = addDays(originalFinish, deltaDays);
+        }
+        if(mode === 'end'){
+          newFinish = addDays(originalFinish, deltaDays);
+          if(newFinish <= newStart) newFinish = addDays(newStart, 1);
+        }
+        if(mode === 'start'){
+          newStart = addDays(originalStart, deltaDays);
+          if(newStart >= newFinish) newStart = addDays(newFinish, -1);
+        }
+
+        const min = minimumStart(t);
+        if(min && newStart < min){
+          const dur = daysBetween(newStart, newFinish);
+          newStart = min;
+          if(mode === 'move') newFinish = addDays(newStart, dur);
+          if(mode === 'start' && newStart >= newFinish) newStart = addDays(newFinish, -1);
+        }
+
+        t.start = newStart;
+        t.finish = newFinish;
+        t.duration = Math.max(1, daysBetween(t.start, t.finish));
+
+        if(programmeChartStart){
+          const left = ((t.start.getTime() - programmeChartStart.getTime()) / 86400000) * dayPixels;
+          const width = Math.max(dayPixels, daysBetween(t.start, t.finish) * dayPixels);
+          bar.style.left = left + 'px';
+          bar.style.width = width + 'px';
+        }
+
+        const tip = mode === 'start' ? fmtDate(t.start) : mode === 'end' ? fmtDate(t.finish) : fmtDate(t.start) + ' – ' + fmtDate(t.finish);
+        showDragTooltip(pointerEvent, tip);
+      }
+
+      function move(e){
+        apply(deltaDaysFromPointer(e), e);
+      }
+
+      function up(e){
+        apply(deltaDaysFromPointer(e), e);
+        document.removeEventListener('pointermove', move);
+        document.removeEventListener('pointerup', up);
+        document.removeEventListener('pointercancel', up);
+        bar.classList.remove('dragging');
+        hideDragTooltip();
+        markProgrammeUnsaved();
+        renderProgramme(programmeRows, programmeRows.length);
+        saveProgrammeTask(programmeRows[rowIndex])
+          .then(() => {
+            const unsaved = document.getElementById('programmeUnsaved');
+            if(unsaved){
+              unsaved.textContent = 'Saved to Google Sheet';
+              setTimeout(() => {
+                unsaved.classList.remove('show');
+                unsaved.textContent = 'Unsaved local changes';
+              }, 1500);
+            }
+          })
+          .catch(err => {
+            const unsaved = document.getElementById('programmeUnsaved');
+            if(unsaved){
+              unsaved.textContent = 'Save failed';
+              unsaved.classList.add('show');
+            }
+            alert('Could not save programme change to Google Sheets: ' + err.message);
+          });
+      }
+
+      document.addEventListener('pointermove', move);
+      document.addEventListener('pointerup', up);
+      document.addEventListener('pointercancel', up);
+    });
+  });
 }
 
 window.addEventListener('resize', () => {
-  if(document.getElementById('programmeView').style.display === 'block' && programmeScaleMode === 'overview'){
-    renderProgramme(programmeRows, programmeRows.length, true);
-  }
+  if(programmeScaleMode === 'overview' && programmeRows.length) renderProgramme(programmeRows, programmeRows.length);
 });
+
 
 init();
 </script>
