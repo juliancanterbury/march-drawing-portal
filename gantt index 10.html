@@ -113,12 +113,6 @@
   .programmeError{margin-top:12px;background:#fff7f2;border:1px solid #e6c9b9;padding:14px;border-radius:6px;font-size:13px;color:#522}
   .unsaved{display:none;background:#fff4cf;border:1px solid #e3c56c;color:#5a4310;border-radius:6px;padding:9px 11px;font-size:12px}
   .unsaved.show{display:inline-block}
-  .bar{touch-action:none}
-  .bar .resizeHandle{position:absolute;top:-4px;width:12px;height:28px;border-radius:6px;background:rgba(255,255,255,.72);box-shadow:0 0 0 1px rgba(0,0,0,.24);opacity:0;transition:opacity .12s}
-  .bar:hover .resizeHandle{opacity:1}
-  .bar .resizeStart{left:-6px;cursor:w-resize}
-  .bar .resizeEnd{right:-6px;cursor:e-resize}
-  .bar.resizing{opacity:.72}
 
   .bar.dragging{opacity:.55}
   .bar.ghost{position:absolute;pointer-events:none;opacity:.45;outline:2px solid rgba(0,0,0,.25)}
@@ -681,30 +675,26 @@ function programmeWindow(rows){
     centre = new Date((t.start.getTime() + t.finish.getTime()) / 2);
   }
 
-  if(programmeViewMode === 'week') return {min:addDays(centre,-7), max:addDays(centre,14)};
+  if(programmeViewMode === 'week') return {min:addDays(centre,-14), max:addDays(centre,21)};
   if(programmeViewMode === 'month') return {min:addDays(centre,-21), max:addDays(centre,45)};
   if(programmeViewMode === 'quarter') return {min:addDays(centre,-45), max:addDays(centre,110)};
   if(programmeViewMode === 'selected' && selectedProgrammeIndex !== null && rows[selectedProgrammeIndex]){
     const t = rows[selectedProgrammeIndex];
-    return {min:addDays(t.start,-7), max:addDays(t.finish,14)};
+    return {min:addDays(t.start,-21), max:addDays(t.finish,35)};
   }
 
   return {min:addDays(rawMin,-28), max:addDays(rawMax,28)};
 }
 
 function tickStepDays(totalDays){
-  if(programmeViewMode === 'week' || programmeViewMode === 'selected') return 1;
-  if(programmeViewMode === 'month') return 7;
-  if(programmeViewMode === 'quarter') return 14;
+  if(programmeZoom === 'day' || programmeZoom === 'week' || programmeZoom === 'selected') return 1;
+  if(programmeZoom === 'month') return 7;
   if(totalDays <= 420) return 30;
   return 91;
 }
 
 function scaleLabel(date, totalDays){
-  if(programmeViewMode === 'week' || programmeViewMode === 'selected'){
-    return ['S','M','T','W','T','F','S'][date.getDay()];
-  }
-  if(programmeViewMode === 'month') return date.toLocaleDateString('en-AU', {day:'2-digit', month:'short'});
+  if(totalDays <= 80) return date.toLocaleDateString('en-AU', {day:'2-digit', month:'short'});
   if(totalDays <= 420) return date.toLocaleDateString('en-AU', {month:'short', year:'2-digit'});
   return String(date.getFullYear());
 }
@@ -752,7 +742,7 @@ function renderProgramme(rows, rawCount){
   let tick = new Date(minStart.getTime());
   while(tick <= maxFinish){
     const left = Math.max(0, Math.min(100, ((tick.getTime() - minStart.getTime()) / 86400000) / totalDays * 100));
-    const isDay = (programmeViewMode === 'week' || programmeViewMode === 'selected');
+    const isDay = (programmeZoom === 'day' || programmeZoom === 'week' || programmeZoom === 'selected');
     const weekend = tick.getDay() === 0 || tick.getDay() === 6;
     const tickWidth = isDay ? Math.max(0.5, (1 / totalDays) * 100) : 0;
     const cls = isDay ? ('dayCell' + (weekend ? ' weekend' : '')) : 'monthTick';
@@ -879,100 +869,68 @@ function attachProgrammeDragHandlers(){
 
       const handle = ev.target.closest('.resizeHandle');
       const mode = handle ? handle.dataset.edge : 'move';
-
       const rowIndex = Number(bar.dataset.row);
       selectedProgrammeIndex = rowIndex;
 
       const cell = bar.closest('.timelineCell');
-      const minMs = Number(cell.dataset.min);
       const totalDays = Number(cell.dataset.totalDays);
       const startX = ev.clientX;
       const task = programmeRows[rowIndex];
       const originalStart = task.start.getTime();
-      const originalFinish = task.finish.getTime();
       const originalDuration = task.duration;
       const cellWidth = cell.clientWidth;
-      const snap = (programmeViewMode === 'full' || programmeViewMode === 'quarter') ? 7 : 1;
+      const snap = (programmeZoom === 'year') ? 7 : 1;
 
-      bar.classList.toggle('resizing', mode !== 'move');
-      bar.classList.toggle('dragging', mode === 'move');
-
-      function daysFromDx(e){
+      function deltaDaysFromPointer(e){
         const dx = e.clientX - startX;
         const deltaDaysRaw = (dx / cellWidth) * totalDays;
         return Math.round(deltaDaysRaw / snap) * snap;
       }
 
-      function previewTask(deltaDays){
-        let newStart = new Date(originalStart);
-        let newDuration = originalDuration;
+      function apply(deltaDays){
+        const t = programmeRows[rowIndex];
 
         if(mode === 'move'){
-          newStart = addDays(new Date(originalStart), deltaDays);
+          t.start = addDays(new Date(originalStart), deltaDays);
+          t.duration = originalDuration;
+          t.finish = addDays(t.start, t.duration);
         }
 
         if(mode === 'end'){
-          newDuration = Math.max(1, originalDuration + deltaDays);
+          t.start = new Date(originalStart);
+          t.duration = Math.max(1, originalDuration + deltaDays);
+          t.finish = addDays(t.start, t.duration);
         }
 
         if(mode === 'start'){
-          newStart = addDays(new Date(originalStart), deltaDays);
-          newDuration = Math.max(1, originalDuration - deltaDays);
-        }
-
-        const previewFinish = addDays(newStart, newDuration);
-        const left = ((newStart.getTime() - minMs) / 86400000) / totalDays * 100;
-        const width = ((previewFinish.getTime() - newStart.getTime()) / 86400000) / totalDays * 100;
-
-        bar.style.left = Math.max(-20, Math.min(120, left)) + '%';
-        bar.style.width = Math.max(1.2, width) + '%';
-      }
-
-      function applyTask(deltaDays){
-        const task = programmeRows[rowIndex];
-
-        if(mode === 'move'){
-          task.start = addDays(new Date(originalStart), deltaDays);
-          task.finish = addDays(task.start, task.duration);
-        }
-
-        if(mode === 'end'){
-          task.duration = Math.max(1, originalDuration + deltaDays);
-          task.start = new Date(originalStart);
-          task.finish = addDays(task.start, task.duration);
-        }
-
-        if(mode === 'start'){
-          task.start = addDays(new Date(originalStart), deltaDays);
-          task.duration = Math.max(1, originalDuration - deltaDays);
-          task.finish = addDays(task.start, task.duration);
+          const proposedDuration = Math.max(1, originalDuration - deltaDays);
+          const actualDelta = originalDuration - proposedDuration;
+          t.start = addDays(new Date(originalStart), actualDelta);
+          t.duration = proposedDuration;
+          t.finish = addDays(t.start, t.duration);
         }
 
         programmeRows = enforceDependencies(programmeRows);
       }
 
       function move(e){
-        previewTask(daysFromDx(e));
+        apply(deltaDaysFromPointer(e));
+        renderProgramme(programmeRows, programmeRows.length);
       }
 
       function up(e){
-        applyTask(daysFromDx(e));
-
-        bar.classList.remove('dragging');
-        bar.classList.remove('resizing');
-        bar.removeEventListener('pointermove', move);
-        bar.removeEventListener('pointerup', up);
-        bar.removeEventListener('pointercancel', up);
-
+        apply(deltaDaysFromPointer(e));
+        document.removeEventListener('pointermove', move);
+        document.removeEventListener('pointerup', up);
+        document.removeEventListener('pointercancel', up);
         markProgrammeUnsaved();
         renderProgramme(programmeRows, programmeRows.length);
-        saveProgrammeRows();
+        if(typeof saveProgrammeRows === 'function') saveProgrammeRows();
       }
 
-      bar.setPointerCapture(ev.pointerId);
-      bar.addEventListener('pointermove', move);
-      bar.addEventListener('pointerup', up);
-      bar.addEventListener('pointercancel', up);
+      document.addEventListener('pointermove', move);
+      document.addEventListener('pointerup', up);
+      document.addEventListener('pointercancel', up);
     });
   });
 }
