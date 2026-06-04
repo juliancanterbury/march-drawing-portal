@@ -687,8 +687,8 @@ function programmeWindow(rows){
 }
 
 function tickStepDays(totalDays){
-  if(programmeZoom === 'day' || programmeZoom === 'week' || programmeZoom === 'selected') return 1;
-  if(programmeZoom === 'month') return 7;
+  if(totalDays <= 45) return 7;
+  if(totalDays <= 120) return 14;
   if(totalDays <= 420) return 30;
   return 91;
 }
@@ -742,11 +742,7 @@ function renderProgramme(rows, rawCount){
   let tick = new Date(minStart.getTime());
   while(tick <= maxFinish){
     const left = Math.max(0, Math.min(100, ((tick.getTime() - minStart.getTime()) / 86400000) / totalDays * 100));
-    const isDay = (programmeZoom === 'day' || programmeZoom === 'week' || programmeZoom === 'selected');
-    const weekend = tick.getDay() === 0 || tick.getDay() === 6;
-    const tickWidth = isDay ? Math.max(0.5, (1 / totalDays) * 100) : 0;
-    const cls = isDay ? ('dayCell' + (weekend ? ' weekend' : '')) : 'monthTick';
-    ticks.push(`<div class="${cls}" style="left:${left}%;${isDay ? 'width:'+tickWidth+'%;' : ''}">${scaleLabel(tick,totalDays)}</div>`);
+    ticks.push(`<div class="monthTick" style="left:${left}%">${scaleLabel(tick,totalDays)}</div>`);
     tick = addDays(tick, step);
   }
 
@@ -869,68 +865,100 @@ function attachProgrammeDragHandlers(){
 
       const handle = ev.target.closest('.resizeHandle');
       const mode = handle ? handle.dataset.edge : 'move';
+
       const rowIndex = Number(bar.dataset.row);
       selectedProgrammeIndex = rowIndex;
 
       const cell = bar.closest('.timelineCell');
+      const minMs = Number(cell.dataset.min);
       const totalDays = Number(cell.dataset.totalDays);
       const startX = ev.clientX;
       const task = programmeRows[rowIndex];
       const originalStart = task.start.getTime();
+      const originalFinish = task.finish.getTime();
       const originalDuration = task.duration;
       const cellWidth = cell.clientWidth;
       const snap = (programmeZoom === 'year') ? 7 : 1;
 
-      function deltaDaysFromPointer(e){
+      bar.classList.toggle('resizing', mode !== 'move');
+      bar.classList.toggle('dragging', mode === 'move');
+
+      function daysFromDx(e){
         const dx = e.clientX - startX;
         const deltaDaysRaw = (dx / cellWidth) * totalDays;
         return Math.round(deltaDaysRaw / snap) * snap;
       }
 
-      function apply(deltaDays){
-        const t = programmeRows[rowIndex];
+      function previewTask(deltaDays){
+        let newStart = new Date(originalStart);
+        let newDuration = originalDuration;
 
         if(mode === 'move'){
-          t.start = addDays(new Date(originalStart), deltaDays);
-          t.duration = originalDuration;
-          t.finish = addDays(t.start, t.duration);
+          newStart = addDays(new Date(originalStart), deltaDays);
         }
 
         if(mode === 'end'){
-          t.start = new Date(originalStart);
-          t.duration = Math.max(1, originalDuration + deltaDays);
-          t.finish = addDays(t.start, t.duration);
+          newDuration = Math.max(1, originalDuration + deltaDays);
         }
 
         if(mode === 'start'){
-          const proposedDuration = Math.max(1, originalDuration - deltaDays);
-          const actualDelta = originalDuration - proposedDuration;
-          t.start = addDays(new Date(originalStart), actualDelta);
-          t.duration = proposedDuration;
-          t.finish = addDays(t.start, t.duration);
+          newStart = addDays(new Date(originalStart), deltaDays);
+          newDuration = Math.max(1, originalDuration - deltaDays);
+        }
+
+        const previewFinish = addDays(newStart, newDuration);
+        const left = ((newStart.getTime() - minMs) / 86400000) / totalDays * 100;
+        const width = ((previewFinish.getTime() - newStart.getTime()) / 86400000) / totalDays * 100;
+
+        bar.style.left = Math.max(-20, Math.min(120, left)) + '%';
+        bar.style.width = Math.max(1.2, width) + '%';
+      }
+
+      function applyTask(deltaDays){
+        const task = programmeRows[rowIndex];
+
+        if(mode === 'move'){
+          task.start = addDays(new Date(originalStart), deltaDays);
+          task.finish = addDays(task.start, task.duration);
+        }
+
+        if(mode === 'end'){
+          task.duration = Math.max(1, originalDuration + deltaDays);
+          task.start = new Date(originalStart);
+          task.finish = addDays(task.start, task.duration);
+        }
+
+        if(mode === 'start'){
+          task.start = addDays(new Date(originalStart), deltaDays);
+          task.duration = Math.max(1, originalDuration - deltaDays);
+          task.finish = addDays(task.start, task.duration);
         }
 
         programmeRows = enforceDependencies(programmeRows);
       }
 
       function move(e){
-        apply(deltaDaysFromPointer(e));
-        renderProgramme(programmeRows, programmeRows.length);
+        previewTask(daysFromDx(e));
       }
 
       function up(e){
-        apply(deltaDaysFromPointer(e));
-        document.removeEventListener('pointermove', move);
-        document.removeEventListener('pointerup', up);
-        document.removeEventListener('pointercancel', up);
+        applyTask(daysFromDx(e));
+
+        bar.classList.remove('dragging');
+        bar.classList.remove('resizing');
+        bar.removeEventListener('pointermove', move);
+        bar.removeEventListener('pointerup', up);
+        bar.removeEventListener('pointercancel', up);
+
         markProgrammeUnsaved();
         renderProgramme(programmeRows, programmeRows.length);
-        if(typeof saveProgrammeRows === 'function') saveProgrammeRows();
+        saveProgrammeRows();
       }
 
-      document.addEventListener('pointermove', move);
-      document.addEventListener('pointerup', up);
-      document.addEventListener('pointercancel', up);
+      bar.setPointerCapture(ev.pointerId);
+      bar.addEventListener('pointermove', move);
+      bar.addEventListener('pointerup', up);
+      bar.addEventListener('pointercancel', up);
     });
   });
 }
