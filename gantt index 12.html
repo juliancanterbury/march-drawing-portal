@@ -73,16 +73,14 @@
   .errorBox{background:#fff7f2;border:1px solid #e6c9b9;padding:14px;border-radius:6px;font-size:13px;line-height:1.45;margin-top:14px;color:#522}
 
   .programmeView{display:none;background:#fffdf8;padding:32px;overflow:visible;min-height:calc(100vh - 88px)}
-  .programmeTop{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:18px;flex-wrap:wrap}
+  .programmeTop{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:18px}
   .programmeTop h2{font-size:28px;font-weight:400;margin:0}
   .programmeTop p{margin:7px 0 0;color:#666;font-size:13px}
-  .programmeTop>div:first-child{min-width:320px;flex:1 1 420px}
-  .programmeTools{flex:1 1 520px}
-  .programmeTools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-start;max-width:100%;margin-left:0}
+  .programmeTools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
   .zoomBtn{border:1px solid #bbb;background:white;padding:8px 10px;border-radius:6px;font-size:11px;cursor:pointer;text-transform:uppercase}
   .zoomBtn.active{background:#111;color:#fff;border-color:#111}
   .ganttSummary{font-size:13px;color:#555;margin:0 0 14px}
-  .ganttWrap{border:1px solid var(--line);border-radius:12px;background:#fff;overflow:auto;box-shadow:0 12px 32px rgba(0,0,0,.05);max-width:100%;clear:both}
+  .ganttWrap{border:1px solid var(--line);border-radius:12px;background:#fff;overflow:auto;box-shadow:0 12px 32px rgba(0,0,0,.05);max-width:100%}
   .ganttHeader,.ganttRow{display:grid;grid-template-columns:330px minmax(900px,1fr);min-width:1230px}
   .ganttHeader{background:#f6f1e8;border-bottom:1px solid var(--line);font-size:12px;color:#555;position:sticky;top:0;z-index:3}
   .ganttHeader>div{padding:14px 16px}
@@ -116,7 +114,7 @@
   .unsaved{display:none;background:#fff4cf;border:1px solid #e3c56c;color:#5a4310;border-radius:6px;padding:9px 11px;font-size:12px}
   .unsaved.show{display:inline-block}
   .scaleControl{font-size:11px;color:#555;display:flex;gap:8px;align-items:center}
-  .scaleControl input{width:120px;max-width:30vw}
+  .scaleControl input{width:130px}
   .timelineHeader{position:relative;height:54px}
   .monthBand{position:absolute;top:0;height:24px;border-left:1px solid rgba(0,0,0,.16);padding-left:6px;font-size:11px;color:#333;background:rgba(246,241,232,.82)}
   .dayBand{position:absolute;top:24px;height:30px;border-left:1px solid rgba(0,0,0,.08);font-size:10px;color:#555;padding:7px 0 0 4px}
