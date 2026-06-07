@@ -205,9 +205,7 @@
   .protoCard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;box-shadow:0 8px 22px rgba(0,0,0,.035)}
   .protoCard h3{margin:0 0 8px;font-size:16px}.protoCard p{margin:0;color:#555;font-size:13px;line-height:1.45}.protoMetric{font-size:30px;font-weight:400;margin:8px 0 2px}.protoTag{display:inline-block;font-size:11px;border:1px solid #d1c8ba;background:#f6f1e8;border-radius:999px;padding:5px 8px;color:#555;margin:4px 4px 0 0}.protoTag.good{background:#e7efe3;border-color:#cadbc4}.protoTag.warn{background:#fff3d3;border-color:#e4c56a}.protoTag.hot{background:#fff1eb;border-color:#e5bba8;color:#7b321f}
   .protoSplit{display:grid;grid-template-columns:minmax(360px,1.15fr) minmax(300px,.85fr);gap:18px}.protoPanel{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}.protoPanel h3{margin:0 0 14px;font-size:17px}.protoTable{width:100%;border-collapse:collapse;font-size:13px}.protoTable th{font-size:11px;text-transform:uppercase;color:#666;background:#faf6ef}.protoTable th,.protoTable td{padding:10px;border-bottom:1px solid #eee;text-align:left;vertical-align:top}.protoTable tr:hover{background:#faf7f1}.protoInput,.protoSelect,.protoTextarea{width:100%;border:1px solid #ccc;border-radius:5px;padding:8px;background:#fff;font-size:13px}.protoTextarea{height:92px;resize:vertical}.stageList{display:grid;gap:10px}.stageItem{border:1px solid var(--line);border-radius:8px;padding:12px;background:#fff;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}.stageItem strong{display:block;margin-bottom:4px}.stageItem small{color:#666}.stageItem.current{border-color:#d7a64c;background:#fff9eb}.stageItem.approved{background:#f4faf1}.approvalBox{border:1px solid #d9c7a7;background:#fff9eb;border-radius:8px;padding:13px;font-size:13px;line-height:1.45;color:#5b451b}.rfiList{display:grid;gap:10px}.rfiItem{border:1px solid var(--line);border-radius:8px;padding:12px;background:#fff}.rfiItem strong{display:block;margin-bottom:4px}.rfiItem small{color:#666}.miniWorkflow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.miniStep{border:1px solid #d2c8b8;background:#f8f2e8;border-radius:999px;padding:7px 10px;font-size:11px}.miniStep.done{background:#e7efe3}.miniStep.active{background:#111;color:#fff;border-color:#111}
-
-  .officeStrip{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 18px;align-items:center}.projectPill{border:1px solid #cfc6b7;background:#fff;border-radius:999px;padding:8px 11px;font-size:12px;cursor:pointer}.projectPill.active{background:#111;color:#fff;border-color:#111}.timesheetTotals{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:10px;margin-bottom:14px}.timesheetTotal{border:1px solid var(--line);background:#faf6ef;border-radius:8px;padding:10px}.timesheetTotal strong{display:block;font-size:18px;margin-top:4px}.inlineFormGrid{display:grid;grid-template-columns:repeat(2,minmax(120px,1fr));gap:10px}.timesheetMini{font-size:11px;color:#666;line-height:1.4;margin-top:8px}.docTree{display:grid;gap:8px;font-size:13px}.docTree details{border:1px solid #eee;border-radius:7px;background:#fff;padding:9px}.docTree summary{cursor:pointer;font-weight:700}.docTree ul{margin:8px 0 0 18px;padding:0;color:#555;line-height:1.65}.docPath{font-family:monospace;font-size:11px;background:#f5f1e9;border:1px solid #e3dacb;border-radius:5px;padding:6px;margin-top:8px;overflow:auto}
-  @media(max-width:1050px){.protoGrid{grid-template-columns:1fr}.protoSplit{grid-template-columns:1fr}.prototypeView{padding:18px}.timesheetTotals{grid-template-columns:1fr 1fr}.inlineFormGrid{grid-template-columns:1fr}}
+  @media(max-width:1050px){.protoGrid{grid-template-columns:1fr}.protoSplit{grid-template-columns:1fr}.prototypeView{padding:18px}}
 
 </style>
 </head>
@@ -331,53 +329,32 @@
       <div class="prototypeTop">
         <div>
           <h2>Timesheets</h2>
-          <p>Interactive sketch for entering staff time across all office projects on one page. This is local-browser only for now; later it can write to a central Timesheets Google Sheet.</p>
+          <p>Sketch view for staff time against project stages. Later this can write to a Timesheets sheet and report hours by stage, staff member, task and invoice period.</p>
         </div>
-        <div class="prototypeActions"><button class="btn dark" onclick="addTimesheetEntry()">Save Time Entry</button><button class="btn" onclick="exportTimesheetCSV()">Export CSV</button><button class="btn" onclick="clearDraftTimesheets()">Clear Drafts</button></div>
+        <div class="prototypeActions"><button class="btn dark">Add Time Entry</button><button class="btn">Export CSV</button><button class="btn" onclick="showProgramme()">View Programme</button></div>
       </div>
-
-      <div class="officeStrip">
-        <strong>Office projects:</strong>
-        <button class="projectPill active" data-project-filter="All" onclick="setTimesheetProjectFilter('All')">All Projects</button>
-        <button class="projectPill" data-project-filter="Dome House" onclick="setTimesheetProjectFilter('Dome House')">Dome House</button>
-        <button class="projectPill" data-project-filter="Abbotsford Street" onclick="setTimesheetProjectFilter('Abbotsford Street')">Abbotsford Street</button>
+      <div class="protoGrid">
+        <div class="protoCard"><h3>This Week</h3><div class="protoMetric">38.5 h</div><p>Entered across concept and planning tasks.</p></div>
+        <div class="protoCard"><h3>Current Stage</h3><div class="protoMetric">Town Planning</div><p><span class="protoTag warn">in progress</span><span class="protoTag">linked to programme</span></p></div>
+        <div class="protoCard"><h3>Unsubmitted</h3><div class="protoMetric">6.0 h</div><p>Draft entries waiting for staff confirmation.</p></div>
       </div>
-
-      <div class="timesheetTotals">
-        <div class="timesheetTotal">Visible hours<strong id="tsTotalHours">0.0 h</strong></div>
-        <div class="timesheetTotal">Dome House<strong id="tsDomeHours">0.0 h</strong></div>
-        <div class="timesheetTotal">Abbotsford Street<strong id="tsAbbotsfordHours">0.0 h</strong></div>
-        <div class="timesheetTotal">Unsubmitted draft<strong id="tsDraftHours">0.0 h</strong></div>
-      </div>
-
       <div class="protoSplit">
         <div class="protoPanel">
-          <h3>Office time entries</h3>
-          <table class="protoTable"><thead><tr><th>Date</th><th>Project</th><th>Staff</th><th>Stage</th><th>Description</th><th>Hours</th><th></th></tr></thead><tbody id="timesheetRows"></tbody></table>
+          <h3>Recent time entries</h3>
+          <table class="protoTable"><thead><tr><th>Date</th><th>Staff</th><th>Stage</th><th>Description</th><th>Hours</th></tr></thead><tbody>
+            <tr><td>04 Jun</td><td>JC</td><td>Concept Design</td><td>Client markups and option review</td><td>3.5</td></tr>
+            <tr><td>04 Jun</td><td>AB</td><td>Town Planning</td><td>Planning drawings / area checks</td><td>6.0</td></tr>
+            <tr><td>03 Jun</td><td>MS</td><td>Design Development</td><td>Window schedule coordination</td><td>2.0</td></tr>
+            <tr><td>02 Jun</td><td>JC</td><td>Tender</td><td>Preliminary tender package review</td><td>1.5</td></tr>
+          </tbody></table>
         </div>
         <div class="protoPanel">
-          <h3>New time entry</h3>
-          <div class="inlineFormGrid">
-            <label>Date<br><input id="tsDate" class="protoInput" type="date"></label>
-            <label>Staff<br><select id="tsStaff" class="protoSelect"><option>JC</option><option>AB</option><option>MS</option><option>New staff member</option></select></label>
-            <label>Project<br><select id="tsProject" class="protoSelect" onchange="refreshTimesheetStageOptions()"><option>Dome House</option><option>Abbotsford Street</option></select></label>
-            <label>Stage<br><select id="tsStage" class="protoSelect"></select></label>
-            <label>Hours<br><input id="tsHours" class="protoInput" type="number" step="0.25" min="0" value="2.5"></label>
-            <label>Billable?<br><select id="tsBillable" class="protoSelect"><option>Billable</option><option>Non-billable</option><option>Potential variation</option></select></label>
-          </div>
-          <p><label>Notes<br><textarea id="tsNotes" class="protoTextarea" placeholder="What was done?"></textarea></label></p>
-          <button class="btn dark" onclick="addTimesheetEntry()">Save Draft Entry</button>
-          <p class="timesheetMini">Later: staff login, weekly submit/approve, fee-stage budget, invoice export, and variation flags when time relates to client changes after a signed stage approval.</p>
-        </div>
-      </div>
-
-      <div class="protoPanel" style="margin-top:18px">
-        <h3>Document arrangement for multiple projects</h3>
-        <p style="font-size:13px;color:#555;line-height:1.45">Each project should have its own root folder, then the same discipline and issue structure inside. The portal switches project first, then shows Architectural, Structural, Mechanical, Electrical, Civil, Hydraulic, Landscape etc. for that project only.</p>
-        <div class="docPath">/Projects / Dome House / Drawings / Architectural / Current / PDFs<br>/Projects / Abbotsford Street / Drawings / Structural / Current / PDFs</div>
-        <div class="docTree">
-          <details open><summary>Dome House</summary><ul><li>Drawings / Architectural / Current / PDF</li><li>Drawings / Structural / Current / PDF</li><li>Programme / Stages</li><li>Approvals / signed stage acknowledgements</li><li>Tender / issued package / RFIs / addenda</li></ul></details>
-          <details><summary>Abbotsford Street</summary><ul><li>Drawings / Architectural / Current / PDF</li><li>Drawings / Heritage + Planning / Current / PDF</li><li>Drawings / Structural / Current / PDF</li><li>Timesheets / concept, planning, documentation</li><li>Approvals / client instructions and scope changes</li></ul></details>
+          <h3>New entry sketch</h3>
+          <p><label>Staff<br><select class="protoSelect"><option>JC</option><option>AB</option><option>MS</option></select></label></p>
+          <p><label>Project Stage<br><select class="protoSelect"><option>Concept Design</option><option>Town Planning</option><option>Design Development</option><option>Tender</option><option>Construction</option></select></label></p>
+          <p><label>Hours<br><input class="protoInput" value="2.5"></label></p>
+          <p><label>Notes<br><textarea class="protoTextarea">Sketch notes only — not saving yet.</textarea></label></p>
+          <button class="btn dark">Save Draft</button>
         </div>
       </div>
     </main>
@@ -745,7 +722,6 @@ function showPrototypeView(kind){
   if(pair){
     document.getElementById(pair[0]).style.display = 'block';
     document.getElementById(pair[1]).classList.add('active');
-    if(kind === 'timesheets') loadTimesheetEntries();
   }
   document.getElementById('navDrawings').classList.remove('active');
   document.getElementById('navProgramme').classList.remove('active');
@@ -1259,93 +1235,6 @@ async function saveProgrammeTask(task){
     unsaved.classList.add('show');
   }
   alert('Could not save programme change to Google Sheets: ' + (lastError ? lastError.message : 'Unknown error'));
-}
-
-
-const timesheetStagesByProject = {
-  'Dome House':['Concept Design','Town Planning','Design Development','Tender','Construction','Administration'],
-  'Abbotsford Street':['Feasibility','Heritage + Planning','Town Planning','Design Development','Documentation','Tender','Construction']
-};
-let timesheetFilterProject = 'All';
-let timesheetEntries = [];
-const defaultTimesheetEntries = [
-  {date:'2026-06-04', project:'Dome House', staff:'JC', stage:'Concept Design', notes:'Client markups and option review', hours:3.5, billable:'Billable'},
-  {date:'2026-06-04', project:'Dome House', staff:'AB', stage:'Town Planning', notes:'Planning drawings / area checks', hours:6.0, billable:'Billable'},
-  {date:'2026-06-03', project:'Abbotsford Street', staff:'MS', stage:'Heritage + Planning', notes:'Heritage response and side wall notes', hours:2.0, billable:'Billable'},
-  {date:'2026-06-02', project:'Abbotsford Street', staff:'JC', stage:'Feasibility', notes:'Use options and caretaker residence review', hours:1.5, billable:'Potential variation'}
-];
-function loadTimesheetEntries(){
-  try{ timesheetEntries = JSON.parse(localStorage.getItem('marchTimesheetDrafts') || 'null') || defaultTimesheetEntries.slice(); }
-  catch(e){ timesheetEntries = defaultTimesheetEntries.slice(); }
-  if(!document.getElementById('tsDate')) return;
-  if(!document.getElementById('tsDate').value) document.getElementById('tsDate').value = new Date().toISOString().slice(0,10);
-  refreshTimesheetStageOptions();
-  renderTimesheets();
-}
-function saveTimesheetEntries(){ localStorage.setItem('marchTimesheetDrafts', JSON.stringify(timesheetEntries)); }
-function refreshTimesheetStageOptions(){
-  const project = document.getElementById('tsProject') ? document.getElementById('tsProject').value : 'Dome House';
-  const stages = timesheetStagesByProject[project] || [];
-  const sel = document.getElementById('tsStage');
-  if(sel) sel.innerHTML = stages.map(s => `<option>${escapeHtml(s)}</option>`).join('');
-}
-function setTimesheetProjectFilter(project){
-  timesheetFilterProject = project;
-  document.querySelectorAll('[data-project-filter]').forEach(b => b.classList.toggle('active', b.dataset.projectFilter === project));
-  renderTimesheets();
-}
-function addTimesheetEntry(){
-  if(!document.getElementById('tsDate')) return;
-  const entry = {
-    date:document.getElementById('tsDate').value || new Date().toISOString().slice(0,10),
-    project:document.getElementById('tsProject').value,
-    staff:document.getElementById('tsStaff').value,
-    stage:document.getElementById('tsStage').value,
-    notes:document.getElementById('tsNotes').value || 'No note',
-    hours:Math.max(0, Number(document.getElementById('tsHours').value || 0)),
-    billable:document.getElementById('tsBillable').value
-  };
-  timesheetEntries.unshift(entry);
-  saveTimesheetEntries();
-  document.getElementById('tsNotes').value = '';
-  renderTimesheets();
-  toast('Timesheet draft saved locally');
-}
-function deleteTimesheetEntry(index){
-  timesheetEntries.splice(index,1);
-  saveTimesheetEntries();
-  renderTimesheets();
-}
-function renderTimesheets(){
-  const tbody = document.getElementById('timesheetRows');
-  if(!tbody) return;
-  const visible = timesheetEntries.map((e,i)=>({...e,_index:i})).filter(e => timesheetFilterProject === 'All' || e.project === timesheetFilterProject);
-  tbody.innerHTML = visible.map(e => `<tr><td>${escapeHtml(formatShortDate(e.date))}</td><td>${escapeHtml(e.project)}</td><td>${escapeHtml(e.staff)}</td><td>${escapeHtml(e.stage)}<br><span class="protoTag">${escapeHtml(e.billable)}</span></td><td>${escapeHtml(e.notes)}</td><td>${Number(e.hours).toFixed(2)}</td><td><button class="btn" onclick="deleteTimesheetEntry(${e._index})">Delete</button></td></tr>`).join('');
-  const total = arr => arr.reduce((s,e)=>s+Number(e.hours||0),0).toFixed(1) + ' h';
-  document.getElementById('tsTotalHours').textContent = total(visible);
-  document.getElementById('tsDomeHours').textContent = total(timesheetEntries.filter(e=>e.project==='Dome House'));
-  document.getElementById('tsAbbotsfordHours').textContent = total(timesheetEntries.filter(e=>e.project==='Abbotsford Street'));
-  document.getElementById('tsDraftHours').textContent = total(timesheetEntries);
-}
-function formatShortDate(iso){
-  const d = new Date(String(iso)+'T00:00:00');
-  return isNaN(d) ? iso : d.toLocaleDateString('en-AU',{day:'2-digit',month:'short'});
-}
-function clearDraftTimesheets(){
-  if(!confirm('Clear local timesheet draft entries and restore sample entries?')) return;
-  timesheetEntries = defaultTimesheetEntries.slice();
-  saveTimesheetEntries();
-  renderTimesheets();
-}
-function exportTimesheetCSV(){
-  const rows = [['Date','Project','Staff','Stage','Description','Hours','Billable'], ...timesheetEntries.map(e=>[e.date,e.project,e.staff,e.stage,e.notes,e.hours,e.billable])];
-  const csv = rows.map(r => r.map(v => '"' + String(v).replace(/"/g,'""') + '"').join(',')).join('
-');
-  const blob = new Blob([csv], {type:'text/csv'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'march-timesheet-draft.csv'; a.click();
-  URL.revokeObjectURL(url);
 }
 
 window.addEventListener('resize', () => {
