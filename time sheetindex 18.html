@@ -244,7 +244,6 @@
           <h2 id="heading">Architectural Drawings</h2>
           <div class="actions">
             <button class="btn" onclick="showRegister()">Export Register</button>
-            <button class="btn" onclick="copyCurrentLink()">Copy Link</button>
             <button class="btn dark" onclick="openTransmittal()">Create Transmittal</button>
           </div>
         </div>
@@ -317,7 +316,6 @@
             <input id="dayScale" type="range" min="2" max="40" value="14" oninput="setDayScale(this.value)">
           </label>
           <button class="btn" onclick="loadProgramme()">Refresh</button>
-          <button class="btn" onclick="copyCurrentLink()">Copy Link</button>
           <button class="btn dark" onclick="showDrawings()">Back to Drawings</button>
         </div>
       </div>
@@ -350,14 +348,14 @@
         <h3>Office-wide weekly time entry</h3>
         <div class="prototypeActions" style="margin-bottom:12px">
           <label class="scaleControl">Project
-            <select class="protoSelect" id="tsProjectFilter" onchange="renderTimesheets(); updateTimesheetRoute()" style="width:190px">
+            <select class="protoSelect" id="tsProjectFilter" onchange="renderTimesheets()" style="width:190px">
               <option value="All">All projects</option>
               <option value="Dome House">Dome House</option>
               <option value="Abbotsford Street">Abbotsford Street</option>
             </select>
           </label>
           <label class="scaleControl">Staff
-            <select class="protoSelect" id="tsStaffFilter" onchange="renderTimesheets(); updateTimesheetRoute()" style="width:130px">
+            <select class="protoSelect" id="tsStaffFilter" onchange="renderTimesheets()" style="width:130px">
               <option value="All">All staff</option>
               <option>JC</option><option>AB</option><option>MS</option><option>LT</option>
             </select>
@@ -407,7 +405,7 @@
           <h2>Stage Approvals</h2>
           <p>Client acknowledgement workflow. The idea is that each stage can be formally accepted before the next stage proceeds, with later changes flagged as possible variations in scope.</p>
         </div>
-        <div class="prototypeActions"><button class="btn dark">Request Approval</button><button class="btn">Download Approval PDF</button><button class="btn" onclick="copyCurrentLink()">Copy Link</button></div>
+        <div class="prototypeActions"><button class="btn dark">Request Approval</button><button class="btn">Download Approval PDF</button></div>
       </div>
       <div class="protoGrid">
         <div class="protoCard"><h3>Current approval</h3><div class="protoMetric">Town Planning</div><p><span class="protoTag warn">awaiting client</span></p></div>
@@ -439,7 +437,7 @@
           <h2>Tender Portal</h2>
           <p>Sketch view for issuing tender documents to invited tenderers, logging RFIs, issuing addenda, and receiving submissions through the portal.</p>
         </div>
-        <div class="prototypeActions"><button class="btn dark">Invite Tenderer</button><button class="btn">Issue Addendum</button><button class="btn">Close Tender</button><button class="btn" onclick="copyCurrentLink()">Copy Link</button></div>
+        <div class="prototypeActions"><button class="btn dark">Invite Tenderer</button><button class="btn">Issue Addendum</button><button class="btn">Close Tender</button></div>
       </div>
       <div class="protoGrid">
         <div class="protoCard"><h3>Tender status</h3><div class="protoMetric">Open</div><p><span class="protoTag good">documents issued</span><span class="protoTag warn">2 RFIs open</span></p></div>
@@ -525,134 +523,17 @@ let fallbackDrawings = [
   {d:'Other',no:'SK001',title:'Client Sketch Issue',rev:'-',date:'-',status:'Current',preview:'assets/drawings/SK001.svg',download:'#',notes:'Mock other placeholder.'}
 ];
 
-
-/* v17 URL routing: every main page and selected drawing/programme item gets a shareable hash URL.
-   This is GitHub Pages safe because it uses # routes, not server-side paths. */
-let routeLock = false;
-let pendingDrawingKey = null;
-let pendingProgrammeTaskId = null;
-
-function urlPart(value){
-  return encodeURIComponent(String(value || '').trim());
-}
-
-function deUrlPart(value){
-  try { return decodeURIComponent(String(value || '')); }
-  catch(e){ return String(value || ''); }
-}
-
-function drawingKey(x){
-  return String((x && (x.id || x.rawName || x.no)) || '').trim();
-}
-
-function setPortalHash(hash){
-  if(routeLock) return;
-  if(!hash.startsWith('#')) hash = '#' + hash;
-  if(window.location.hash === hash) return;
-  routeLock = true;
-  window.location.hash = hash;
-  setTimeout(() => { routeLock = false; }, 0);
-}
-
-function copyCurrentLink(){
-  const url = window.location.href;
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(url).then(() => toast('Link copied'));
-  } else {
-    prompt('Copy this link', url);
-  }
-}
-
-function applyRouteFromHash(){
-  if(routeLock) return;
-  const hash = (window.location.hash || '#drawings').replace(/^#/, '');
-  const parts = hash.split('/').map(deUrlPart);
-  const page = (parts[0] || 'drawings').toLowerCase();
-
-  routeLock = true;
-  try{
-    if(page === 'programme'){
-      pendingProgrammeTaskId = parts[1] || null;
-      showProgramme(true);
-      return;
-    }
-    if(page === 'timesheets'){
-      showPrototypeView('timesheets', true);
-      const project = parts[1];
-      const filter = document.getElementById('tsProjectFilter');
-      if(project && filter){ filter.value = project; renderTimesheets(); }
-      return;
-    }
-    if(page === 'approvals'){
-      showPrototypeView('approvals', true);
-      return;
-    }
-    if(page === 'tender'){
-      showPrototypeView('tender', true);
-      return;
-    }
-    if(page === 'drawing'){
-      const discipline = parts[1] || active || 'Architectural';
-      pendingDrawingKey = parts[2] || null;
-      showDrawings(true);
-      setDisc(discipline, true);
-      return;
-    }
-    if(page === 'drawings'){
-      const discipline = parts[1] || active || 'Architectural';
-      pendingDrawingKey = null;
-      showDrawings(true);
-      setDisc(discipline, true);
-      return;
-    }
-    showDrawings(true);
-  } finally {
-    setTimeout(() => { routeLock = false; }, 0);
-  }
-}
-
-function selectPendingDrawingIfPossible(discipline){
-  if(!pendingDrawingKey || active !== discipline) return false;
-  const key = pendingDrawingKey;
-  const match = filtered().find(x => drawingKey(x) === key || x.no === key || x.rawName === key);
-  if(match){
-    pendingDrawingKey = null;
-    selectDrawing(match, true);
-    return true;
-  }
-  return false;
-}
-
-function scrollToPendingProgrammeTask(){
-  if(!pendingProgrammeTaskId) return;
-  const id = pendingProgrammeTaskId;
-  const bar = document.querySelector(`#programmeContent .bar[data-task-id="${CSS.escape(id)}"]`);
-  if(bar){
-    bar.scrollIntoView({block:'center', inline:'center'});
-    bar.classList.add('dragging');
-    setTimeout(() => bar.classList.remove('dragging'), 900);
-    pendingProgrammeTaskId = null;
-  }
-}
-
 function init(){
   document.getElementById('tabs').innerHTML = disciplines.map(d =>
     `<button class="${d===active?'active':''}" onclick="setDisc('${d}')">${d}</button>`
   ).join('');
   renderRows();
   renderAudit();
-  window.addEventListener('hashchange', applyRouteFromHash);
-  if(window.location.hash){
-    applyRouteFromHash();
-  } else {
-    setPortalHash('#drawings/Architectural');
-    loadDisciplineFromAPI('Architectural');
-  }
+  loadDisciplineFromAPI('Architectural');
 }
 
-function setDisc(d, fromRoute){
+function setDisc(d){
   active = d;
-  if(!fromRoute) setPortalHash('#drawings/' + urlPart(d));
   document.getElementById('heading').textContent = d + ' Drawings';
   document.getElementById('errorBox').innerHTML = '';
   document.getElementById('tabs').innerHTML = disciplines.map(x =>
@@ -720,7 +601,7 @@ function loadDisciplineFromAPI(discipline){
       if(active === discipline){
         renderRows();
         if(liveDrawings[discipline].length) {
-          if(!selectPendingDrawingIfPossible(discipline)) selectDrawing(liveDrawings[discipline][0]);
+          selectDrawing(liveDrawings[discipline][0]);
         } else {
           showApiMessage('The API worked, but no PDFs were found in the ' + discipline + ' folder.');
         }
@@ -776,10 +657,9 @@ function selectDrawingByIndex(i){
   selectDrawing(x);
 }
 
-function selectDrawing(x, fromRoute){
+function selectDrawing(x){
   current = x;
   if(!x) return;
-  if(!fromRoute) setPortalHash('#drawing/' + urlPart(active) + '/' + urlPart(drawingKey(x)));
 
   document.getElementById('vTitle').textContent = x.no + '   ' + x.title;
   document.getElementById('vMeta').textContent = 'Revision ' + x.rev + '   |   ' + x.date + '   |   ' + x.status;
@@ -866,7 +746,7 @@ function hidePrototypeViews(){
   });
 }
 
-function showPrototypeView(kind, fromRoute){
+function showPrototypeView(kind){
   document.querySelector('.content').style.gridTemplateRows = '88px 1fr';
   document.getElementById('tabs').style.display = 'none';
   document.getElementById('drawingMain').style.display = 'none';
@@ -886,14 +766,6 @@ function showPrototypeView(kind, fromRoute){
   }
   document.getElementById('navDrawings').classList.remove('active');
   document.getElementById('navProgramme').classList.remove('active');
-  if(!fromRoute){
-    if(kind === 'timesheets'){
-      const project = document.getElementById('tsProjectFilter')?.value || 'All';
-      setPortalHash(project && project !== 'All' ? '#timesheets/' + urlPart(project) : '#timesheets');
-    } else {
-      setPortalHash('#' + kind);
-    }
-  }
   window.scrollTo(0,0);
 }
 
@@ -920,7 +792,7 @@ function escapeHtml(str){
 
 
 
-function showDrawings(fromRoute){
+function showDrawings(){
   document.querySelector('.content').style.gridTemplateRows = '88px 70px 1fr';
   document.getElementById('tabs').style.display = 'flex';
   document.getElementById('drawingMain').style.display = 'grid';
@@ -928,11 +800,10 @@ function showDrawings(fromRoute){
   hidePrototypeViews();
   document.getElementById('navDrawings').classList.add('active');
   document.getElementById('navProgramme').classList.remove('active');
-  if(!fromRoute) setPortalHash('#drawings/' + urlPart(active));
   window.scrollTo(0,0);
 }
 
-function showProgramme(fromRoute){
+function showProgramme(){
   document.querySelector('.content').style.gridTemplateRows = '88px 1fr';
   document.getElementById('tabs').style.display = 'none';
   document.getElementById('drawingMain').style.display = 'none';
@@ -940,7 +811,6 @@ function showProgramme(fromRoute){
   hidePrototypeViews();
   document.getElementById('navDrawings').classList.remove('active');
   document.getElementById('navProgramme').classList.add('active');
-  if(!fromRoute) setPortalHash('#programme');
   window.scrollTo(0,0);
   loadProgramme();
 }
@@ -1169,7 +1039,7 @@ function renderProgramme(rows, rawCount, preserveScroll){
           <div class="taskDates">${fmtDate(t.start)}<br>${fmtDate(t.end)}</div>
         </div>
         <div class="timelineCell" style="width:${width}px">
-          <div class="bar ${warn ? 'warn' : ''}" data-index="${i}" data-task-id="${escapeHtml(t.id)}" data-colour="${colourFor(t)}" style="left:${left}px;width:${w}px">
+          <div class="bar ${warn ? 'warn' : ''}" data-index="${i}" data-colour="${colourFor(t)}" style="left:${left}px;width:${w}px">
             <span class="handle left" data-mode="start"></span>
             <span class="handle right" data-mode="end"></span>
           </div>
@@ -1183,7 +1053,6 @@ function renderProgramme(rows, rawCount, preserveScroll){
   html += '</div></div>';
   el.innerHTML = html;
   bindProgrammeBars();
-  scrollToPendingProgrammeTask();
 
   const wrap = el.querySelector('.ganttWrap');
   if(wrap && preserveScroll){
@@ -1288,7 +1157,6 @@ function startProgrammeDrag(e){
   const bar = e.target.closest('.bar');
   const idx = Number(bar.dataset.index);
   const task = programmeRows[idx];
-  setPortalHash('#programme/' + urlPart(task.id));
   const mode = e.target.dataset.mode || 'move';
 
   dragState = {
@@ -1466,11 +1334,6 @@ function visibleTimesheetEntries(){
   return timesheetEntries
     .map((entry, index) => ({entry, index}))
     .filter(x => (project === 'All' || x.entry.project === project) && (staff === 'All' || x.entry.staff === staff));
-}
-
-function updateTimesheetRoute(){
-  const project = document.getElementById('tsProjectFilter')?.value || 'All';
-  setPortalHash(project && project !== 'All' ? '#timesheets/' + urlPart(project) : '#timesheets');
 }
 
 function renderTimesheets(rebuildRows = true){
