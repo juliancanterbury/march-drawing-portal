@@ -205,6 +205,7 @@
   .protoCard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;box-shadow:0 8px 22px rgba(0,0,0,.035)}
   .protoCard h3{margin:0 0 8px;font-size:16px}.protoCard p{margin:0;color:#555;font-size:13px;line-height:1.45}.protoMetric{font-size:30px;font-weight:400;margin:8px 0 2px}.protoTag{display:inline-block;font-size:11px;border:1px solid #d1c8ba;background:#f6f1e8;border-radius:999px;padding:5px 8px;color:#555;margin:4px 4px 0 0}.protoTag.good{background:#e7efe3;border-color:#cadbc4}.protoTag.warn{background:#fff3d3;border-color:#e4c56a}.protoTag.hot{background:#fff1eb;border-color:#e5bba8;color:#7b321f}
   .protoSplit{display:grid;grid-template-columns:minmax(360px,1.15fr) minmax(300px,.85fr);gap:18px}.protoPanel{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}.protoPanel h3{margin:0 0 14px;font-size:17px}.protoTable{width:100%;border-collapse:collapse;font-size:13px}.protoTable th{font-size:11px;text-transform:uppercase;color:#666;background:#faf6ef}.protoTable th,.protoTable td{padding:10px;border-bottom:1px solid #eee;text-align:left;vertical-align:top}.protoTable tr:hover{background:#faf7f1}.protoInput,.protoSelect,.protoTextarea{width:100%;border:1px solid #ccc;border-radius:5px;padding:8px;background:#fff;font-size:13px}.protoTextarea{height:92px;resize:vertical}.stageList{display:grid;gap:10px}.stageItem{border:1px solid var(--line);border-radius:8px;padding:12px;background:#fff;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}.stageItem strong{display:block;margin-bottom:4px}.stageItem small{color:#666}.stageItem.current{border-color:#d7a64c;background:#fff9eb}.stageItem.approved{background:#f4faf1}.approvalBox{border:1px solid #d9c7a7;background:#fff9eb;border-radius:8px;padding:13px;font-size:13px;line-height:1.45;color:#5b451b}.rfiList{display:grid;gap:10px}.rfiItem{border:1px solid var(--line);border-radius:8px;padding:12px;background:#fff}.rfiItem strong{display:block;margin-bottom:4px}.rfiItem small{color:#666}.miniWorkflow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.miniStep{border:1px solid #d2c8b8;background:#f8f2e8;border-radius:999px;padding:7px 10px;font-size:11px}.miniStep.done{background:#e7efe3}.miniStep.active{background:#111;color:#fff;border-color:#111}
+<<<<<<< HEAD
 
   .defectThumb{width:54px;height:42px;border-radius:6px;background:linear-gradient(135deg,#ddd,#aaa);display:inline-flex;align-items:center;justify-content:center;font-size:18px;color:#555;overflow:hidden}
   .defectThumb img{width:100%;height:100%;object-fit:cover}
@@ -213,6 +214,8 @@
   .defectMap:before{content:"GPS / map placeholder";position:absolute;left:14px;top:12px;color:#777;font-size:12px}.defectMap:after{content:"";position:absolute;left:58%;top:46%;width:18px;height:18px;border-radius:50% 50% 50% 0;background:#c0392b;transform:rotate(-45deg);box-shadow:0 2px 8px rgba(0,0,0,.25)}
   .defectPlan:before{content:"Plan pin placeholder";position:absolute;left:14px;top:12px;color:#777;font-size:12px}.defectPlan .planLine{position:absolute;background:#ddd2c2}.defectPin{position:absolute;width:18px;height:18px;border-radius:50%;background:#111;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(0,0,0,.25)}
 
+=======
+>>>>>>> e77ce55dfdf9964c023b70fcd677226c155d7abb
   @media(max-width:1050px){.protoGrid{grid-template-columns:1fr}.protoSplit{grid-template-columns:1fr}.prototypeView{padding:18px}}
 
 </style>
@@ -228,7 +231,10 @@
       <button id="navTimesheets" onclick="showPrototypeView('timesheets')">Timesheets</button>
       <button id="navApprovals" onclick="showPrototypeView('approvals')">Stage Approvals</button>
       <button id="navTender" onclick="showPrototypeView('tender')">Tender</button>
+<<<<<<< HEAD
       <button id="navDefects" onclick="showPrototypeView('defects')">Defects</button>
+=======
+>>>>>>> e77ce55dfdf9964c023b70fcd677226c155d7abb
       <button onclick="openTransmittal()">Transmittal</button>
       <button onclick="showRegister()">Register</button>
       <button onclick="showAudit()">Audit Log</button>
@@ -482,6 +488,7 @@
       </div>
     </main>
 
+<<<<<<< HEAD
     <main class="prototypeView" id="defectsView">
       <div class="prototypeTop">
         <div>
@@ -537,6 +544,8 @@
       </div>
     </main>
 
+=======
+>>>>>>> e77ce55dfdf9964c023b70fcd677226c155d7abb
   </section>
 </div>
 
@@ -655,11 +664,14 @@ function applyRouteFromHash(){
       showPrototypeView('tender', true);
       return;
     }
+<<<<<<< HEAD
     if(page === 'defects'){
       selectedDefectId = parts[1] || selectedDefectId;
       showPrototypeView('defects', true);
       return;
     }
+=======
+>>>>>>> e77ce55dfdf9964c023b70fcd677226c155d7abb
     if(page === 'drawing'){
       const discipline = parts[1] || active || 'Architectural';
       pendingDrawingKey = parts[2] || null;
@@ -925,11 +937,19 @@ function showAudit(){
 
 
 function hidePrototypeViews(){
+<<<<<<< HEAD
   ['timesheetsView','approvalsView','tenderView','defectsView'].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.style.display = 'none';
   });
   ['navTimesheets','navApprovals','navTender','navDefects'].forEach(id => {
+=======
+  ['timesheetsView','approvalsView','tenderView'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = 'none';
+  });
+  ['navTimesheets','navApprovals','navTender'].forEach(id => {
+>>>>>>> e77ce55dfdf9964c023b70fcd677226c155d7abb
     const el = document.getElementById(id);
     if(el) el.classList.remove('active');
   });
@@ -945,15 +965,22 @@ function showPrototypeView(kind, fromRoute){
   const map = {
     timesheets:['timesheetsView','navTimesheets'],
     approvals:['approvalsView','navApprovals'],
+<<<<<<< HEAD
     tender:['tenderView','navTender'],
     defects:['defectsView','navDefects']
+=======
+    tender:['tenderView','navTender']
+>>>>>>> e77ce55dfdf9964c023b70fcd677226c155d7abb
   };
   const pair = map[kind];
   if(pair){
     document.getElementById(pair[0]).style.display = 'block';
     document.getElementById(pair[1]).classList.add('active');
     if(kind === 'timesheets') renderTimesheets();
+<<<<<<< HEAD
     if(kind === 'defects') renderDefects();
+=======
+>>>>>>> e77ce55dfdf9964c023b70fcd677226c155d7abb
   }
   document.getElementById('navDrawings').classList.remove('active');
   document.getElementById('navProgramme').classList.remove('active');
@@ -961,8 +988,11 @@ function showPrototypeView(kind, fromRoute){
     if(kind === 'timesheets'){
       const project = document.getElementById('tsProjectFilter')?.value || 'All';
       setPortalHash(project && project !== 'All' ? '#timesheets/' + urlPart(project) : '#timesheets');
+<<<<<<< HEAD
     } else if(kind === 'defects') {
       setPortalHash(selectedDefectId ? '#defects/' + urlPart(selectedDefectId) : '#defects');
+=======
+>>>>>>> e77ce55dfdf9964c023b70fcd677226c155d7abb
     } else {
       setPortalHash('#' + kind);
     }
@@ -1601,6 +1631,7 @@ function exportTimesheetCSV(){
 }
 
 
+<<<<<<< HEAD
 /* Defects draft module: front-end only for now. Later this can write to Google Sheets + Drive/GitHub image folders. */
 let selectedDefectId = 'D-001';
 let pendingDefectGPS = null;
@@ -1736,6 +1767,8 @@ function exportDefectsCSV(){
 }
 
 
+=======
+>>>>>>> e77ce55dfdf9964c023b70fcd677226c155d7abb
 window.addEventListener('resize', () => {
   if(document.getElementById('programmeView').style.display === 'block' && programmeScaleMode === 'overview'){
     renderProgramme(programmeRows, programmeRows.length, true);
