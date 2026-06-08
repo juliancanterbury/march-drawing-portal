@@ -329,72 +329,32 @@
       <div class="prototypeTop">
         <div>
           <h2>Timesheets</h2>
-          <p>Interactive sketch for entering staff time across all office projects on one page. This is local-browser only for now; later it can write to a Timesheets sheet.</p>
+          <p>Sketch view for staff time against project stages. Later this can write to a Timesheets sheet and report hours by stage, staff member, task and invoice period.</p>
         </div>
-        <div class="prototypeActions">
-          <button class="btn dark" onclick="addTimesheetEntry()">Add Entry</button>
-          <button class="btn" onclick="exportTimesheetCSV()">Export CSV</button>
-          <button class="btn" onclick="clearTimesheetDrafts()">Reset Drafts</button>
-        </div>
+        <div class="prototypeActions"><button class="btn dark">Add Time Entry</button><button class="btn">Export CSV</button><button class="btn" onclick="showProgramme()">View Programme</button></div>
       </div>
-
       <div class="protoGrid">
-        <div class="protoCard"><h3>Total visible hours</h3><div class="protoMetric" id="tsTotalHours">0 h</div><p>Updates as entries are edited.</p></div>
-        <div class="protoCard"><h3>Projects</h3><div class="protoMetric">2</div><p><span class="protoTag good">Dome House</span><span class="protoTag">Abbotsford Street</span></p></div>
-        <div class="protoCard"><h3>Document model</h3><div class="protoMetric">Project → Discipline</div><p>Each project has its own drawing folders and issue register.</p></div>
+        <div class="protoCard"><h3>This Week</h3><div class="protoMetric">38.5 h</div><p>Entered across concept and planning tasks.</p></div>
+        <div class="protoCard"><h3>Current Stage</h3><div class="protoMetric">Town Planning</div><p><span class="protoTag warn">in progress</span><span class="protoTag">linked to programme</span></p></div>
+        <div class="protoCard"><h3>Unsubmitted</h3><div class="protoMetric">6.0 h</div><p>Draft entries waiting for staff confirmation.</p></div>
       </div>
-
-      <div class="protoPanel" style="margin-bottom:18px">
-        <h3>Office-wide weekly time entry</h3>
-        <div class="prototypeActions" style="margin-bottom:12px">
-          <label class="scaleControl">Project
-            <select class="protoSelect" id="tsProjectFilter" onchange="renderTimesheets()" style="width:190px">
-              <option value="All">All projects</option>
-              <option value="Dome House">Dome House</option>
-              <option value="Abbotsford Street">Abbotsford Street</option>
-            </select>
-          </label>
-          <label class="scaleControl">Staff
-            <select class="protoSelect" id="tsStaffFilter" onchange="renderTimesheets()" style="width:130px">
-              <option value="All">All staff</option>
-              <option>JC</option><option>AB</option><option>MS</option><option>LT</option>
-            </select>
-          </label>
-          <span class="protoTag warn">draft only — not saving to Google yet</span>
-        </div>
-        <table class="protoTable">
-          <thead><tr><th>Date</th><th>Staff</th><th>Project</th><th>Stage</th><th>Description</th><th>Hours</th><th></th></tr></thead>
-          <tbody id="timesheetRows"></tbody>
-        </table>
-      </div>
-
       <div class="protoSplit">
         <div class="protoPanel">
-          <h3>Hours by project and stage</h3>
-          <table class="protoTable">
-            <thead><tr><th>Project</th><th>Stage</th><th>Hours</th></tr></thead>
-            <tbody id="timesheetSummaryRows"></tbody>
-          </table>
+          <h3>Recent time entries</h3>
+          <table class="protoTable"><thead><tr><th>Date</th><th>Staff</th><th>Stage</th><th>Description</th><th>Hours</th></tr></thead><tbody>
+            <tr><td>04 Jun</td><td>JC</td><td>Concept Design</td><td>Client markups and option review</td><td>3.5</td></tr>
+            <tr><td>04 Jun</td><td>AB</td><td>Town Planning</td><td>Planning drawings / area checks</td><td>6.0</td></tr>
+            <tr><td>03 Jun</td><td>MS</td><td>Design Development</td><td>Window schedule coordination</td><td>2.0</td></tr>
+            <tr><td>02 Jun</td><td>JC</td><td>Tender</td><td>Preliminary tender package review</td><td>1.5</td></tr>
+          </tbody></table>
         </div>
-
         <div class="protoPanel">
-          <h3>How project documents would be arranged</h3>
-          <p style="font-size:13px;line-height:1.45;color:#555;margin-top:0">Best structure is one project record, with separate discipline folders and registers under it. The UI can switch project first, then show the same discipline tabs.</p>
-          <table class="protoTable">
-            <thead><tr><th>Project</th><th>Disciplines / folders</th><th>Registers</th></tr></thead>
-            <tbody>
-              <tr><td><strong>Dome House</strong></td><td>Architectural, Structural, Civil, Mechanical, Electrical, Hydraulic, Landscape</td><td>Drawing Register, Programme, RFIs, Approvals, Transmittals</td></tr>
-              <tr><td><strong>Abbotsford Street</strong></td><td>Architectural, Heritage, Planning, Structural, Services, Town Planning</td><td>Planning Register, Tender Register, RFIs, Stage Approvals</td></tr>
-            </tbody>
-          </table>
-          <div class="approvalBox" style="margin-top:12px">
-            Suggested Google Drive layout:<br>
-            <strong>/Projects/Dome House/Architectural</strong><br>
-            <strong>/Projects/Dome House/Structural</strong><br>
-            <strong>/Projects/Abbotsford Street/Architectural</strong><br>
-            <strong>/Projects/Abbotsford Street/Planning</strong><br>
-            Each folder can have its own Apps Script folder ID, or one master project API can return project + discipline + file metadata.
-          </div>
+          <h3>New entry sketch</h3>
+          <p><label>Staff<br><select class="protoSelect"><option>JC</option><option>AB</option><option>MS</option></select></label></p>
+          <p><label>Project Stage<br><select class="protoSelect"><option>Concept Design</option><option>Town Planning</option><option>Design Development</option><option>Tender</option><option>Construction</option></select></label></p>
+          <p><label>Hours<br><input class="protoInput" value="2.5"></label></p>
+          <p><label>Notes<br><textarea class="protoTextarea">Sketch notes only — not saving yet.</textarea></label></p>
+          <button class="btn dark">Save Draft</button>
         </div>
       </div>
     </main>
@@ -762,7 +722,6 @@ function showPrototypeView(kind){
   if(pair){
     document.getElementById(pair[0]).style.display = 'block';
     document.getElementById(pair[1]).classList.add('active');
-    if(kind === 'timesheets') renderTimesheets();
   }
   document.getElementById('navDrawings').classList.remove('active');
   document.getElementById('navProgramme').classList.remove('active');
@@ -1277,119 +1236,6 @@ async function saveProgrammeTask(task){
   }
   alert('Could not save programme change to Google Sheets: ' + (lastError ? lastError.message : 'Unknown error'));
 }
-
-
-/* Interactive timesheet sketch: local only, safe to remove later.
-   This does not touch the existing Drawings or Programme APIs. */
-const timesheetStages = ['Concept Design','Town Planning','Design Development','Documentation','Tender','Construction','Admin'];
-const timesheetProjects = ['Dome House','Abbotsford Street'];
-let timesheetEntries = [
-  {date:'2026-06-03', staff:'JC', project:'Dome House', stage:'Concept Design', notes:'Client markups and option review', hours:3.5},
-  {date:'2026-06-04', staff:'AB', project:'Dome House', stage:'Town Planning', notes:'Planning drawings / area checks', hours:6.0},
-  {date:'2026-06-04', staff:'MS', project:'Abbotsford Street', stage:'Town Planning', notes:'Heritage response and planning notes', hours:4.0},
-  {date:'2026-06-05', staff:'LT', project:'Abbotsford Street', stage:'Tender', notes:'Tender drawing issue setup', hours:2.5}
-];
-
-function todayISO(){
-  const d = new Date();
-  return d.toISOString().slice(0,10);
-}
-
-function addTimesheetEntry(){
-  timesheetEntries.push({
-    date: todayISO(),
-    staff: 'JC',
-    project: 'Dome House',
-    stage: 'Concept Design',
-    notes: '',
-    hours: 0
-  });
-  renderTimesheets();
-}
-
-function updateTimesheetEntry(index, key, value){
-  if(!timesheetEntries[index]) return;
-  timesheetEntries[index][key] = key === 'hours' ? Math.max(0, Number(value || 0)) : value;
-  renderTimesheets(false);
-}
-
-function deleteTimesheetEntry(index){
-  timesheetEntries.splice(index, 1);
-  renderTimesheets();
-}
-
-function clearTimesheetDrafts(){
-  timesheetEntries = [
-    {date:'2026-06-03', staff:'JC', project:'Dome House', stage:'Concept Design', notes:'Client markups and option review', hours:3.5},
-    {date:'2026-06-04', staff:'AB', project:'Dome House', stage:'Town Planning', notes:'Planning drawings / area checks', hours:6.0},
-    {date:'2026-06-04', staff:'MS', project:'Abbotsford Street', stage:'Town Planning', notes:'Heritage response and planning notes', hours:4.0},
-    {date:'2026-06-05', staff:'LT', project:'Abbotsford Street', stage:'Tender', notes:'Tender drawing issue setup', hours:2.5}
-  ];
-  renderTimesheets();
-}
-
-function visibleTimesheetEntries(){
-  const project = document.getElementById('tsProjectFilter')?.value || 'All';
-  const staff = document.getElementById('tsStaffFilter')?.value || 'All';
-  return timesheetEntries
-    .map((entry, index) => ({entry, index}))
-    .filter(x => (project === 'All' || x.entry.project === project) && (staff === 'All' || x.entry.staff === staff));
-}
-
-function renderTimesheets(rebuildRows = true){
-  const tbody = document.getElementById('timesheetRows');
-  if(!tbody) return;
-
-  const visible = visibleTimesheetEntries();
-
-  if(rebuildRows){
-    tbody.innerHTML = visible.map(({entry, index}) => `
-      <tr>
-        <td><input class="protoInput" type="date" value="${escapeHtml(entry.date)}" onchange="updateTimesheetEntry(${index}, 'date', this.value)"></td>
-        <td><select class="protoSelect" onchange="updateTimesheetEntry(${index}, 'staff', this.value)">${['JC','AB','MS','LT'].map(s => `<option ${entry.staff===s?'selected':''}>${s}</option>`).join('')}</select></td>
-        <td><select class="protoSelect" onchange="updateTimesheetEntry(${index}, 'project', this.value)">${timesheetProjects.map(p => `<option ${entry.project===p?'selected':''}>${p}</option>`).join('')}</select></td>
-        <td><select class="protoSelect" onchange="updateTimesheetEntry(${index}, 'stage', this.value)">${timesheetStages.map(s => `<option ${entry.stage===s?'selected':''}>${s}</option>`).join('')}</select></td>
-        <td><input class="protoInput" value="${escapeHtml(entry.notes)}" placeholder="What was done?" onchange="updateTimesheetEntry(${index}, 'notes', this.value)"></td>
-        <td><input class="protoInput" type="number" min="0" step="0.25" value="${entry.hours}" onchange="updateTimesheetEntry(${index}, 'hours', this.value)" style="width:80px"></td>
-        <td><button class="btn" onclick="deleteTimesheetEntry(${index})">Delete</button></td>
-      </tr>
-    `).join('');
-  }
-
-  const total = visible.reduce((sum, x) => sum + Number(x.entry.hours || 0), 0);
-  const totalEl = document.getElementById('tsTotalHours');
-  if(totalEl) totalEl.textContent = total.toFixed(total % 1 ? 1 : 0) + ' h';
-
-  const groups = {};
-  visible.forEach(({entry}) => {
-    const key = entry.project + '||' + entry.stage;
-    groups[key] = (groups[key] || 0) + Number(entry.hours || 0);
-  });
-
-  const summary = document.getElementById('timesheetSummaryRows');
-  if(summary){
-    summary.innerHTML = Object.keys(groups).sort().map(key => {
-      const [project, stage] = key.split('||');
-      return `<tr><td>${escapeHtml(project)}</td><td>${escapeHtml(stage)}</td><td>${groups[key].toFixed(groups[key] % 1 ? 1 : 0)}</td></tr>`;
-    }).join('') || '<tr><td colspan="3">No entries visible.</td></tr>';
-  }
-}
-
-function exportTimesheetCSV(){
-  const header = ['Date','Staff','Project','Stage','Description','Hours'];
-  const lines = [header].concat(timesheetEntries.map(e => [e.date, e.staff, e.project, e.stage, e.notes, e.hours]));
-  const csv = lines.map(row => row.map(v => '"' + String(v ?? '').replace(/"/g,'""') + '"').join(',')).join('\n');
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'march-timesheets-draft.csv';
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 
 window.addEventListener('resize', () => {
   if(document.getElementById('programmeView').style.display === 'block' && programmeScaleMode === 'overview'){
