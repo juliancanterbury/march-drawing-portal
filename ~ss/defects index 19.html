@@ -215,16 +215,6 @@
 
   @media(max-width:1050px){.protoGrid{grid-template-columns:1fr}.protoSplit{grid-template-columns:1fr}.prototypeView{padding:18px}}
 
-
-/* v24 mobile top navigation: no drawer, no checkbox, always visible on phone */
-.mobileQuickNav{display:none}
-@media(max-width:1050px){
-  .mobileQuickNav{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;background:#111;border-top:1px solid #2a2a2a;border-bottom:1px solid #2a2a2a;padding:10px 12px;position:sticky;top:0;z-index:80}
-  .mobileQuickNav a{flex:0 0 auto;border:1px solid #333;background:#1d1d1d;color:#fff;border-radius:999px;padding:10px 13px;font-size:13px;white-space:nowrap;text-decoration:none;display:inline-block}
-  .mobileQuickNav a.active{background:#fff;color:#111;border-color:#fff}
-  .content{grid-template-rows:74px auto 70px 1fr}
-}
-
 </style>
 </head>
 <body>
@@ -254,18 +244,6 @@
       <div class="title"><strong>DOME HOUSE</strong><span>Client Drawing Portal</span></div>
       <div>March Studio ▾</div>
     </header>
-
-    <nav class="mobileQuickNav" id="mobileQuickNav" aria-label="Mobile section menu">
-      <a data-mobile-view="drawings" href="#drawings/Architectural">Drawings</a>
-      <a data-mobile-view="programme" href="#programme">Programme</a>
-      <a data-mobile-view="timesheets" href="#timesheets">Timesheets</a>
-      <a data-mobile-view="approvals" href="#approvals">Approvals</a>
-      <a data-mobile-view="tender" href="#tender">Tender</a>
-      <a data-mobile-view="defects" href="#defects">Defects</a>
-      <a data-mobile-view="transmittal" href="#transmittal">Transmittal</a>
-      <a data-mobile-view="register" href="#register">Register</a>
-      <a data-mobile-view="audit" href="#audit">Audit</a>
-    </nav>
 
     <div class="tabs" id="tabs"></div>
 
@@ -649,28 +627,6 @@ function copyCurrentLink(){
   }
 }
 
-
-function updateMobileQuickNav(page){
-  const key = (page || '').toLowerCase();
-  document.querySelectorAll('#mobileQuickNav a').forEach(a => {
-    a.classList.toggle('active', a.dataset.mobileView === key);
-  });
-}
-
-function installMobileQuickNav(){
-  document.querySelectorAll('#mobileQuickNav a').forEach(a => {
-    a.addEventListener('click', function(ev){
-      ev.preventDefault();
-      const href = this.getAttribute('href') || '#drawings/Architectural';
-      if(href === '#transmittal'){ openTransmittal(); updateMobileQuickNav('transmittal'); return; }
-      if(href === '#register'){ showRegister(); updateMobileQuickNav('register'); return; }
-      if(href === '#audit'){ showAudit(); updateMobileQuickNav('audit'); return; }
-      window.location.hash = href;
-      applyRouteFromHash();
-    });
-  });
-}
-
 function applyRouteFromHash(){
   if(routeLock) return;
   const hash = (window.location.hash || '#drawings').replace(/^#/, '');
@@ -980,8 +936,7 @@ function hidePrototypeViews(){
 }
 
 function showPrototypeView(kind, fromRoute){
-  updateMobileQuickNav(kind);
-  setContentRows('page');
+  document.querySelector('.content').style.gridTemplateRows = '88px 1fr';
   document.getElementById('tabs').style.display = 'none';
   document.getElementById('drawingMain').style.display = 'none';
   document.getElementById('programmeView').style.display = 'none';
@@ -1039,8 +994,7 @@ function escapeHtml(str){
 
 
 function showDrawings(fromRoute){
-  updateMobileQuickNav('drawings');
-  setContentRows('drawings');
+  document.querySelector('.content').style.gridTemplateRows = '88px 70px 1fr';
   document.getElementById('tabs').style.display = 'flex';
   document.getElementById('drawingMain').style.display = 'grid';
   document.getElementById('programmeView').style.display = 'none';
@@ -1052,8 +1006,7 @@ function showDrawings(fromRoute){
 }
 
 function showProgramme(fromRoute){
-  updateMobileQuickNav('programme');
-  setContentRows('page');
+  document.querySelector('.content').style.gridTemplateRows = '88px 1fr';
   document.getElementById('tabs').style.display = 'none';
   document.getElementById('drawingMain').style.display = 'none';
   document.getElementById('programmeView').style.display = 'block';
@@ -1784,15 +1737,12 @@ function exportDefectsCSV(){
 
 
 window.addEventListener('resize', () => {
-  if(document.getElementById('drawingMain').style.display !== 'none') setContentRows('drawings');
-  else setContentRows('page');
   if(document.getElementById('programmeView').style.display === 'block' && programmeScaleMode === 'overview'){
     renderProgramme(programmeRows, programmeRows.length, true);
   }
 });
 
 init();
-setMobileNavActive('drawings');
 </script>
 </body>
 </html>
