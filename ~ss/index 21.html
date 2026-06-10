@@ -557,36 +557,28 @@
       <div class="prototypeTop">
         <div>
           <h2>3D Model</h2>
-          <p>Live Speckle model for Brunswick Dome. The model is published from Rhino to Speckle, then displayed directly inside the portal.</p>
+          <p>First draft Speckle model page. Paste a Speckle share or embed URL below to test a live browser-based model inside the portal. Later this can link model objects to specifications, defects, keynotes and drawings.</p>
         </div>
         <div class="prototypeActions">
-          <button class="btn dark" onclick="openSpeckleExternal()">Open in Speckle</button>
-          <button class="btn" onclick="copySpeckleLink()">Copy Model Link</button>
-          <button class="btn" onclick="copyCurrentLink()">Copy Portal Link</button>
+          <button class="btn dark" onclick="loadSpeckleEmbed()">Load Model</button>
+          <button class="btn" onclick="openSpeckleExternal()">Open Speckle</button>
+          <button class="btn" onclick="copyCurrentLink()">Copy Link</button>
         </div>
       </div>
 
       <div class="modelHero">
         <div class="modelViewport" id="modelViewport">
-          <iframe
-            src="https://app.speckle.systems/projects/7d7cc451b4/models/ece55c9405"
-            allow="fullscreen; clipboard-write; xr-spatial-tracking"
-            allowfullscreen>
-          </iframe>
+          <div class="modelPlaceholder" id="modelPlaceholder"><div><strong>Speckle Model Viewer</strong><p>Paste a Speckle share/embed URL in the panel to the right, then press Load Model.</p><p style="font-size:12px;color:#aaa">This keeps the portal lightweight while Speckle handles model viewing, sectioning, measurement and object data.</p></div></div>
         </div>
         <div class="protoPanel">
-          <h3>Dome Model</h3>
-          <p style="font-size:13px;line-height:1.45;color:#555;margin-top:0">
-            Live Rhino model published through Speckle. Updates made in Rhino and sent to the same Speckle model will appear here as the latest model version.
-          </p>
-          <div class="modelTools">
-            <button class="btn dark" onclick="openSpeckleExternal()">Open in Speckle</button>
-            <button class="btn" onclick="copySpeckleLink()">Copy Model Link</button>
-          </div>
+          <h3>Speckle embed test</h3>
+          <p style="font-size:13px;line-height:1.45;color:#555;margin-top:0">In Speckle, open the model, use Share / Embed, then paste either the embed URL or the full iframe code here.</p>
+          <textarea class="protoTextarea modelEmbedInput" id="speckleEmbedInput" placeholder="Paste Speckle embed URL or iframe code here"></textarea>
+          <div class="modelTools"><button class="btn dark" onclick="loadSpeckleEmbed()">Load Model</button><button class="btn" onclick="clearSpeckleEmbed()">Clear</button></div>
           <div class="modelInfoGrid">
-            <div class="modelInfo"><small>Source</small><strong>Rhino → Speckle</strong></div>
-            <div class="modelInfo"><small>Status</small><strong>Live</strong></div>
-            <div class="modelInfo"><small>Client use</small><strong>View / orbit</strong></div>
+            <div class="modelInfo"><small>Best source</small><strong>Rhino → Speckle</strong></div>
+            <div class="modelInfo"><small>Client use</small><strong>Orbit / walk / view</strong></div>
+            <div class="modelInfo"><small>Technical use</small><strong>Measure / section</strong></div>
             <div class="modelInfo"><small>Future links</small><strong>Specs + defects</strong></div>
           </div>
         </div>
@@ -594,11 +586,11 @@
 
       <div class="protoSplit">
         <div class="protoPanel">
-          <h3>How this will work</h3>
-          <div class="modelStep"><span>1</span><div>Edit the model in Rhino.</div></div>
-          <div class="modelStep"><span>2</span><div>Send/publish the updated model to Speckle.</div></div>
-          <div class="modelStep"><span>3</span><div>The portal displays the current Speckle model without clients needing Rhino.</div></div>
-          <div class="modelStep"><span>4</span><div>Later, model objects can be linked to keynotes, specifications, defects and drawings.</div></div>
+          <h3>Workflow to test</h3>
+          <div class="modelStep"><span>1</span><div>Install Speckle Connector for Rhino, then send a lightweight model stream.</div></div>
+          <div class="modelStep"><span>2</span><div>Open the model in Speckle and confirm materials/layers/objects are readable.</div></div>
+          <div class="modelStep"><span>3</span><div>Use Share / Embed and paste the URL into this page.</div></div>
+          <div class="modelStep"><span>4</span><div>Test iPad/phone performance, orbit, sectioning, measurements and object selection.</div></div>
         </div>
         <div class="protoPanel">
           <h3>Future portal links</h3>
@@ -608,7 +600,7 @@
               <tr><td>Object / layer</td><td>Specification keynote</td><td>Click F-001 to open finish/product record.</td></tr>
               <tr><td>Room / location</td><td>Defect register</td><td>Jump from D-014 to model location.</td></tr>
               <tr><td>View / section</td><td>Drawing</td><td>Link model view to A201 or A501.</td></tr>
-              <tr><td>Quantity / area</td><td>Procurement</td><td>Later: checks, ordering and status.</td></tr>
+              <tr><td>Quantity / area</td><td>Timesheets / procurement</td><td>Later: checks, ordering and status.</td></tr>
             </tbody>
           </table>
         </div>
@@ -1820,17 +1812,40 @@ function exportDefectsCSV(){
 }
 
 
-/* Speckle model embed. Hard-wired to the live Brunswick Dome model. */
-const SPECKLE_MODEL_URL = 'https://app.speckle.systems/projects/7d7cc451b4/models/ece55c9405';
-function openSpeckleExternal(){
-  window.open(SPECKLE_MODEL_URL, '_blank');
+/* Speckle model embed draft. This uses Speckle's own share/embed viewer inside an iframe.
+   Paste the Speckle embed URL or full iframe code into the field and load it. */
+let currentSpeckleUrl = '';
+function extractSpeckleUrl(value){
+  let text = String(value || '').trim();
+  if(!text) return '';
+  const srcMatch = text.match(/src=["']([^"']+)["']/i);
+  if(srcMatch) text = srcMatch[1];
+  if(!/^https?:\/\//i.test(text)) return '';
+  return text;
 }
-function copySpeckleLink(){
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(SPECKLE_MODEL_URL).then(() => toast('Speckle model link copied'));
-  } else {
-    prompt('Copy this Speckle model link', SPECKLE_MODEL_URL);
-  }
+function loadSpeckleEmbed(){
+  const input = document.getElementById('speckleEmbedInput');
+  const url = extractSpeckleUrl(input ? input.value : '');
+  if(!url){ toast('Paste a Speckle share or embed URL first'); return; }
+  currentSpeckleUrl = url;
+  const viewport = document.getElementById('modelViewport');
+  if(!viewport) return;
+  viewport.innerHTML = `<iframe src="${escapeHtml(url)}" allow="fullscreen; clipboard-write; xr-spatial-tracking" allowfullscreen></iframe>`;
+  setPortalHash('#model');
+  toast('Speckle model loaded');
+}
+function clearSpeckleEmbed(){
+  currentSpeckleUrl = '';
+  const input = document.getElementById('speckleEmbedInput');
+  if(input) input.value = '';
+  const viewport = document.getElementById('modelViewport');
+  if(viewport) viewport.innerHTML = '<div class="modelPlaceholder" id="modelPlaceholder"><div><strong>Speckle Model Viewer</strong><p>Paste a Speckle share/embed URL in the panel to the right, then press Load Model.</p><p style="font-size:12px;color:#aaa">This keeps the portal lightweight while Speckle handles model viewing, sectioning, measurement and object data.</p></div></div>';
+}
+function openSpeckleExternal(){
+  const input = document.getElementById('speckleEmbedInput');
+  const url = currentSpeckleUrl || extractSpeckleUrl(input ? input.value : '');
+  if(url) window.open(url, '_blank');
+  else toast('No Speckle URL loaded');
 }
 
 
