@@ -216,48 +216,6 @@
   @media(max-width:1050px){.protoGrid{grid-template-columns:1fr}.protoSplit{grid-template-columns:1fr}.prototypeView{padding:18px}}
 
 
-  /* Programa-style specification workbook */
-  .specHero{display:grid;grid-template-columns:minmax(420px,1.3fr) repeat(2,minmax(210px,.5fr));gap:16px;margin-bottom:18px}
-  .specHeroMain{background:#111;color:#fff;border-radius:14px;padding:26px;min-height:170px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 16px 34px rgba(0,0,0,.12)}
-  .specHeroMain h3{font-size:26px;font-weight:400;margin:0 0 10px}.specHeroMain p{font-size:14px;line-height:1.5;color:#f0eee9;margin:0;max-width:840px}
-  .specStat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px}.specStat strong{display:block;font-size:13px;margin-bottom:8px}.specStat .number{font-size:34px;font-weight:400}
-  .specControls{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}.specControls .protoSelect{max-width:220px}
-  .specViewTabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-  .specCards{display:grid;grid-template-columns:repeat(4,minmax(210px,1fr));gap:14px}
-  .specCard{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,.045);cursor:pointer;transition:transform .12s, box-shadow .12s}
-  .specCard:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(0,0,0,.09)}
-  .specCard.selected{outline:2px solid #111}
-  .specImage{height:150px;background:#ddd;position:relative;overflow:hidden}
-  .specImage:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(0,0,0,.18))}
-  .specImage.concrete{background:radial-gradient(circle at 20% 30%,#e7e1d6 0 2px,transparent 3px),linear-gradient(135deg,#b8b1a6,#eee7db)}
-  .specImage.mudbrick{background:linear-gradient(135deg,#7f5738,#b38255 45%,#d2a06d)}
-  .specImage.lime{background:radial-gradient(circle at 30% 50%,#fff 0 1px,transparent 2px),linear-gradient(135deg,#e8e3d9,#faf8ef)}
-  .specImage.timber{background:repeating-linear-gradient(90deg,#8a5f38 0 12px,#b47c46 12px 26px,#d5a66d 26px 42px)}
-  .specImage.steel{background:linear-gradient(135deg,#1c1c1c,#555,#1f1f1f)}
-  .specImage.appliance{background:linear-gradient(135deg,#111,#252525 55%,#666)}
-  .specImage.tapware{background:linear-gradient(135deg,#a69b8d,#e6dfd1,#8d8070)}
-  .specImage.floorboard{background:repeating-linear-gradient(90deg,#c9a66f 0 42px,#e5c790 42px 86px,#9d7445 86px 92px)}
-  .specImage.stone{background:radial-gradient(circle at 35% 35%,#fff 0 1px,transparent 2px),linear-gradient(135deg,#e9e3dc,#b7ada3)}
-  .specImage.light{background:radial-gradient(circle at 50% 45%,#fff7c7 0 20px,#d4b04e 21px 28px,transparent 29px),linear-gradient(135deg,#202020,#494949)}
-  .specImage.joinery{background:linear-gradient(135deg,#5b3a22,#c08b52)}
-  .specImage.bath{background:linear-gradient(135deg,#f3f1ed,#d5d0c7)}
-  .specKey{position:absolute;left:12px;top:12px;z-index:2;background:#111;color:#fff;border-radius:999px;padding:6px 9px;font-size:11px;letter-spacing:.03em}
-  .specBody{padding:14px}.specBody h3{margin:0 0 4px;font-size:15px}.specBody p{margin:0 0 10px;color:#555;font-size:12px;line-height:1.35}
-  .specMetaLine{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:#666;margin-top:8px}
-  .specLayout{display:grid;grid-template-columns:minmax(520px,1.2fr) minmax(330px,.8fr);gap:18px}
-  .specDetail{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;position:sticky;top:20px;align-self:start}
-  .specDetailImage{height:230px;border-radius:12px;margin-bottom:14px}
-  .specDetail h3{font-size:24px;font-weight:400;margin:0 0 6px}.specDetail .keynote{display:inline-block;background:#111;color:#fff;border-radius:999px;padding:6px 10px;font-size:12px;margin-bottom:10px}
-  .specFields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.specField{border-top:1px solid #eee;padding-top:8px}.specField small{display:block;color:#777;text-transform:uppercase;font-size:10px;margin-bottom:4px}.specField span{font-size:13px}
-  .specLibraryGrid{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:12px}
-  .specScheduleWrap{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:auto}
-  .specScheduleWrap table{min-width:1150px}
-  .specScheduleWrap tr.selected{background:#eee6da}
-  @media(max-width:1200px){.specCards{grid-template-columns:repeat(3,minmax(210px,1fr))}.specHero{grid-template-columns:1fr}.specLayout{grid-template-columns:1fr}.specDetail{position:static}}
-  @media(max-width:760px){.specCards,.specLibraryGrid{grid-template-columns:1fr}.specFields{grid-template-columns:1fr}.specImage{height:190px}}
-
-
-
   /* Speckle / 3D Model first draft */
   .modelHero{display:grid;grid-template-columns:minmax(320px,1.1fr) minmax(280px,.9fr);gap:18px;margin-bottom:18px}
   .modelViewport{background:#111;border-radius:12px;overflow:hidden;min-height:520px;box-shadow:0 18px 45px rgba(0,0,0,.18);position:relative}
@@ -270,15 +228,6 @@
   .modelInfo small{display:block;color:#777;text-transform:uppercase;font-size:10px;margin-bottom:4px}.modelInfo strong{font-size:14px}
   .modelEmbedInput{font-family:Arial,Helvetica,sans-serif;height:86px}
   .modelStep{display:grid;grid-template-columns:26px 1fr;gap:10px;margin:10px 0;font-size:13px;line-height:1.42;color:#555}.modelStep span{background:#111;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px}
-
-  .materialList{display:grid;gap:9px;margin-top:12px}
-  .materialItem{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:center;border:1px solid var(--line);border-radius:8px;background:#fff;padding:10px}
-  .materialSwatch{width:28px;height:28px;border-radius:50%;border:1px solid rgba(0,0,0,.18);box-shadow:inset 0 1px 4px rgba(0,0,0,.08)}
-  .materialSwatch.concrete{background:#9a9a93}
-  .materialSwatch.timber{background:#8a5b2f}
-  .materialSwatch.mud{background:#9c6a43}
-  .materialItem strong{display:block;font-size:13px}
-  .materialItem small{display:block;color:#666;line-height:1.35;margin-top:2px}
   @media(max-width:1050px){.modelHero{grid-template-columns:1fr}.modelViewport,.modelViewport iframe,.modelPlaceholder{min-height:420px}}
 
 </style>
@@ -291,7 +240,6 @@
     <nav class="nav">
       <button class="active" id="navDrawings" onclick="showDrawings()">Drawings</button>
       <button id="navProgramme" onclick="showProgramme()">Programme</button>
-      <button id="navSpecifications" onclick="showPrototypeView('specifications')">Specifications</button>
       <button id="navTimesheets" onclick="showPrototypeView('timesheets')">Timesheets</button>
       <button id="navApprovals" onclick="showPrototypeView('approvals')">Stage Approvals</button>
       <button id="navTender" onclick="showPrototypeView('tender')">Tender</button>
@@ -403,58 +351,6 @@
       </div>
       <div class="dateTooltip" id="dateTooltip"></div>
     </main>
-
-    <main class="prototypeView" id="specificationsView">
-      <div class="prototypeTop">
-        <div>
-          <h2>Specifications</h2>
-          <p>Programa-style project workbook for selections, finishes, fixtures, appliances and procurement. Keynote tags are the connection back to the drawings.</p>
-        </div>
-        <div class="prototypeActions">
-          <button class="btn dark" onclick="setSpecMode('cards')">Studio View</button>
-          <button class="btn" onclick="setSpecMode('schedule')">Schedule View</button>
-          <button class="btn" onclick="setSpecMode('library')">Product Library</button>
-          <button class="btn" onclick="exportSpecsCSV()">Export CSV</button>
-          <button class="btn" onclick="copyCurrentLink()">Copy Link</button>
-        </div>
-      </div>
-
-      <div class="specHero">
-        <div class="specHeroMain">
-          <div>
-            <h3 id="specHeroTitle">Project Selections</h3>
-            <p>A live schedule for keynote-linked finishes, fixtures, fittings, furniture, lighting and appliances. Visual enough for clients, structured enough for tender and construction.</p>
-          </div>
-          <div><span class="protoTag good">Approved</span><span class="protoTag warn">Client Review</span><span class="protoTag">Ordered</span><span class="protoTag hot">Lead Time Risk</span></div>
-        </div>
-        <div class="specStat"><strong>Visible items</strong><div class="number" id="specVisibleCount">0</div><p style="margin:0;color:#555;font-size:13px">Filtered schedule items.</p></div>
-        <div class="specStat"><strong>Keynotes</strong><div class="number">Linked</div><p style="margin:0;color:#555;font-size:13px">F-001, FX-014, AP-003, LT-002 etc.</p></div>
-      </div>
-
-      <div class="specControls">
-        <select class="protoSelect" id="specProjectFilter" onchange="renderSpecifications(); updateSpecificationRoute()"><option>All projects</option><option>Dome House</option><option>Abbotsford Street</option></select>
-        <select class="protoSelect" id="specCategoryFilter" onchange="renderSpecifications()"><option>All categories</option><option>Finishes</option><option>Fixtures</option><option>Fittings</option><option>Furniture</option><option>Lighting</option><option>Appliances</option><option>Joinery</option><option>Bathroom</option><option>Doors & Hardware</option></select>
-        <select class="protoSelect" id="specRoomFilter" onchange="renderSpecifications()"><option>All rooms</option><option>Dome Interior</option><option>Sauna</option><option>Entry</option><option>Kitchen</option><option>Bathroom</option><option>Office</option><option>Workshop</option><option>Roof Terrace</option></select>
-        <select class="protoSelect" id="specStatusFilter" onchange="renderSpecifications()"><option>All statuses</option><option>Draft</option><option>Client Review</option><option>Approved</option><option>Ordered</option><option>Installed</option><option>Lead Time Risk</option></select>
-      </div>
-
-      <div class="specViewTabs">
-        <button class="btn dark" id="specModeCards" onclick="setSpecMode('cards')">Studio Cards</button>
-        <button class="btn" id="specModeSchedule" onclick="setSpecMode('schedule')">Schedule</button>
-        <button class="btn" id="specModeDetail" onclick="setSpecMode('detail')">Item Detail</button>
-        <button class="btn" id="specModeLibrary" onclick="setSpecMode('library')">Library</button>
-      </div>
-
-      <div class="specLayout">
-        <div>
-          <div id="specCardsView" class="specCards"></div>
-          <div id="specScheduleView" class="specScheduleWrap" style="display:none"></div>
-          <div id="specLibraryView" style="display:none"></div>
-        </div>
-        <div id="specDetailView" class="specDetail"></div>
-      </div>
-    </main>
-
 
     <main class="prototypeView" id="timesheetsView">
       <div class="prototypeTop">
@@ -690,13 +586,8 @@
           <div class="modelInfoGrid">
             <div class="modelInfo"><small>Source</small><strong>Rhino → Speckle</strong></div>
             <div class="modelInfo"><small>Status</small><strong>Live</strong></div>
-            <div class="modelInfo"><small>Viewer</small><strong>Speckle / Three.js</strong></div>
+            <div class="modelInfo"><small>Client use</small><strong>View / orbit</strong></div>
             <div class="modelInfo"><small>Future links</small><strong>Specs + defects</strong></div>
-          </div>
-          <div class="materialList">
-            <div class="materialItem"><span class="materialSwatch concrete"></span><div><strong>Concrete</strong><small>Best controlled in Rhino as object/layer colour or render material before publishing.</small></div></div>
-            <div class="materialItem"><span class="materialSwatch timber"></span><div><strong>Timber</strong><small>Speckle will carry material colour/PBR-style data, but not Rhino bitmap textures.</small></div></div>
-            <div class="materialItem"><span class="materialSwatch mud"></span><div><strong>Mudbrick / mud render</strong><small>Use a named Rhino material or layer colour so the portal viewer reads it cleanly.</small></div></div>
           </div>
         </div>
       </div>
@@ -704,10 +595,10 @@
       <div class="protoSplit">
         <div class="protoPanel">
           <h3>How this will work</h3>
-          <div class="modelStep"><span>1</span><div>Edit geometry, layers and materials in Rhino.</div></div>
-          <div class="modelStep"><span>2</span><div>Publish the updated model to the same Speckle model.</div></div>
-          <div class="modelStep"><span>3</span><div>The portal displays the latest Speckle version automatically without clients needing Rhino.</div></div>
-          <div class="modelStep"><span>4</span><div>Use Speckle viewer tools for orbiting, object selection, sectioning and measurement where available.</div></div>
+          <div class="modelStep"><span>1</span><div>Edit the model in Rhino.</div></div>
+          <div class="modelStep"><span>2</span><div>Send/publish the updated model to Speckle.</div></div>
+          <div class="modelStep"><span>3</span><div>The portal displays the current Speckle model without clients needing Rhino.</div></div>
+          <div class="modelStep"><span>4</span><div>Later, model objects can be linked to keynotes, specifications, defects and drawings.</div></div>
         </div>
         <div class="protoPanel">
           <h3>Future portal links</h3>
@@ -826,11 +717,6 @@ function applyRouteFromHash(){
     if(page === 'programme'){
       pendingProgrammeTaskId = parts[1] || null;
       showProgramme(true);
-      return;
-    }
-    if(page === 'specifications'){
-      selectedSpecKey = parts[1] || selectedSpecKey;
-      showPrototypeView('specifications', true);
       return;
     }
     if(page === 'timesheets'){
@@ -1122,11 +1008,11 @@ function showAudit(){
 
 
 function hidePrototypeViews(){
-  ['specificationsView','timesheetsView','approvalsView','tenderView','defectsView','modelView'].forEach(id => {
+  ['timesheetsView','approvalsView','tenderView','defectsView','modelView'].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.style.display = 'none';
   });
-  ['navSpecifications','navTimesheets','navApprovals','navTender','navDefects','navModel'].forEach(id => {
+  ['navTimesheets','navApprovals','navTender','navDefects','navModel'].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.classList.remove('active');
   });
@@ -1140,7 +1026,6 @@ function showPrototypeView(kind, fromRoute){
   hidePrototypeViews();
 
   const map = {
-    specifications:['specificationsView','navSpecifications'],
     timesheets:['timesheetsView','navTimesheets'],
     approvals:['approvalsView','navApprovals'],
     tender:['tenderView','navTender'],
@@ -1151,7 +1036,6 @@ function showPrototypeView(kind, fromRoute){
   if(pair){
     document.getElementById(pair[0]).style.display = 'block';
     document.getElementById(pair[1]).classList.add('active');
-    if(kind === 'specifications') renderSpecifications();
     if(kind === 'timesheets') renderTimesheets();
     if(kind === 'defects') renderDefects();
   }
@@ -1681,158 +1565,6 @@ async function saveProgrammeTask(task){
     unsaved.classList.add('show');
   }
   alert('Could not save programme change to Google Sheets: ' + (lastError ? lastError.message : 'Unknown error'));
-}
-
-
-/* Programa-style specification schedule: local prototype only.
-   Items include keynote tags, images/swatches, supplier links, optional cost/contact/lead-time and procurement state. */
-let selectedSpecKey = 'F-001';
-let specMode = 'cards';
-const specItems = [
-  {project:'Dome House', key:'F-001', category:'Finishes', room:'Dome Interior', title:'Polished Concrete Floor', image:'concrete', supplier:'Local concrete finisher', supplierUrl:'https://www.ccaa.com.au', manufacturer:'Site finish', model:'40MPa / polished', dimensions:'100mm slab / Class B exposure', finish:'Low sheen penetrating sealer', cost:'TBC / m²', contact:'Concrete contractor', lead:'6 weeks incl cure', status:'Approved', procurement:'Installed', drawings:'A201, A501', notes:'Primary floor finish to dome interior and entry threshold.'},
-  {project:'Dome House', key:'F-002', category:'Finishes', room:'Dome Interior', title:'Mudbrick Internal Wall', image:'mudbrick', supplier:'Site made', supplierUrl:'', manufacturer:'March Studio', model:'Mudbrick / earth plaster', dimensions:'Nom. 250mm wall', finish:'Natural earth finish', cost:'Labour only', contact:'March Studio', lead:'Site programme', status:'Approved', procurement:'Installed', drawings:'A201, A301', notes:'Exposed internal dome masonry. Repair chips before final seal.'},
-  {project:'Dome House', key:'F-003', category:'Finishes', room:'Entry', title:'Lime Render External Finish', image:'lime', supplier:'Lime supplier', supplierUrl:'https://www.lime.org.uk', manufacturer:'TBC', model:'Lime render over hempcrete', dimensions:'10–20mm render coat', finish:'Natural off-white limewash', cost:'TBC', contact:'Renderer', lead:'4 weeks', status:'Client Review', procurement:'Selected', drawings:'A301, A501', notes:'External lime finish to be sampled before full application.'},
-  {project:'Dome House', key:'F-004', category:'Finishes', room:'Entry', title:'Sugar Gum Timber Columns', image:'timber', supplier:'Local timber yard', supplierUrl:'', manufacturer:'Local hardwood', model:'Sugar gum posts', dimensions:'Varies / structural setout', finish:'Oil finish', cost:'TBC', contact:'Timber supplier', lead:'4 weeks', status:'Approved', procurement:'Ordered', drawings:'A201, S101', notes:'Entry structure timber. Check cracking and weather exposure.'},
-  {project:'Dome House', key:'LT-001', category:'Lighting', room:'Dome Interior', title:'Oculus Ring Light', image:'light', supplier:'Custom LED supplier', supplierUrl:'', manufacturer:'Custom', model:'Warm LED ring', dimensions:'To suit oculus recess', finish:'Concealed warm white', cost:'TBC', contact:'Electrician', lead:'6 weeks', status:'Draft', procurement:'Not ordered', drawings:'A701, E101', notes:'Concealed ring light around oculus / concrete ring.'},
-  {project:'Dome House', key:'FX-001', category:'Fixtures', room:'Sauna', title:'Sauna Door Hardware', image:'steel', supplier:'Architectural hardware supplier', supplierUrl:'https://www.hallidaybaillie.com', manufacturer:'Halliday + Baillie style', model:'Flush pull / latch set', dimensions:'To door thickness', finish:'Blackened / dark bronze', cost:'TBC', contact:'Hardware supplier', lead:'8 weeks', status:'Client Review', procurement:'Selected', drawings:'A601', notes:'Heat-resistant simple hardware, avoid plastic components.'},
-  {project:'Dome House', key:'FF-001', category:'Furniture', room:'Sauna', title:'Sauna Bench', image:'timber', supplier:'Joiner', supplierUrl:'', manufacturer:'Custom joinery', model:'Timber bench', dimensions:'Site measured', finish:'Natural oiled timber', cost:'TBC', contact:'Joiner', lead:'5 weeks', status:'Draft', procurement:'Not ordered', drawings:'A501, J101', notes:'Bench geometry to follow dome interior radius.'},
-
-  {project:'Abbotsford Street', key:'AP-001', category:'Appliances', room:'Kitchen', title:'Fisher & Paykel Integrated Fridge', image:'appliance', supplier:'Fisher & Paykel', supplierUrl:'https://www.fisherpaykel.com/au/', manufacturer:'Fisher & Paykel', model:'Integrated French Door Fridge', dimensions:'Approx. 900W integrated cavity', finish:'Integrated panel-ready', cost:'Optional cost field', contact:'Appliance supplier', lead:'12 weeks', status:'Client Review', procurement:'Selected', drawings:'A501, J201', notes:'Integrated into kitchen joinery. Confirm ventilation and door clearances.'},
-  {project:'Abbotsford Street', key:'AP-002', category:'Appliances', room:'Kitchen', title:'Fisher & Paykel Induction Cooktop', image:'appliance', supplier:'Fisher & Paykel', supplierUrl:'https://www.fisherpaykel.com/au/cooking/cooktops/induction-cooktops/', manufacturer:'Fisher & Paykel', model:'900mm induction cooktop', dimensions:'900mm nominal', finish:'Black glass', cost:'Optional', contact:'Appliance supplier', lead:'8 weeks', status:'Approved', procurement:'Ordered', drawings:'A501, E201', notes:'Coordinate power supply, stone cutout and ventilation.'},
-  {project:'Abbotsford Street', key:'AP-003', category:'Appliances', room:'Kitchen', title:'Fisher & Paykel Combination Steam Oven', image:'appliance', supplier:'Fisher & Paykel', supplierUrl:'https://www.fisherpaykel.com/au/cooking/ovens/', manufacturer:'Fisher & Paykel', model:'60cm combination steam oven', dimensions:'600mm module', finish:'Black glass', cost:'Optional', contact:'Appliance supplier', lead:'10 weeks', status:'Lead Time Risk', procurement:'To order', drawings:'A501, J201', notes:'Confirm module height and adjacent warming drawer / microwave requirements.'},
-  {project:'Abbotsford Street', key:'F-101', category:'Finishes', room:'Office', title:'Dinesen Douglas Fir Floorboards', image:'floorboard', supplier:'Dinesen / timber supplier', supplierUrl:'https://www.dinesen.com', manufacturer:'Dinesen', model:'Douglas fir plank flooring', dimensions:'Approx. 300mm wide boards', finish:'Lye + white oil', cost:'Optional cost range', contact:'Timber supplier', lead:'14 weeks', status:'Client Review', procurement:'Selected', drawings:'A201, A901', notes:'Hero floor finish for office/living areas. Confirm availability and acclimatisation.'},
-  {project:'Abbotsford Street', key:'FX-101', category:'Fittings', room:'Bathroom', title:'Brodware Basin Mixer', image:'tapware', supplier:'Brodware', supplierUrl:'https://www.brodware.com.au', manufacturer:'Brodware', model:'Yokato basin mixer', dimensions:'Bench/wall mount TBC', finish:'Brushed nickel', cost:'Optional', contact:'Bathroom supplier', lead:'8 weeks', status:'Approved', procurement:'Ordered', drawings:'A601, P201', notes:'High-end tapware finish, coordinate basin and wall thickness.'},
-  {project:'Abbotsford Street', key:'FX-102', category:'Fittings', room:'Kitchen', title:'Brodware Sink Mixer', image:'tapware', supplier:'Brodware', supplierUrl:'https://www.brodware.com.au', manufacturer:'Brodware', model:'Kitchen sink mixer', dimensions:'To sink setout', finish:'Brushed nickel', cost:'Optional', contact:'Bathroom/kitchen supplier', lead:'8 weeks', status:'Client Review', procurement:'Selected', drawings:'A501, P201', notes:'Kitchen mixer to match bathroom fittings.'},
-  {project:'Abbotsford Street', key:'BA-101', category:'Bathroom', room:'Bathroom', title:'Apaiser Stone Basin', image:'bath', supplier:'Apaiser', supplierUrl:'https://www.apaiser.com', manufacturer:'Apaiser', model:'Stone basin', dimensions:'Size TBC', finish:'Matte white', cost:'Optional', contact:'Bathroom supplier', lead:'10 weeks', status:'Client Review', procurement:'Selected', drawings:'A601', notes:'Confirm waste, tap position and vanity detail.'},
-  {project:'Abbotsford Street', key:'BA-102', category:'Bathroom', room:'Bathroom', title:'Wall Hung WC', image:'bath', supplier:'Parisi', supplierUrl:'https://www.parisi.com.au', manufacturer:'Parisi / equivalent', model:'Wall hung WC', dimensions:'Concealed cistern', finish:'White ceramic', cost:'Optional', contact:'Bathroom supplier', lead:'6 weeks', status:'Draft', procurement:'Not ordered', drawings:'A601, P201', notes:'Coordinate in-wall cistern, access panel and tile setout.'},
-  {project:'Abbotsford Street', key:'J-101', category:'Joinery', room:'Kitchen', title:'Kitchen Island', image:'joinery', supplier:'Custom joiner', supplierUrl:'', manufacturer:'Custom', model:'Oak veneer island', dimensions:'Site measured', finish:'Oak veneer / stone top / blackened plinth', cost:'Joinery quote', contact:'Joiner', lead:'10 weeks', status:'Draft', procurement:'Not ordered', drawings:'J101, J102, A501', notes:'Island as project centrepiece. Link appliances, sink mixer, stone and power.'},
-  {project:'Abbotsford Street', key:'LT-101', category:'Lighting', room:'Kitchen', title:'Flos IC Pendant', image:'light', supplier:'Euroluce / Flos supplier', supplierUrl:'https://flos.com', manufacturer:'Flos', model:'IC pendant', dimensions:'Pendant size TBC', finish:'Brass / black TBC', cost:'Optional', contact:'Lighting supplier', lead:'12 weeks', status:'Client Review', procurement:'Selected', drawings:'E201, A701', notes:'Pendant over kitchen island / office table. Confirm ceiling height.'},
-  {project:'Abbotsford Street', key:'DH-101', category:'Doors & Hardware', room:'Office', title:'Halliday + Baillie Flush Pull', image:'steel', supplier:'Halliday + Baillie', supplierUrl:'https://www.hallidaybaillie.com', manufacturer:'Halliday + Baillie', model:'Flush pull', dimensions:'To door detail', finish:'Brushed nickel / dark bronze', cost:'Optional', contact:'Hardware supplier', lead:'8 weeks', status:'Approved', procurement:'Ordered', drawings:'A401, A601', notes:'High-end hardware for sliding / concealed doors.'}
-];
-
-function specClass(item){ return item.image || 'concrete'; }
-
-function visibleSpecs(){
-  const project = document.getElementById('specProjectFilter')?.value || 'All projects';
-  const cat = document.getElementById('specCategoryFilter')?.value || 'All categories';
-  const room = document.getElementById('specRoomFilter')?.value || 'All rooms';
-  const status = document.getElementById('specStatusFilter')?.value || 'All statuses';
-  return specItems.filter(i =>
-    (project === 'All projects' || i.project === project) &&
-    (cat === 'All categories' || i.category === cat) &&
-    (room === 'All rooms' || i.room === room) &&
-    (status === 'All statuses' || i.status === status)
-  );
-}
-
-function setSpecMode(mode){
-  specMode = mode;
-  ['Cards','Schedule','Detail','Library'].forEach(m => {
-    const b = document.getElementById('specMode' + m);
-    if(b) b.classList.toggle('dark', m.toLowerCase() === mode);
-  });
-  renderSpecifications();
-}
-
-function selectSpec(key){
-  selectedSpecKey = key;
-  setPortalHash('#specifications/' + urlPart(key));
-  renderSpecifications();
-}
-
-function updateSpecificationRoute(){
-  const project = document.getElementById('specProjectFilter')?.value || 'All projects';
-  setPortalHash(project !== 'All projects' ? '#specifications/' + urlPart(selectedSpecKey) : '#specifications/' + urlPart(selectedSpecKey));
-}
-
-function renderSpecifications(){
-  const cards = document.getElementById('specCardsView');
-  const schedule = document.getElementById('specScheduleView');
-  const detail = document.getElementById('specDetailView');
-  const library = document.getElementById('specLibraryView');
-  if(!cards || !schedule || !detail || !library) return;
-
-  const visible = visibleSpecs();
-  const count = document.getElementById('specVisibleCount'); if(count) count.textContent = visible.length;
-  const hero = document.getElementById('specHeroTitle');
-  const project = document.getElementById('specProjectFilter')?.value || 'All projects';
-  if(hero) hero.textContent = project === 'All projects' ? 'Project Selections' : project + ' Selections';
-
-  if(!visible.find(i => i.key === selectedSpecKey) && visible[0]) selectedSpecKey = visible[0].key;
-  const selected = specItems.find(i => i.key === selectedSpecKey) || visible[0] || specItems[0];
-
-  cards.style.display = specMode === 'cards' || specMode === 'detail' ? 'grid' : 'none';
-  schedule.style.display = specMode === 'schedule' ? 'block' : 'none';
-  library.style.display = specMode === 'library' ? 'block' : 'none';
-
-  cards.innerHTML = visible.map(i => `
-    <div class="specCard ${i.key===selectedSpecKey?'selected':''}" onclick="selectSpec('${escapeHtml(i.key)}')">
-      <div class="specImage ${specClass(i)}"><span class="specKey">${escapeHtml(i.key)}</span></div>
-      <div class="specBody">
-        <h3>${escapeHtml(i.title)}</h3>
-        <p>${escapeHtml(i.project)} · ${escapeHtml(i.room)}<br>${escapeHtml(i.manufacturer)} ${i.model ? '· ' + escapeHtml(i.model) : ''}</p>
-        <span class="protoTag ${i.status==='Approved'||i.status==='Installed'?'good':i.status==='Client Review'?'warn':i.status==='Lead Time Risk'?'hot':''}">${escapeHtml(i.status)}</span>
-        <div class="specMetaLine"><span>${escapeHtml(i.category)}</span><span>${escapeHtml(i.lead)}</span></div>
-      </div>
-    </div>
-  `).join('');
-
-  schedule.innerHTML = `
-    <table class="protoTable">
-      <thead><tr><th>Keynote</th><th>Project</th><th>Category</th><th>Room</th><th>Item</th><th>Supplier</th><th>Dimensions / finish</th><th>Lead</th><th>Cost</th><th>Status</th><th>Procurement</th></tr></thead>
-      <tbody>
-      ${visible.map(i => `<tr onclick="selectSpec('${escapeHtml(i.key)}')" class="${i.key===selectedSpecKey?'selected':''}">
-        <td><strong>${escapeHtml(i.key)}</strong></td><td>${escapeHtml(i.project)}</td><td>${escapeHtml(i.category)}</td><td>${escapeHtml(i.room)}</td>
-        <td>${escapeHtml(i.title)}<br><small>${escapeHtml(i.manufacturer)} · ${escapeHtml(i.model)}</small></td>
-        <td>${i.supplierUrl ? `<a href="${escapeHtml(i.supplierUrl)}" target="_blank">${escapeHtml(i.supplier)}</a>` : escapeHtml(i.supplier)}</td>
-        <td>${escapeHtml(i.dimensions)}<br><small>${escapeHtml(i.finish)}</small></td><td>${escapeHtml(i.lead)}</td><td>${escapeHtml(i.cost)}</td>
-        <td><span class="protoTag ${i.status==='Approved'||i.status==='Installed'?'good':i.status==='Client Review'?'warn':i.status==='Lead Time Risk'?'hot':''}">${escapeHtml(i.status)}</span></td><td>${escapeHtml(i.procurement)}</td>
-      </tr>`).join('')}
-      </tbody>
-    </table>`;
-
-  library.innerHTML = `
-    <div class="specLibraryGrid">
-      ${specItems.map(i => `<div class="protoCard" onclick="selectSpec('${escapeHtml(i.key)}')"><h3>${escapeHtml(i.manufacturer)}</h3><p><strong>${escapeHtml(i.title)}</strong><br>${escapeHtml(i.category)} · ${escapeHtml(i.project)}</p><span class="protoTag">${escapeHtml(i.key)}</span></div>`).join('')}
-    </div>`;
-
-  if(selected){
-    detail.innerHTML = `
-      <div class="specDetailImage specImage ${specClass(selected)}"><span class="specKey">${escapeHtml(selected.key)}</span></div>
-      <span class="keynote">${escapeHtml(selected.key)}</span>
-      <h3>${escapeHtml(selected.title)}</h3>
-      <p style="color:#555;margin:0 0 8px">${escapeHtml(selected.project)} · ${escapeHtml(selected.room)} · ${escapeHtml(selected.category)}</p>
-      <p>${escapeHtml(selected.notes)}</p>
-      <div class="specFields">
-        <div class="specField"><small>Manufacturer</small><span>${escapeHtml(selected.manufacturer)}</span></div>
-        <div class="specField"><small>Model</small><span>${escapeHtml(selected.model)}</span></div>
-        <div class="specField"><small>Supplier</small><span>${selected.supplierUrl ? `<a href="${escapeHtml(selected.supplierUrl)}" target="_blank">${escapeHtml(selected.supplier)}</a>` : escapeHtml(selected.supplier)}</span></div>
-        <div class="specField"><small>Contact</small><span>${escapeHtml(selected.contact)}</span></div>
-        <div class="specField"><small>Dimensions</small><span>${escapeHtml(selected.dimensions)}</span></div>
-        <div class="specField"><small>Finish</small><span>${escapeHtml(selected.finish)}</span></div>
-        <div class="specField"><small>Lead Time</small><span>${escapeHtml(selected.lead)}</span></div>
-        <div class="specField"><small>Cost</small><span>${escapeHtml(selected.cost)}</span></div>
-        <div class="specField"><small>Status</small><span>${escapeHtml(selected.status)}</span></div>
-        <div class="specField"><small>Procurement</small><span>${escapeHtml(selected.procurement)}</span></div>
-        <div class="specField"><small>Drawing References</small><span>${escapeHtml(selected.drawings)}</span></div>
-        <div class="specField"><small>Keynote Tag</small><span>${escapeHtml(selected.key)}</span></div>
-      </div>
-      <div class="prototypeActions">
-        <button class="btn dark" onclick="toast('Selection approval recorded locally')">Approve Selection</button>
-        <button class="btn" onclick="toast('Marked for client review')">Request Change</button>
-        <button class="btn" onclick="copyCurrentLink()">Copy Spec Link</button>
-      </div>`;
-  }
-}
-
-function exportSpecsCSV(){
-  const header = ['Project','Keynote','Category','Room','Title','Manufacturer','Model','Supplier','Supplier URL','Dimensions','Finish','Cost','Contact','Lead Time','Status','Procurement','Drawings','Notes'];
-  const lines = [header].concat(specItems.map(i => [i.project,i.key,i.category,i.room,i.title,i.manufacturer,i.model,i.supplier,i.supplierUrl,i.dimensions,i.finish,i.cost,i.contact,i.lead,i.status,i.procurement,i.drawings,i.notes]));
-  const csv = lines.map(row => row.map(v => '"' + String(v ?? '').replace(/"/g,'""') + '"').join(',')).join('\n');
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'march-specifications-draft.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
 }
 
 
