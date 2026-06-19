@@ -258,38 +258,6 @@
 
 
 
-  /* Specification Admin v1: product library + project assignment prototype */
-  .adminModeToggle{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-  .specAdminLayout{display:grid;grid-template-columns:minmax(420px,.95fr) minmax(520px,1.05fr);gap:18px;align-items:start}
-  .specAdminForm{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 10px 24px rgba(0,0,0,.035)}
-  .specAdminForm h3{margin:0 0 12px;font-size:18px}
-  .specAdminGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .specAdminGrid .wide{grid-column:1/-1}
-  .specAdminForm label{display:block;font-size:11px;text-transform:uppercase;color:#666;margin-bottom:4px;letter-spacing:.02em}
-  .dropZone{border:1px dashed #b9ad9d;background:#faf7f1;border-radius:12px;min-height:118px;padding:14px;display:flex;align-items:center;justify-content:center;text-align:center;color:#655;font-size:13px;line-height:1.45;position:relative;overflow:hidden}
-  .dropZone.dragover{background:#fff2d8;border-color:#111}
-  .dropZone img{max-width:100%;max-height:180px;object-fit:contain;border-radius:8px;display:block;margin:auto}
-  .docList{display:grid;gap:8px;margin-top:10px}
-  .docPill{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid #ddd3c5;background:#fff;border-radius:999px;padding:7px 10px;font-size:12px}
-  .projectChecks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
-  .projectChecks label{display:flex;gap:8px;align-items:center;text-transform:none;font-size:13px;color:#333;border:1px solid #ddd3c5;border-radius:8px;padding:9px;background:#fff}
-  .unitRow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-  .adminLibrary{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  .adminLibraryHeader{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:16px;border-bottom:1px solid var(--line);background:#faf6ef;flex-wrap:wrap}
-  .adminLibraryHeader h3{margin:0;font-size:18px}
-  .adminProductList{max-height:720px;overflow:auto}
-  .adminProduct{display:grid;grid-template-columns:76px 1fr auto;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid #eee;cursor:pointer}
-  .adminProduct:hover{background:#faf7f1}.adminProduct.selected{background:#eee6da}
-  .adminThumb{width:76px;height:58px;border-radius:8px;background:#ddd;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#777;font-size:20px}
-  .adminThumb img{width:100%;height:100%;object-fit:cover}
-  .adminProduct h4{margin:0 0 4px;font-size:14px}.adminProduct p{margin:0;color:#555;font-size:12px;line-height:1.35}
-  .assignmentTags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
-  .costPreview{border:1px solid #ddd3c5;background:#fffaf0;border-radius:10px;padding:10px;margin-top:10px;font-size:13px}
-  .costPreview strong{font-size:18px}
-  @media(max-width:1150px){.specAdminLayout{grid-template-columns:1fr}.adminProductList{max-height:none}}
-  @media(max-width:760px){.specAdminGrid,.unitRow,.projectChecks{grid-template-columns:1fr}.adminProduct{grid-template-columns:58px 1fr}.adminProduct .btn{grid-column:1/-1;width:max-content}.adminThumb{width:58px;height:48px}}
-
-
   /* Speckle / 3D Model first draft */
   .modelHero{display:grid;grid-template-columns:minmax(320px,1.1fr) minmax(280px,.9fr);gap:18px;margin-bottom:18px}
   .modelViewport{background:#111;border-radius:12px;overflow:hidden;min-height:520px;box-shadow:0 18px 45px rgba(0,0,0,.18);position:relative}
@@ -324,7 +292,6 @@
       <button class="active" id="navDrawings" onclick="showDrawings()">Drawings</button>
       <button id="navProgramme" onclick="showProgramme()">Programme</button>
       <button id="navSpecifications" onclick="showPrototypeView('specifications')">Specifications</button>
-      <button id="navSpecAdmin" onclick="showPrototypeView('specAdmin')">Spec Admin</button>
       <button id="navTimesheets" onclick="showPrototypeView('timesheets')">Timesheets</button>
       <button id="navApprovals" onclick="showPrototypeView('approvals')">Stage Approvals</button>
       <button id="navTender" onclick="showPrototypeView('tender')">Tender</button>
@@ -488,99 +455,6 @@
       </div>
     </main>
 
-
-
-
-    <main class="prototypeView" id="specAdminView">
-      <div class="prototypeTop">
-        <div>
-          <h2>Spec Admin</h2>
-          <p>Prototype backend for building a reusable product library, assigning products to projects, adding images/PDFs, and calculating quantities/costs. This is browser-local for now; later it writes to Google Sheets and uploads files to Google Drive.</p>
-          <div class="adminModeToggle">
-            <span class="protoTag good">Library database</span>
-            <span class="protoTag warn">Project assignment</span>
-            <span class="protoTag">Images + PDFs</span>
-            <span class="protoTag">Unit cost × quantity</span>
-          </div>
-        </div>
-        <div class="prototypeActions">
-          <button class="btn dark" onclick="newSpecAdminProduct()">New Product</button>
-          <button class="btn" onclick="saveSpecAdminProduct()">Save Product</button>
-          <button class="btn" onclick="exportSpecAdminCSV()">Export Admin CSV</button>
-          <button class="btn" onclick="copyCurrentLink()">Copy Link</button>
-        </div>
-      </div>
-
-      <div class="protoGrid">
-        <div class="protoCard"><h3>Library items</h3><div class="protoMetric" id="adminLibraryCount">0</div><p>Reusable products stored once, then assigned to projects.</p></div>
-        <div class="protoCard"><h3>Abbotsford Street total</h3><div class="protoMetric" id="adminAbbotsfordTotal">$0</div><p>Draft total from assigned items with quantities and unit costs.</p></div>
-        <div class="protoCard"><h3>Documents</h3><div class="protoMetric" id="adminDocCount">0</div><p>Installation PDFs, datasheets, warranty docs and quotes.</p></div>
-      </div>
-
-      <div class="specAdminLayout">
-        <section class="specAdminForm">
-          <h3>Product sheet</h3>
-          <div class="specAdminGrid">
-            <div><label>Product ID</label><input class="protoInput" id="adminKey" placeholder="AP-004"></div>
-            <div><label>Category</label><select class="protoSelect" id="adminCategory"><option>Appliances</option><option>Fixtures</option><option>Fittings</option><option>Finishes</option><option>Equipment</option><option>Lighting</option><option>Joinery</option><option>Bathroom</option><option>Doors & Hardware</option></select></div>
-            <div class="wide"><label>Product name</label><input class="protoInput" id="adminTitle" placeholder="Fisher & Paykel Integrated Dishwasher"></div>
-            <div><label>Manufacturer</label><input class="protoInput" id="adminManufacturer" placeholder="Fisher & Paykel"></div>
-            <div><label>Model</label><input class="protoInput" id="adminModel" placeholder="Model number / range"></div>
-            <div class="wide"><label>Supplier URL</label><input class="protoInput" id="adminSupplierUrl" placeholder="https://..."></div>
-            <div><label>Supplier</label><input class="protoInput" id="adminSupplier" placeholder="Supplier / showroom"></div>
-            <div><label>Contact</label><input class="protoInput" id="adminContact" placeholder="Rep / phone / email"></div>
-            <div><label>Dimensions</label><input class="protoInput" id="adminDimensions" placeholder="600W x 580D x 820H"></div>
-            <div><label>Finish</label><input class="protoInput" id="adminFinish" placeholder="Integrated / brushed nickel / oak"></div>
-            <div><label>Lead time</label><input class="protoInput" id="adminLead" placeholder="8 weeks"></div>
-            <div><label>Status</label><select class="protoSelect" id="adminStatus"><option>Draft</option><option>Client Review</option><option>Approved</option><option>Quoted</option><option>Ordered</option><option>Delivered</option><option>Installed</option><option>Lead Time Risk</option></select></div>
-            <div class="wide"><label>Notes</label><textarea class="protoTextarea" id="adminNotes" placeholder="Installation notes, coordination issues, alternatives..."></textarea></div>
-          </div>
-
-          <h3 style="margin-top:18px">Project assignment</h3>
-          <div class="projectChecks">
-            <label><input type="checkbox" id="adminProjectAbbotsford" checked> Abbotsford Street</label>
-            <label><input type="checkbox" id="adminProjectDome"> Dome House</label>
-          </div>
-          <div class="specAdminGrid" style="margin-top:10px">
-            <div><label>Room / location</label><input class="protoInput" id="adminRoom" placeholder="Kitchen"></div>
-            <div><label>Drawing refs</label><input class="protoInput" id="adminDrawings" placeholder="A501, J201"></div>
-          </div>
-
-          <h3 style="margin-top:18px">Quantity + cost</h3>
-          <div class="unitRow">
-            <div><label>Unit</label><select class="protoSelect" id="adminUnit" onchange="updateSpecAdminCost()"><option>each</option><option>lineal m</option><option>m²</option><option>m³</option><option>set</option><option>allowance</option></select></div>
-            <div><label>Unit cost</label><input class="protoInput" id="adminUnitCost" type="number" min="0" step="0.01" value="0" oninput="updateSpecAdminCost()"></div>
-            <div><label>Quantity</label><input class="protoInput" id="adminQty" type="number" min="0" step="0.01" value="1" oninput="updateSpecAdminCost()"></div>
-          </div>
-          <div class="costPreview">Total cost: <strong id="adminTotalCost">$0</strong> <span id="adminCostUnit">each</span></div>
-
-          <h3 style="margin-top:18px">Image</h3>
-          <div class="dropZone" id="adminImageDrop" tabindex="0">
-            <div id="adminImagePreview">Paste an image from a website here, or drag/drop an image file.<br><small>Prototype resizes preview in the browser; later it uploads to Drive.</small></div>
-          </div>
-
-          <h3 style="margin-top:18px">PDF documents</h3>
-          <div class="dropZone" id="adminPdfDrop">Drag/drop PDFs here: installation guide, datasheet, warranty, quote.</div>
-          <div class="docList" id="adminDocList"></div>
-
-          <div class="prototypeActions" style="margin-top:18px">
-            <button class="btn dark" onclick="saveSpecAdminProduct()">Save / Commit to Library</button>
-            <button class="btn" onclick="pushAdminToSpecs()">Send to Viewer Schedule</button>
-          </div>
-        </section>
-
-        <section class="adminLibrary">
-          <div class="adminLibraryHeader">
-            <h3>Product library</h3>
-            <div class="prototypeActions">
-              <select class="protoSelect" id="adminProjectFilter" onchange="renderSpecAdminLibrary()" style="max-width:190px"><option>All projects</option><option>Abbotsford Street</option><option>Dome House</option><option>Unassigned</option></select>
-              <select class="protoSelect" id="adminCategoryFilter" onchange="renderSpecAdminLibrary()" style="max-width:170px"><option>All categories</option><option>Appliances</option><option>Fixtures</option><option>Fittings</option><option>Finishes</option><option>Equipment</option><option>Lighting</option><option>Joinery</option><option>Bathroom</option><option>Doors & Hardware</option></select>
-            </div>
-          </div>
-          <div class="adminProductList" id="adminProductList"></div>
-        </section>
-      </div>
-    </main>
 
     <main class="prototypeView" id="timesheetsView">
       <div class="prototypeTop">
@@ -887,8 +761,6 @@ const DISCIPLINE_APIS = {
 
 const PROGRAMME_API_URL = "https://script.google.com/macros/s/AKfycbyfp28G7bAbjKlEEMXCaMD37m6pzo7p3mJT6RGJZG5pF29X1uqFUYhh-DZOZ350y_Bp/exec";
 
-const SPEC_API_URL = "https://script.google.com/macros/s/AKfycbzUAV0gzSiN0cgK4sUpovD9S7qyvtrfHaiPRw6brab8gegVi6x8h9ngXee9UxK7t5UV/exec";
-
 const disciplines = Object.keys(DISCIPLINE_APIS);
 
 let active = 'Architectural';
@@ -959,11 +831,6 @@ function applyRouteFromHash(){
     if(page === 'specifications'){
       selectedSpecKey = parts[1] || selectedSpecKey;
       showPrototypeView('specifications', true);
-      return;
-    }
-    if(page === 'specadmin' || page === 'spec-admin'){
-      selectedAdminKey = parts[1] || selectedAdminKey;
-      showPrototypeView('specAdmin', true);
       return;
     }
     if(page === 'timesheets'){
@@ -1255,11 +1122,11 @@ function showAudit(){
 
 
 function hidePrototypeViews(){
-  ['specificationsView','specAdminView','timesheetsView','approvalsView','tenderView','defectsView','modelView'].forEach(id => {
+  ['specificationsView','timesheetsView','approvalsView','tenderView','defectsView','modelView'].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.style.display = 'none';
   });
-  ['navSpecifications','navSpecAdmin','navTimesheets','navApprovals','navTender','navDefects','navModel'].forEach(id => {
+  ['navSpecifications','navTimesheets','navApprovals','navTender','navDefects','navModel'].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.classList.remove('active');
   });
@@ -1274,7 +1141,6 @@ function showPrototypeView(kind, fromRoute){
 
   const map = {
     specifications:['specificationsView','navSpecifications'],
-    specAdmin:['specAdminView','navSpecAdmin'],
     timesheets:['timesheetsView','navTimesheets'],
     approvals:['approvalsView','navApprovals'],
     tender:['tenderView','navTender'],
@@ -1286,16 +1152,13 @@ function showPrototypeView(kind, fromRoute){
     document.getElementById(pair[0]).style.display = 'block';
     document.getElementById(pair[1]).classList.add('active');
     if(kind === 'specifications') renderSpecifications();
-    if(kind === 'specAdmin') renderSpecAdmin();
     if(kind === 'timesheets') renderTimesheets();
     if(kind === 'defects') renderDefects();
   }
   document.getElementById('navDrawings').classList.remove('active');
   document.getElementById('navProgramme').classList.remove('active');
   if(!fromRoute){
-    if(kind === 'specAdmin'){
-      setPortalHash(selectedAdminKey ? '#specadmin/' + urlPart(selectedAdminKey) : '#specadmin');
-    } else if(kind === 'timesheets'){
+    if(kind === 'timesheets'){
       const project = document.getElementById('tsProjectFilter')?.value || 'All';
       setPortalHash(project && project !== 'All' ? '#timesheets/' + urlPart(project) : '#timesheets');
     } else if(kind === 'defects') {
@@ -1973,298 +1836,6 @@ function exportSpecsCSV(){
 }
 
 
-/* Specification Admin v1: local product library prototype.
-   Later this becomes: Apps Script saves rows to Google Sheets and uploads image/PDF files to Google Drive. */
-let selectedAdminKey = 'AP-001';
-let adminImageData = '';
-let adminDocs = [];
-let specAdminProducts = [];
-
-function seedSpecAdminProducts(){
-  if(specAdminProducts.length) return;
-  specAdminProducts = specItems.map(i => ({
-    key:i.key, category:i.category, title:i.title, manufacturer:i.manufacturer, model:i.model,
-    supplier:i.supplier, supplierUrl:i.supplierUrl, dimensions:i.dimensions, finish:i.finish,
-    contact:i.contact, lead:i.lead, status:i.status, notes:i.notes, room:i.room, drawings:i.drawings,
-    projects:[i.project], unit: guessUnitFromCost(i.cost), unitCost: guessCostNumber(i.cost), qty: 1,
-    imageClass:i.image, imageData:'', docs: defaultDocsForSpec(i)
-  }));
-}
-
-function guessUnitFromCost(cost){
-  const s = String(cost || '').toLowerCase();
-  if(s.includes('m²') || s.includes('/m2')) return 'm²';
-  if(s.includes('m³')) return 'm³';
-  if(s.includes('lineal') || s.includes('/lm')) return 'lineal m';
-  if(s.includes('allow')) return 'allowance';
-  return 'each';
-}
-
-function guessCostNumber(cost){
-  const m = String(cost || '').replace(/,/g,'').match(/\$?\s*(\d+(?:\.\d+)?)/);
-  return m ? Number(m[1]) : 0;
-}
-
-function defaultDocsForSpec(i){
-  const docs = [];
-  if(i.supplierUrl) docs.push({name:'Supplier product page', type:'URL', url:i.supplierUrl});
-  if((i.category || '').toLowerCase().includes('appliance')) docs.push({name:'Installation guide PDF placeholder', type:'PDF', url:''});
-  return docs;
-}
-
-function renderSpecAdmin(){
-  seedSpecAdminProducts();
-  if(!specAdminProducts.find(p => p.key === selectedAdminKey) && specAdminProducts[0]) selectedAdminKey = specAdminProducts[0].key;
-  loadAdminProductToForm(selectedAdminKey, false);
-  setupSpecAdminDropZones();
-  renderSpecAdminLibrary();
-  updateSpecAdminStats();
-}
-
-function visibleAdminProducts(){
-  const project = document.getElementById('adminProjectFilter')?.value || 'All projects';
-  const cat = document.getElementById('adminCategoryFilter')?.value || 'All categories';
-  return specAdminProducts.filter(p => {
-    const projectOk = project === 'All projects' || (project === 'Unassigned' ? !p.projects.length : p.projects.includes(project));
-    const catOk = cat === 'All categories' || p.category === cat;
-    return projectOk && catOk;
-  });
-}
-
-function renderSpecAdminLibrary(){
-  seedSpecAdminProducts();
-  const list = document.getElementById('adminProductList');
-  if(!list) return;
-  const visible = visibleAdminProducts();
-  list.innerHTML = visible.map(p => `
-    <div class="adminProduct ${p.key===selectedAdminKey?'selected':''}" onclick="selectAdminProduct('${escapeHtml(p.key)}')">
-      <div class="adminThumb">${p.imageData ? `<img src="${p.imageData}" alt="">` : `<div class="specImage ${p.imageClass || 'appliance'}" style="width:100%;height:100%"></div>`}</div>
-      <div>
-        <h4>${escapeHtml(p.key)} · ${escapeHtml(p.title)}</h4>
-        <p>${escapeHtml(p.manufacturer || '')} ${p.model ? '· ' + escapeHtml(p.model) : ''}<br>${escapeHtml(p.category)} · ${escapeHtml(p.room || 'No room')}</p>
-        <div class="assignmentTags">${p.projects.length ? p.projects.map(x => `<span class="protoTag good">${escapeHtml(x)}</span>`).join('') : '<span class="protoTag warn">Unassigned</span>'}<span class="protoTag">${escapeHtml(p.unit || 'each')}</span><span class="protoTag">${formatMoney((Number(p.unitCost)||0)*(Number(p.qty)||0))}</span></div>
-      </div>
-      <button class="btn" onclick="event.stopPropagation(); selectAdminProduct('${escapeHtml(p.key)}')">Edit</button>
-    </div>
-  `).join('') || '<div style="padding:18px;color:#666">No products match this filter.</div>';
-  updateSpecAdminStats();
-}
-
-function selectAdminProduct(key){
-  selectedAdminKey = key;
-  loadAdminProductToForm(key, true);
-  setPortalHash('#specadmin/' + urlPart(key));
-  renderSpecAdminLibrary();
-}
-
-function loadAdminProductToForm(key, resetMedia=true){
-  const p = specAdminProducts.find(x => x.key === key);
-  if(!p) return;
-  const set = (id,val) => { const el=document.getElementById(id); if(el) el.value = val ?? ''; };
-  set('adminKey', p.key); set('adminCategory', p.category); set('adminTitle', p.title); set('adminManufacturer', p.manufacturer);
-  set('adminModel', p.model); set('adminSupplierUrl', p.supplierUrl); set('adminSupplier', p.supplier); set('adminContact', p.contact);
-  set('adminDimensions', p.dimensions); set('adminFinish', p.finish); set('adminLead', p.lead); set('adminStatus', p.status);
-  set('adminNotes', p.notes); set('adminRoom', p.room); set('adminDrawings', p.drawings); set('adminUnit', p.unit || 'each'); set('adminUnitCost', p.unitCost || 0); set('adminQty', p.qty || 1);
-  const ab = document.getElementById('adminProjectAbbotsford'); if(ab) ab.checked = p.projects.includes('Abbotsford Street');
-  const dome = document.getElementById('adminProjectDome'); if(dome) dome.checked = p.projects.includes('Dome House');
-  adminImageData = p.imageData || '';
-  adminDocs = (p.docs || []).map(d => ({...d}));
-  renderAdminImagePreview(p);
-  renderAdminDocList();
-  updateSpecAdminCost();
-}
-
-function readAdminForm(){
-  const val = id => document.getElementById(id)?.value || '';
-  const projects = [];
-  if(document.getElementById('adminProjectAbbotsford')?.checked) projects.push('Abbotsford Street');
-  if(document.getElementById('adminProjectDome')?.checked) projects.push('Dome House');
-  return {
-    key: val('adminKey').trim() || nextAdminKey(), category: val('adminCategory'), title: val('adminTitle').trim() || 'Untitled product',
-    manufacturer: val('adminManufacturer'), model: val('adminModel'), supplier: val('adminSupplier'), supplierUrl: val('adminSupplierUrl'), contact: val('adminContact'),
-    dimensions: val('adminDimensions'), finish: val('adminFinish'), lead: val('adminLead'), status: val('adminStatus'), notes: val('adminNotes'),
-    room: val('adminRoom'), drawings: val('adminDrawings'), projects, unit: val('adminUnit'), unitCost: Number(val('adminUnitCost') || 0), qty: Number(val('adminQty') || 0),
-    imageClass: categoryImageClass(val('adminCategory')), imageData: adminImageData, docs: adminDocs.map(d => ({...d}))
-  };
-}
-
-function saveSpecAdminProduct(){
-  seedSpecAdminProducts();
-  const p = readAdminForm();
-  const oldKey = selectedAdminKey;
-  const idx = specAdminProducts.findIndex(x => x.key === oldKey || x.key === p.key);
-  if(idx >= 0) specAdminProducts[idx] = p;
-  else specAdminProducts.unshift(p);
-  selectedAdminKey = p.key;
-  renderSpecAdminLibrary();
-  updateSpecAdminStats();
-  toast('Product committed to local library');
-}
-
-function newSpecAdminProduct(){
-  selectedAdminKey = nextAdminKey();
-  adminImageData = '';
-  adminDocs = [];
-  const set = (id,val) => { const el=document.getElementById(id); if(el) el.value = val ?? ''; };
-  set('adminKey', selectedAdminKey); set('adminCategory','Appliances'); set('adminTitle',''); set('adminManufacturer',''); set('adminModel',''); set('adminSupplierUrl',''); set('adminSupplier',''); set('adminContact',''); set('adminDimensions',''); set('adminFinish',''); set('adminLead',''); set('adminStatus','Draft'); set('adminNotes',''); set('adminRoom','Kitchen'); set('adminDrawings',''); set('adminUnit','each'); set('adminUnitCost',0); set('adminQty',1);
-  const ab=document.getElementById('adminProjectAbbotsford'); if(ab) ab.checked=true;
-  const dome=document.getElementById('adminProjectDome'); if(dome) dome.checked=false;
-  renderAdminImagePreview(); renderAdminDocList(); updateSpecAdminCost();
-  setPortalHash('#specadmin/' + urlPart(selectedAdminKey));
-}
-
-function nextAdminKey(){
-  const n = specAdminProducts.length + 1;
-  return 'NEW-' + String(n).padStart(3,'0');
-}
-
-function categoryImageClass(cat){
-  const c = String(cat || '').toLowerCase();
-  if(c.includes('finish')) return 'floorboard';
-  if(c.includes('fitting') || c.includes('fixture')) return 'tapware';
-  if(c.includes('bath')) return 'bath';
-  if(c.includes('light')) return 'light';
-  if(c.includes('joinery')) return 'joinery';
-  if(c.includes('door')) return 'steel';
-  return 'appliance';
-}
-
-function updateSpecAdminCost(){
-  const unit = document.getElementById('adminUnit')?.value || 'each';
-  const unitCost = Number(document.getElementById('adminUnitCost')?.value || 0);
-  const qty = Number(document.getElementById('adminQty')?.value || 0);
-  const total = unitCost * qty;
-  const totalEl = document.getElementById('adminTotalCost'); if(totalEl) totalEl.textContent = formatMoney(total);
-  const unitEl = document.getElementById('adminCostUnit'); if(unitEl) unitEl.textContent = `${qty || 0} ${unit} × ${formatMoney(unitCost)}`;
-}
-
-function formatMoney(n){
-  return '$' + Number(n || 0).toLocaleString('en-AU', {maximumFractionDigits:2});
-}
-
-function renderAdminImagePreview(p){
-  const el = document.getElementById('adminImagePreview');
-  if(!el) return;
-  if(adminImageData) el.innerHTML = `<img src="${adminImageData}" alt="Product image">`;
-  else el.innerHTML = `Paste an image from a website here, or drag/drop an image file.<br><small>Prototype resizes preview in the browser; later it uploads to Drive.</small>`;
-}
-
-function renderAdminDocList(){
-  const list = document.getElementById('adminDocList');
-  if(!list) return;
-  list.innerHTML = adminDocs.map((d,i) => `
-    <div class="docPill"><span>📄 ${escapeHtml(d.name)} <small>${escapeHtml(d.type || 'PDF')}</small></span><button class="btn" onclick="removeAdminDoc(${i})">Remove</button></div>
-  `).join('') || '<div style="font-size:12px;color:#777">No documents attached yet.</div>';
-}
-
-function removeAdminDoc(i){
-  adminDocs.splice(i,1);
-  renderAdminDocList();
-  updateSpecAdminStats();
-}
-
-function setupSpecAdminDropZones(){
-  const imageDrop = document.getElementById('adminImageDrop');
-  const pdfDrop = document.getElementById('adminPdfDrop');
-  if(imageDrop && !imageDrop.dataset.bound){
-    imageDrop.dataset.bound = '1';
-    ['dragenter','dragover'].forEach(ev => imageDrop.addEventListener(ev, e => {e.preventDefault(); imageDrop.classList.add('dragover');}));
-    ['dragleave','drop'].forEach(ev => imageDrop.addEventListener(ev, e => {e.preventDefault(); imageDrop.classList.remove('dragover');}));
-    imageDrop.addEventListener('drop', e => handleAdminImageFiles(e.dataTransfer.files));
-    imageDrop.addEventListener('paste', handleAdminPasteImage);
-    document.addEventListener('paste', e => {
-      if(document.getElementById('specAdminView')?.style.display === 'block') handleAdminPasteImage(e);
-    });
-  }
-  if(pdfDrop && !pdfDrop.dataset.bound){
-    pdfDrop.dataset.bound = '1';
-    ['dragenter','dragover'].forEach(ev => pdfDrop.addEventListener(ev, e => {e.preventDefault(); pdfDrop.classList.add('dragover');}));
-    ['dragleave','drop'].forEach(ev => pdfDrop.addEventListener(ev, e => {e.preventDefault(); pdfDrop.classList.remove('dragover');}));
-    pdfDrop.addEventListener('drop', e => handleAdminPdfFiles(e.dataTransfer.files));
-  }
-}
-
-function handleAdminPasteImage(e){
-  const items = e.clipboardData && e.clipboardData.items;
-  if(!items) return;
-  for(const item of items){
-    if(item.type && item.type.startsWith('image/')){
-      const file = item.getAsFile();
-      if(file){ e.preventDefault(); resizeAdminImage(file); return; }
-    }
-  }
-}
-
-function handleAdminImageFiles(files){
-  const file = Array.from(files || []).find(f => f.type.startsWith('image/'));
-  if(file) resizeAdminImage(file);
-}
-
-function resizeAdminImage(file){
-  const reader = new FileReader();
-  reader.onload = e => {
-    const img = new Image();
-    img.onload = () => {
-      const max = 900;
-      const scale = Math.min(1, max / Math.max(img.width, img.height));
-      const canvas = document.createElement('canvas');
-      canvas.width = Math.max(1, Math.round(img.width * scale));
-      canvas.height = Math.max(1, Math.round(img.height * scale));
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      adminImageData = canvas.toDataURL('image/jpeg', .82);
-      renderAdminImagePreview();
-      toast('Image pasted/resized locally');
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-function handleAdminPdfFiles(files){
-  Array.from(files || []).forEach(file => {
-    if(file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')){
-      adminDocs.push({name:file.name, type:'PDF', size:file.size, url:''});
-    }
-  });
-  renderAdminDocList();
-  updateSpecAdminStats();
-  toast('PDF document(s) added locally');
-}
-
-function updateSpecAdminStats(){
-  const count=document.getElementById('adminLibraryCount'); if(count) count.textContent = specAdminProducts.length;
-  const docs=document.getElementById('adminDocCount'); if(docs) docs.textContent = specAdminProducts.reduce((s,p)=>s+(p.docs?.length||0),0) + adminDocs.length;
-  const total = specAdminProducts.filter(p => p.projects.includes('Abbotsford Street')).reduce((s,p)=>s+(Number(p.unitCost)||0)*(Number(p.qty)||0),0);
-  const t=document.getElementById('adminAbbotsfordTotal'); if(t) t.textContent = formatMoney(total);
-}
-
-function pushAdminToSpecs(){
-  saveSpecAdminProduct();
-  const p = specAdminProducts.find(x => x.key === selectedAdminKey);
-  if(!p) return;
-  const projects = p.projects.length ? p.projects : ['Unassigned'];
-  projects.forEach(project => {
-    if(project === 'Unassigned') return;
-    const existing = specItems.find(i => i.key === p.key && i.project === project);
-    const spec = {project, key:p.key, category:p.category, room:p.room, title:p.title, image:p.imageClass, supplier:p.supplier, supplierUrl:p.supplierUrl, manufacturer:p.manufacturer, model:p.model, dimensions:p.dimensions, finish:p.finish, cost:`${formatMoney(p.unitCost)} / ${p.unit}; qty ${p.qty}; total ${formatMoney(p.unitCost*p.qty)}`, contact:p.contact, lead:p.lead, status:p.status, procurement:p.status, drawings:p.drawings, notes:p.notes};
-    if(existing) Object.assign(existing, spec); else specItems.push(spec);
-  });
-  toast('Product sent to viewer schedule');
-}
-
-function exportSpecAdminCSV(){
-  seedSpecAdminProducts();
-  const header = ['ProductID','Projects','Category','Room','Title','Manufacturer','Model','Supplier','SupplierURL','Dimensions','Finish','Contact','LeadTime','Status','Unit','UnitCost','Quantity','TotalCost','Drawings','Documents','Notes'];
-  const rows = specAdminProducts.map(p => [p.key,p.projects.join('; '),p.category,p.room,p.title,p.manufacturer,p.model,p.supplier,p.supplierUrl,p.dimensions,p.finish,p.contact,p.lead,p.status,p.unit,p.unitCost,p.qty,(Number(p.unitCost)||0)*(Number(p.qty)||0),p.drawings,(p.docs||[]).map(d=>d.name).join('; '),p.notes]);
-  const csv = [header].concat(rows).map(row => row.map(v => '"' + String(v ?? '').replace(/"/g,'""') + '"').join(',')).join('\n');
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'march-spec-admin-library-draft.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-}
-
-
 /* Interactive timesheet sketch: local only, safe to remove later.
    This does not touch the existing Drawings or Programme APIs. */
 const timesheetStages = ['Concept Design','Town Planning','Design Development','Documentation','Tender','Construction','Admin'];
@@ -2536,218 +2107,6 @@ window.addEventListener('resize', () => {
     renderProgramme(programmeRows, programmeRows.length, true);
   }
 });
-
-
-/* Live Specification Admin v35: reads PRODUCTS from Google Sheets and saves edits back via Apps Script.
-   Scope for this version: edit existing PRODUCTS only. Adding new products, PDFs and image upload come later. */
-let liveSpecProductsLoaded = false;
-let liveSpecCanEdit = false;
-
-function sheetValue(product, header){
-  return product && Object.prototype.hasOwnProperty.call(product, header) ? product[header] : '';
-}
-
-function productTitle(p){ return sheetValue(p, 'Product Name') || sheetValue(p, 'ProductID') || 'Untitled product'; }
-function productId(p){ return sheetValue(p, 'ProductID'); }
-
-function renderSpecAdmin(){
-  loadLiveSpecProducts();
-}
-
-async function loadLiveSpecProducts(force){
-  const list = document.getElementById('adminProductList');
-  if(list) list.innerHTML = '<div style="padding:18px;color:#666">Loading products from Google Sheets…</div>';
-  try{
-    if(!force && liveSpecProductsLoaded){ renderSpecAdminLibrary(); loadAdminProductToForm(selectedAdminKey, false); return; }
-    const res = await fetch(SPEC_API_URL + '?action=getProducts&v=' + Date.now(), {cache:'no-store'});
-    if(!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    if(data.error) throw new Error(data.error);
-    liveSpecCanEdit = !!data.canEdit;
-    specAdminProducts = Array.isArray(data.products) ? data.products : [];
-    liveSpecProductsLoaded = true;
-    if(!specAdminProducts.find(p => productId(p) === selectedAdminKey) && specAdminProducts[0]) selectedAdminKey = productId(specAdminProducts[0]);
-    loadAdminProductToForm(selectedAdminKey, false);
-    setupSpecAdminDropZones();
-    renderSpecAdminLibrary();
-    updateSpecAdminStats();
-    updateLiveEditLock();
-  }catch(err){
-    if(list) list.innerHTML = '<div class="errorBox">Could not load PRODUCTS from the Specification Google Sheet.<br><br>' + escapeHtml(err.message) + '<br><br>Check that the Apps Script deployment is a Web App and that access is set to anyone with a Google account.</div>';
-  }
-}
-
-function visibleAdminProducts(){
-  const cat = document.getElementById('adminCategoryFilter')?.value || 'All categories';
-  const project = document.getElementById('adminProjectFilter')?.value || 'All projects';
-  return specAdminProducts.filter(p => {
-    const catOk = cat === 'All categories' || sheetValue(p, 'Category') === cat;
-    const projectOk = project === 'All projects' || project === 'Unassigned' || true;
-    return catOk && projectOk;
-  });
-}
-
-function renderSpecAdminLibrary(){
-  const list = document.getElementById('adminProductList');
-  if(!list) return;
-  const visible = visibleAdminProducts();
-  list.innerHTML = visible.map(p => {
-    const id = productId(p);
-    const title = productTitle(p);
-    const category = sheetValue(p, 'Category');
-    const sub = sheetValue(p, 'Sub Category');
-    const m = sheetValue(p, 'Manufacturer');
-    const part = sheetValue(p, 'Manufacturer Part Number');
-    const unit = sheetValue(p, 'Unit') || sheetValue(p, 'Default Unit') || '';
-    const cost = Number(sheetValue(p, 'Unit Cost') || 0);
-    return `
-      <div class="adminProduct ${id===selectedAdminKey?'selected':''}" onclick="selectAdminProduct('${escapeHtml(id)}')">
-        <div class="adminThumb"><div class="specImage ${categoryImageClass(category)}" style="width:100%;height:100%"></div></div>
-        <div>
-          <h4>${escapeHtml(id)} · ${escapeHtml(title)}</h4>
-          <p>${escapeHtml(m || '')} ${part ? '· ' + escapeHtml(part) : ''}<br>${escapeHtml(category || 'No category')} ${sub ? '· ' + escapeHtml(sub) : ''}</p>
-          <div class="assignmentTags"><span class="protoTag">${escapeHtml(unit || 'unit blank')}</span><span class="protoTag">${formatMoney(cost)}</span>${liveSpecCanEdit ? '<span class="protoTag good">editable</span>' : '<span class="protoTag warn">viewer only</span>'}</div>
-        </div>
-        <button class="btn" onclick="event.stopPropagation(); selectAdminProduct('${escapeHtml(id)}')">Edit</button>
-      </div>`;
-  }).join('') || '<div style="padding:18px;color:#666">No products match this filter.</div>';
-  updateSpecAdminStats();
-}
-
-function selectAdminProduct(key){
-  selectedAdminKey = key;
-  loadAdminProductToForm(key, true);
-  setPortalHash('#specadmin/' + urlPart(key));
-  renderSpecAdminLibrary();
-}
-
-function loadAdminProductToForm(key, resetMedia=true){
-  const p = specAdminProducts.find(x => productId(x) === key);
-  if(!p) return;
-  const set = (id,val) => { const el=document.getElementById(id); if(el) el.value = val ?? ''; };
-  set('adminKey', sheetValue(p,'ProductID'));
-  set('adminCategory', sheetValue(p,'Category'));
-  set('adminTitle', sheetValue(p,'Product Name'));
-  set('adminManufacturer', sheetValue(p,'Manufacturer'));
-  set('adminModel', sheetValue(p,'Manufacturer Part Number'));
-  set('adminSupplierUrl', sheetValue(p,'URL'));
-  set('adminSupplier', sheetValue(p,'SupplierID'));
-  set('adminContact', '');
-  set('adminDimensions', [sheetValue(p,'Width'), sheetValue(p,'Depth'), sheetValue(p,'Height')].filter(Boolean).join('W x D x H '));
-  set('adminFinish', [sheetValue(p,'Material'), sheetValue(p,'Finish'), sheetValue(p,'Colour')].filter(Boolean).join(' / '));
-  set('adminLead', sheetValue(p,'Lead Time Weeks'));
-  set('adminStatus', sheetValue(p,'Status') || 'Draft');
-  set('adminNotes', sheetValue(p,'Notes') || sheetValue(p,'Description'));
-  set('adminRoom', '');
-  set('adminDrawings', '');
-  set('adminUnit', sheetValue(p,'Unit') || 'each');
-  set('adminUnitCost', sheetValue(p,'Unit Cost') || 0);
-  set('adminQty', 1);
-  adminImageData = '';
-  adminDocs = [];
-  renderAdminImagePreview(p);
-  renderAdminDocList();
-  updateSpecAdminCost();
-  updateLiveEditLock();
-}
-
-function readAdminForm(){
-  const val = id => document.getElementById(id)?.value || '';
-  const current = specAdminProducts.find(x => productId(x) === selectedAdminKey) || {};
-  const dim = val('adminDimensions');
-  const finishText = val('adminFinish');
-  const product = {...current};
-  product['ProductID'] = val('adminKey').trim();
-  product['Product Name'] = val('adminTitle').trim();
-  product['Category'] = val('adminCategory');
-  product['Manufacturer'] = val('adminManufacturer');
-  product['Manufacturer Part Number'] = val('adminModel');
-  product['URL'] = val('adminSupplierUrl');
-  product['SupplierID'] = val('adminSupplier');
-  product['Unit'] = val('adminUnit');
-  product['Unit Cost'] = Number(val('adminUnitCost') || 0);
-  product['Lead Time Weeks'] = val('adminLead');
-  product['Status'] = val('adminStatus');
-  product['Notes'] = val('adminNotes');
-  product['Description'] = val('adminNotes');
-  product['Finish'] = finishText;
-  return product;
-}
-
-async function saveSpecAdminProduct(){
-  if(!liveSpecCanEdit){ toast('Viewer only — not authorised to edit'); return; }
-  const product = readAdminForm();
-  const saveBtnText = 'Saving product…';
-  toast(saveBtnText);
-  try{
-    const res = await fetch(SPEC_API_URL, {
-      method:'POST',
-      headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body:JSON.stringify({action:'updateProduct', product})
-    });
-    if(!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    if(!data.ok) throw new Error(data.error || 'Save failed');
-    const idx = specAdminProducts.findIndex(x => productId(x) === product['ProductID']);
-    if(idx >= 0) specAdminProducts[idx] = product;
-    selectedAdminKey = product['ProductID'];
-    renderSpecAdminLibrary();
-    toast('Saved to PRODUCTS sheet');
-  }catch(err){
-    alert('Could not save product: ' + err.message);
-  }
-}
-
-function newSpecAdminProduct(){
-  toast('New Product will be added after existing-product editing is working reliably.');
-}
-
-function updateLiveEditLock(){
-  const view = document.getElementById('specAdminView');
-  if(!view) return;
-  view.querySelectorAll('input, select, textarea').forEach(el => {
-    if(el.id === 'adminProjectFilter' || el.id === 'adminCategoryFilter') return;
-    if(el.id === 'adminKey') { el.readOnly = true; el.disabled = false; return; }
-    el.disabled = !liveSpecCanEdit;
-  });
-  view.querySelectorAll('button').forEach(btn => {
-    const text = (btn.textContent || '').toLowerCase();
-    if(text.includes('save') || text.includes('commit') || text.includes('send to viewer') || text.includes('new product')) btn.disabled = !liveSpecCanEdit;
-  });
-  const top = view.querySelector('.adminModeToggle');
-  if(top && !document.getElementById('liveEditStatus')){
-    const span = document.createElement('span');
-    span.id = 'liveEditStatus';
-    top.appendChild(span);
-  }
-  const status = document.getElementById('liveEditStatus');
-  if(status){
-    status.className = liveSpecCanEdit ? 'protoTag good' : 'protoTag warn';
-    status.textContent = liveSpecCanEdit ? 'Signed in as March Studio editor' : 'Viewer only / not signed in as March Studio';
-  }
-}
-
-function updateSpecAdminStats(){
-  const count=document.getElementById('adminLibraryCount'); if(count) count.textContent = specAdminProducts.length;
-  const docs=document.getElementById('adminDocCount'); if(docs) docs.textContent = 'Later';
-  const total = specAdminProducts.reduce((s,p)=>s+(Number(sheetValue(p,'Unit Cost'))||0),0);
-  const t=document.getElementById('adminAbbotsfordTotal'); if(t) t.textContent = liveSpecCanEdit ? 'Live edit' : 'Read only';
-}
-
-function pushAdminToSpecs(){
-  toast('Project assignment comes after product editing.');
-}
-
-function exportSpecAdminCSV(){
-  const products = specAdminProducts || [];
-  if(!products.length){ toast('No products loaded'); return; }
-  const headers = Object.keys(products[0]);
-  const csv = [headers].concat(products.map(p => headers.map(h => p[h] ?? ''))).map(row => row.map(v => '"' + String(v ?? '').replace(/"/g,'""') + '"').join(',')).join('\n');
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'march-products-live-export.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-}
 
 init();
 </script>
