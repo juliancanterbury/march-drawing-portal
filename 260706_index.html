@@ -319,24 +319,6 @@
   .materialItem small{display:block;color:#666;line-height:1.35;margin-top:2px}
   @media(max-width:1050px){.modelHero{grid-template-columns:1fr}.modelViewport,.modelViewport iframe,.modelPlaceholder{min-height:420px}}
 
-
-
-  /* PDF Tools v1: Compress PDF front-end */
-  .pdfToolsHero{display:grid;grid-template-columns:minmax(360px,1.05fr) minmax(300px,.95fr);gap:18px;margin-bottom:18px}
-  .pdfToolDrop{border:1px dashed #b9ad9d;background:#faf7f1;border-radius:14px;min-height:260px;padding:28px;display:flex;align-items:center;justify-content:center;text-align:center;color:#655;line-height:1.45;transition:background .12s,border-color .12s;cursor:pointer}
-  .pdfToolDrop.dragover{background:#fff2d8;border-color:#111}
-  .pdfToolDrop strong{display:block;color:#111;font-size:24px;font-weight:400;margin-bottom:8px}.pdfToolDrop small{color:#777}
-  .pdfToolInput{display:none}
-  .pdfToolOptions{display:grid;gap:10px;margin-top:12px}
-  .pdfPreset{border:1px solid var(--line);border-radius:10px;background:#fff;padding:13px;display:grid;grid-template-columns:22px 1fr;gap:10px;cursor:pointer}
-  .pdfPreset:hover{background:#faf7f1}.pdfPreset input{margin-top:2px}.pdfPreset strong{display:block;font-size:14px;margin-bottom:4px}.pdfPreset span{font-size:12px;color:#666;line-height:1.4}
-  .pdfToolStats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.pdfToolStat{border:1px solid var(--line);border-radius:10px;background:#fff;padding:13px}.pdfToolStat small{display:block;color:#777;text-transform:uppercase;font-size:10px;margin-bottom:5px}.pdfToolStat strong{font-size:18px;font-weight:400}
-  .pdfToolProgress{height:8px;border-radius:999px;background:#eee6da;overflow:hidden;margin-top:12px}.pdfToolProgress span{display:block;height:100%;width:0;background:#111;transition:width .25s}
-  .pdfToolResult{display:none;border:1px solid #cadbc4;background:#f4faf1;border-radius:10px;padding:14px;margin-top:12px;font-size:13px;color:#304b2d}.pdfToolResult.show{display:block}
-  .pdfToolWarn{border:1px solid #e3c56c;background:#fff8e1;border-radius:10px;padding:13px;margin-top:12px;font-size:13px;line-height:1.45;color:#5a4310}
-  .pdfToolPreview{height:420px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#eee}.pdfToolPreview iframe{width:100%;height:100%;border:0;background:#fff}
-  @media(max-width:1050px){.pdfToolsHero{grid-template-columns:1fr}.pdfToolStats{grid-template-columns:1fr}}
-
 </style>
 </head>
 <body>
@@ -354,7 +336,6 @@
       <button id="navTender" onclick="showPrototypeView('tender')">Tender</button>
       <button id="navDefects" onclick="showPrototypeView('defects')">Defects</button>
       <button id="navModel" onclick="showPrototypeView('model')">3D Model</button>
-      <button id="navPdfTools" onclick="showPrototypeView('pdfTools')">PDF Tools</button>
       <button onclick="openTransmittal()">Transmittal</button>
       <button onclick="showRegister()">Register</button>
       <button onclick="showAudit()">Audit Log</button>
@@ -884,72 +865,6 @@
     </main>
 
 
-    <main class="prototypeView" id="pdfToolsView">
-      <div class="prototypeTop">
-        <div>
-          <h2>PDF Tools</h2>
-          <p>First working draft for reducing PDF file size inside the portal. This version gives the full interface, upload handling, file-size reporting and a backend-ready compression workflow. Real compression will be connected to a server-side Ghostscript/PDF service next.</p>
-        </div>
-        <div class="prototypeActions">
-          <button class="btn dark" onclick="triggerPdfToolUpload()">Choose PDF</button>
-          <button class="btn" onclick="resetPdfTool()">Reset</button>
-          <button class="btn" onclick="copyCurrentLink()">Copy Link</button>
-        </div>
-      </div>
-
-      <div class="pdfToolsHero">
-        <section class="protoPanel">
-          <h3>Compress PDF</h3>
-          <input class="pdfToolInput" id="pdfToolFile" type="file" accept="application/pdf,.pdf" onchange="handlePdfToolFile(this.files && this.files[0])">
-          <div class="pdfToolDrop" id="pdfToolDrop" onclick="triggerPdfToolUpload()">
-            <div><strong>Drop a PDF here</strong><span>or choose a file from your computer</span><br><small>Architectural linework should be preserved; compression should target images, scans, renders and metadata.</small></div>
-          </div>
-
-          <div class="pdfToolStats">
-            <div class="pdfToolStat"><small>File</small><strong id="pdfToolName">None selected</strong></div>
-            <div class="pdfToolStat"><small>Original size</small><strong id="pdfToolOriginal">—</strong></div>
-            <div class="pdfToolStat"><small>Estimated output</small><strong id="pdfToolEstimate">—</strong></div>
-          </div>
-
-          <div class="pdfToolOptions">
-            <label class="pdfPreset"><input type="radio" name="pdfPreset" value="screen" checked onchange="updatePdfToolEstimate()"><span><strong>Screen / Email</strong><span>Smallest file for email, quick review and phones. Strong image downsampling.</span></span></label>
-            <label class="pdfPreset"><input type="radio" name="pdfPreset" value="review" onchange="updatePdfToolEstimate()"><span><strong>Review Issue</strong><span>Balanced setting for markups, consultant coordination and client review.</span></span></label>
-            <label class="pdfPreset"><input type="radio" name="pdfPreset" value="archive" onchange="updatePdfToolEstimate()"><span><strong>Tender / Archive</strong><span>Higher-quality output. Reduce waste without damaging formal issue documents.</span></span></label>
-          </div>
-
-          <div class="projectChecks" style="margin-top:12px">
-            <label><input type="checkbox" id="pdfKeepVector" checked> Preserve drawing linework</label>
-            <label><input type="checkbox" id="pdfKeepPage" checked> Keep page size unchanged</label>
-            <label><input type="checkbox" id="pdfRemoveMeta" checked> Remove metadata</label>
-            <label><input type="checkbox" id="pdfSaveCopy" checked> Save as compressed copy</label>
-          </div>
-
-          <div class="pdfToolProgress"><span id="pdfToolProgressBar"></span></div>
-          <div class="prototypeActions" style="margin-top:14px">
-            <button class="btn dark" onclick="compressPdfTool()">Compress PDF</button>
-            <button class="btn" id="pdfToolDownloadBtn" onclick="downloadPdfToolResult()" disabled>Download</button>
-            <button class="btn" onclick="toast('Save to Project Folder will be connected after the backend is added')">Save to Project Folder</button>
-          </div>
-          <div class="pdfToolResult" id="pdfToolResult"></div>
-        </section>
-
-        <section class="protoPanel">
-          <h3>Preview</h3>
-          <div class="pdfToolPreview" id="pdfToolPreview"><div style="height:100%;display:flex;align-items:center;justify-content:center;color:#777;text-align:center;padding:22px">PDF preview will appear here after upload.</div></div>
-          <div class="pdfToolWarn"><strong>Backend note:</strong> GitHub Pages cannot run Ghostscript by itself. The next step is a small backend endpoint that accepts the PDF, runs the selected compression preset, then returns the compressed file.</div>
-          <table class="protoTable" style="margin-top:12px">
-            <thead><tr><th>Preset</th><th>Backend target</th></tr></thead>
-            <tbody>
-              <tr><td>Screen / Email</td><td>Downsample images hard, remove metadata, keep vectors.</td></tr>
-              <tr><td>Review Issue</td><td>Medium image compression, preserve clarity.</td></tr>
-              <tr><td>Tender / Archive</td><td>Light compression, safest for formal issue PDFs.</td></tr>
-            </tbody>
-          </table>
-        </section>
-      </div>
-    </main>
-
-
   </section>
 </div>
 
@@ -1087,10 +1002,6 @@ function applyRouteFromHash(){
     }
     if(page === 'model'){
       showPrototypeView('model', true);
-      return;
-    }
-    if(page === 'pdftools' || page === 'pdf-tools'){
-      showPrototypeView('pdfTools', true);
       return;
     }
     if(page === 'drawing'){
@@ -1358,11 +1269,11 @@ function showAudit(){
 
 
 function hidePrototypeViews(){
-  ['specificationsView','specAdminView','timesheetsView','approvalsView','tenderView','defectsView','modelView','pdfToolsView'].forEach(id => {
+  ['specificationsView','specAdminView','timesheetsView','approvalsView','tenderView','defectsView','modelView'].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.style.display = 'none';
   });
-  ['navSpecifications','navSpecAdmin','navTimesheets','navApprovals','navTender','navDefects','navModel','navPdfTools'].forEach(id => {
+  ['navSpecifications','navSpecAdmin','navTimesheets','navApprovals','navTender','navDefects','navModel'].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.classList.remove('active');
   });
@@ -1382,8 +1293,7 @@ function showPrototypeView(kind, fromRoute){
     approvals:['approvalsView','navApprovals'],
     tender:['tenderView','navTender'],
     defects:['defectsView','navDefects'],
-    model:['modelView','navModel'],
-    pdfTools:['pdfToolsView','navPdfTools']
+    model:['modelView','navModel']
   };
   const pair = map[kind];
   if(pair){
@@ -1393,7 +1303,6 @@ function showPrototypeView(kind, fromRoute){
     if(kind === 'specAdmin') renderSpecAdmin();
     if(kind === 'timesheets') renderTimesheets();
     if(kind === 'defects') renderDefects();
-    if(kind === 'pdfTools') setupPdfTools();
   }
   document.getElementById('navDrawings').classList.remove('active');
   document.getElementById('navProgramme').classList.remove('active');
@@ -3486,119 +3395,6 @@ function updateSpecAdminStats(){
   const docs=document.getElementById('adminDocCount'); if(docs) docs.textContent = 'Later';
   const total = (liveJoinedSpecItems || []).filter(i => i.project === 'Abbotsford Street').reduce((s,i)=>s+(Number(i.total)||0),0);
   const t=document.getElementById('adminAbbotsfordTotal'); if(t) t.textContent = formatMoney(total);
-}
-
-
-/* PDF Tools v1: browser UI + backend-ready compression workflow. */
-let pdfToolState = { file:null, url:'', resultUrl:'', resultName:'' };
-
-function setupPdfTools(){
-  const drop = document.getElementById('pdfToolDrop');
-  if(!drop || drop.dataset.bound) return;
-  drop.dataset.bound = '1';
-  ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('dragover'); }));
-  ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('dragover'); }));
-  drop.addEventListener('drop', e => handlePdfToolFile(e.dataTransfer.files && e.dataTransfer.files[0]));
-}
-
-function triggerPdfToolUpload(){
-  setupPdfTools();
-  document.getElementById('pdfToolFile')?.click();
-}
-
-function handlePdfToolFile(file){
-  setupPdfTools();
-  if(!file) return;
-  if(file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')){
-    toast('Please choose a PDF file');
-    return;
-  }
-  if(pdfToolState.url) URL.revokeObjectURL(pdfToolState.url);
-  if(pdfToolState.resultUrl) URL.revokeObjectURL(pdfToolState.resultUrl);
-  pdfToolState = { file, url:URL.createObjectURL(file), resultUrl:'', resultName:'' };
-  document.getElementById('pdfToolName').textContent = file.name;
-  document.getElementById('pdfToolOriginal').textContent = formatBytes(file.size);
-  document.getElementById('pdfToolPreview').innerHTML = `<iframe src="${pdfToolState.url}"></iframe>`;
-  document.getElementById('pdfToolDrop').innerHTML = `<div><strong>${escapeHtml(file.name)}</strong><span>${formatBytes(file.size)} selected</span><br><small>Choose a preset, then compress.</small></div>`;
-  document.getElementById('pdfToolDownloadBtn').disabled = true;
-  document.getElementById('pdfToolResult').classList.remove('show');
-  setPdfProgress(0);
-  updatePdfToolEstimate();
-}
-
-function selectedPdfPreset(){
-  return document.querySelector('input[name="pdfPreset"]:checked')?.value || 'screen';
-}
-
-function updatePdfToolEstimate(){
-  const file = pdfToolState.file;
-  const el = document.getElementById('pdfToolEstimate');
-  if(!el) return;
-  if(!file){ el.textContent = '—'; return; }
-  const ratios = {screen:.35, review:.55, archive:.75};
-  const ratio = ratios[selectedPdfPreset()] || .55;
-  el.textContent = '~' + formatBytes(file.size * ratio);
-}
-
-function setPdfProgress(pct){
-  const bar = document.getElementById('pdfToolProgressBar');
-  if(bar) bar.style.width = Math.max(0, Math.min(100, pct)) + '%';
-}
-
-function compressPdfTool(){
-  const file = pdfToolState.file;
-  if(!file){ toast('Choose a PDF first'); return; }
-
-  /* Placeholder until backend exists: creates a safe downloadable copy and records selected settings.
-     Replace this block with fetch(PDF_COMPRESS_API_URL, {method:'POST', body:formData}) when the backend is deployed. */
-  setPdfProgress(15);
-  setTimeout(() => setPdfProgress(55), 180);
-  setTimeout(() => {
-    const preset = selectedPdfPreset();
-    const suffix = preset === 'screen' ? 'screen_email' : preset === 'archive' ? 'tender_archive' : 'review_issue';
-    const base = file.name.replace(/\.pdf$/i,'');
-    pdfToolState.resultName = `${base}_compressed_${suffix}.pdf`;
-    pdfToolState.resultUrl = pdfToolState.url;
-    setPdfProgress(100);
-    const result = document.getElementById('pdfToolResult');
-    result.innerHTML = `<strong>Compression workflow ready.</strong><br>This first draft has prepared <em>${escapeHtml(pdfToolState.resultName)}</em>. Real file-size reduction will occur once the Ghostscript backend is connected.`;
-    result.classList.add('show');
-    document.getElementById('pdfToolDownloadBtn').disabled = false;
-    toast('Compression draft complete');
-  }, 420);
-}
-
-function downloadPdfToolResult(){
-  if(!pdfToolState.resultUrl || !pdfToolState.resultName){ toast('Compress the PDF first'); return; }
-  const a = document.createElement('a');
-  a.href = pdfToolState.resultUrl;
-  a.download = pdfToolState.resultName;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-}
-
-function resetPdfTool(){
-  if(pdfToolState.url) URL.revokeObjectURL(pdfToolState.url);
-  if(pdfToolState.resultUrl && pdfToolState.resultUrl !== pdfToolState.url) URL.revokeObjectURL(pdfToolState.resultUrl);
-  pdfToolState = { file:null, url:'', resultUrl:'', resultName:'' };
-  document.getElementById('pdfToolFile').value = '';
-  document.getElementById('pdfToolName').textContent = 'None selected';
-  document.getElementById('pdfToolOriginal').textContent = '—';
-  document.getElementById('pdfToolEstimate').textContent = '—';
-  document.getElementById('pdfToolPreview').innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#777;text-align:center;padding:22px">PDF preview will appear here after upload.</div>';
-  document.getElementById('pdfToolDrop').innerHTML = '<div><strong>Drop a PDF here</strong><span>or choose a file from your computer</span><br><small>Architectural linework should be preserved; compression should target images, scans, renders and metadata.</small></div>';
-  document.getElementById('pdfToolDownloadBtn').disabled = true;
-  document.getElementById('pdfToolResult').classList.remove('show');
-  setPdfProgress(0);
-}
-
-function formatBytes(bytes){
-  const n = Number(bytes || 0);
-  if(n < 1024) return n + ' B';
-  if(n < 1024*1024) return (n/1024).toFixed(1) + ' KB';
-  if(n < 1024*1024*1024) return (n/1024/1024).toFixed(1) + ' MB';
-  return (n/1024/1024/1024).toFixed(2) + ' GB';
 }
 
 init();
