@@ -335,27 +335,6 @@
   .pdfToolResult{display:none;border:1px solid #cadbc4;background:#f4faf1;border-radius:10px;padding:14px;margin-top:12px;font-size:13px;color:#304b2d}.pdfToolResult.show{display:block}
   .pdfToolWarn{border:1px solid #e3c56c;background:#fff8e1;border-radius:10px;padding:13px;margin-top:12px;font-size:13px;line-height:1.45;color:#5a4310}
   .pdfToolPreview{height:420px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#eee}.pdfToolPreview iframe{width:100%;height:100%;border:0;background:#fff}
-  .pdfToolTabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-  .pdfToolTab{border:1px solid #bbb;background:white;padding:9px 13px;border-radius:999px;font-size:12px;cursor:pointer;text-transform:uppercase;letter-spacing:.02em}
-  .pdfToolTab.active{background:#111;color:#fff;border-color:#111}
-  .pdfToolSection{display:none}
-  .pdfToolSection.active{display:block}
-  .pdfCombineDrop{border:1px dashed #b9ad9d;background:#faf7f1;border-radius:14px;min-height:150px;padding:24px;display:flex;align-items:center;justify-content:center;text-align:center;color:#655;line-height:1.45;transition:background .12s,border-color .12s;cursor:pointer;margin-bottom:12px}
-  .pdfCombineDrop.dragover{background:#fff2d8;border-color:#111}
-  .pdfCombineDrop strong{display:block;color:#111;font-size:20px;font-weight:400;margin-bottom:6px}
-  .pdfCombineList{display:grid;gap:10px;margin-top:12px}
-  .pdfCombineItem{border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px;display:grid;grid-template-columns:32px 1fr auto;gap:10px;align-items:center}
-  .pdfCombineItem.dragging{opacity:.45}
-  .pdfCombineHandle{cursor:grab;color:#777;font-size:18px;user-select:none}
-  .pdfCombineItem h4{margin:0 0 4px;font-size:14px}
-  .pdfCombineItem p{margin:0;color:#666;font-size:12px;line-height:1.35}
-  .pdfPageGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:8px;margin-top:10px}
-  .pdfPageCard{border:1px solid #ddd3c5;border-radius:8px;background:#faf7f1;min-height:96px;padding:8px;font-size:11px;display:flex;flex-direction:column;justify-content:space-between}
-  .pdfPageCard .pageNo{font-size:18px;color:#111}
-  .pdfPageCard small{color:#666}
-  .pdfPageCard.deleted{opacity:.38;text-decoration:line-through}
-  .pdfPageCard .pageActions{display:flex;gap:4px;flex-wrap:wrap}
-  .pdfMiniBtn{border:1px solid #bbb;background:white;border-radius:4px;padding:3px 5px;font-size:10px;cursor:pointer}
   @media(max-width:1050px){.pdfToolsHero{grid-template-columns:1fr}.pdfToolStats{grid-template-columns:1fr}}
 
 </style>
@@ -909,106 +888,64 @@
       <div class="prototypeTop">
         <div>
           <h2>PDF Tools</h2>
-          <p>Document workspace for compressing and combining PDFs inside the portal. Compression uses the Cloud Run Ghostscript backend; combining runs locally in the browser so drawings do not need to leave the machine.</p>
+          <p>First working draft for reducing PDF file size inside the portal. This version gives the full interface, upload handling, file-size reporting and a backend-ready compression workflow. Real compression will be connected to a server-side Ghostscript/PDF service next.</p>
         </div>
         <div class="prototypeActions">
-          <button class="btn dark" onclick="triggerActivePdfUpload()">Choose PDF(s)</button>
+          <button class="btn dark" onclick="triggerPdfToolUpload()">Choose PDF</button>
           <button class="btn" onclick="resetPdfTool()">Reset</button>
           <button class="btn" onclick="copyCurrentLink()">Copy Link</button>
         </div>
       </div>
 
-      <div class="pdfToolTabs">
-        <button class="pdfToolTab active" id="pdfTabCompress" onclick="setPdfToolMode('compress')">Compress</button>
-        <button class="pdfToolTab" id="pdfTabCombine" onclick="setPdfToolMode('combine')">Combine PDFs</button>
-      </div>
+      <div class="pdfToolsHero">
+        <section class="protoPanel">
+          <h3>Compress PDF</h3>
+          <input class="pdfToolInput" id="pdfToolFile" type="file" accept="application/pdf,.pdf" onchange="handlePdfToolFile(this.files && this.files[0])">
+          <div class="pdfToolDrop" id="pdfToolDrop" onclick="triggerPdfToolUpload()">
+            <div><strong>Drop a PDF here</strong><span>or choose a file from your computer</span><br><small>Architectural linework should be preserved; compression should target images, scans, renders and metadata.</small></div>
+          </div>
 
-      <div class="pdfToolSection active" id="pdfCompressSection">
-        <div class="pdfToolsHero">
-          <section class="protoPanel">
-            <h3>Compress PDF</h3>
-            <input class="pdfToolInput" id="pdfToolFile" type="file" accept="application/pdf,.pdf" onchange="handlePdfToolFile(this.files && this.files[0])">
-            <div class="pdfToolDrop" id="pdfToolDrop" onclick="triggerPdfToolUpload()">
-              <div><strong>Drop a PDF here</strong><span>or choose a file from your computer</span><br><small>Architectural linework should be preserved; compression should target images, scans, renders and metadata.</small></div>
-            </div>
+          <div class="pdfToolStats">
+            <div class="pdfToolStat"><small>File</small><strong id="pdfToolName">None selected</strong></div>
+            <div class="pdfToolStat"><small>Original size</small><strong id="pdfToolOriginal">—</strong></div>
+            <div class="pdfToolStat"><small>Estimated output</small><strong id="pdfToolEstimate">—</strong></div>
+          </div>
 
-            <div class="pdfToolStats">
-              <div class="pdfToolStat"><small>File</small><strong id="pdfToolName">None selected</strong></div>
-              <div class="pdfToolStat"><small>Original size</small><strong id="pdfToolOriginal">—</strong></div>
-              <div class="pdfToolStat"><small>Actual / estimated output</small><strong id="pdfToolEstimate">—</strong></div>
-            </div>
+          <div class="pdfToolOptions">
+            <label class="pdfPreset"><input type="radio" name="pdfPreset" value="screen" checked onchange="updatePdfToolEstimate()"><span><strong>Screen / Email</strong><span>Smallest file for email, quick review and phones. Strong image downsampling.</span></span></label>
+            <label class="pdfPreset"><input type="radio" name="pdfPreset" value="review" onchange="updatePdfToolEstimate()"><span><strong>Review Issue</strong><span>Balanced setting for markups, consultant coordination and client review.</span></span></label>
+            <label class="pdfPreset"><input type="radio" name="pdfPreset" value="archive" onchange="updatePdfToolEstimate()"><span><strong>Tender / Archive</strong><span>Higher-quality output. Reduce waste without damaging formal issue documents.</span></span></label>
+          </div>
 
-            <div class="pdfToolOptions">
-              <label class="pdfPreset"><input type="radio" name="pdfPreset" value="screen" checked onchange="updatePdfToolEstimate()"><span><strong>Screen / Email</strong><span>Smallest file for email, quick review and phones. Strong image downsampling.</span></span></label>
-              <label class="pdfPreset"><input type="radio" name="pdfPreset" value="review" onchange="updatePdfToolEstimate()"><span><strong>Review Issue</strong><span>Balanced setting for markups, consultant coordination and client review.</span></span></label>
-              <label class="pdfPreset"><input type="radio" name="pdfPreset" value="archive" onchange="updatePdfToolEstimate()"><span><strong>Tender / Archive</strong><span>Higher-quality output. Reduce waste without damaging formal issue documents.</span></span></label>
-            </div>
+          <div class="projectChecks" style="margin-top:12px">
+            <label><input type="checkbox" id="pdfKeepVector" checked> Preserve drawing linework</label>
+            <label><input type="checkbox" id="pdfKeepPage" checked> Keep page size unchanged</label>
+            <label><input type="checkbox" id="pdfRemoveMeta" checked> Remove metadata</label>
+            <label><input type="checkbox" id="pdfSaveCopy" checked> Save as compressed copy</label>
+          </div>
 
-            <div class="projectChecks" style="margin-top:12px">
-              <label><input type="checkbox" id="pdfKeepVector" checked> Preserve drawing linework</label>
-              <label><input type="checkbox" id="pdfKeepPage" checked> Keep page size unchanged</label>
-              <label><input type="checkbox" id="pdfRemoveMeta" checked> Remove metadata</label>
-              <label><input type="checkbox" id="pdfSaveCopy" checked> Save as compressed copy</label>
-            </div>
+          <div class="pdfToolProgress"><span id="pdfToolProgressBar"></span></div>
+          <div class="prototypeActions" style="margin-top:14px">
+            <button class="btn dark" onclick="compressPdfTool()">Compress PDF</button>
+            <button class="btn" id="pdfToolDownloadBtn" onclick="downloadPdfToolResult()" disabled>Download</button>
+            <button class="btn" onclick="toast('Save to Project Folder will be connected after the backend is added')">Save to Project Folder</button>
+          </div>
+          <div class="pdfToolResult" id="pdfToolResult"></div>
+        </section>
 
-            <div class="pdfToolProgress"><span id="pdfToolProgressBar"></span></div>
-            <div class="prototypeActions" style="margin-top:14px">
-              <button class="btn dark" onclick="compressPdfTool()">Compress PDF</button>
-              <button class="btn" id="pdfToolDownloadBtn" onclick="downloadPdfToolResult()" disabled>Download</button>
-              <button class="btn" onclick="toast('Save to Project Folder will be connected after the backend is added')">Save to Project Folder</button>
-            </div>
-            <div class="pdfToolResult" id="pdfToolResult"></div>
-          </section>
-
-          <section class="protoPanel">
-            <h3>Preview</h3>
-            <div class="pdfToolPreview" id="pdfToolPreview"><div style="height:100%;display:flex;align-items:center;justify-content:center;color:#777;text-align:center;padding:22px">PDF preview will appear here after upload.</div></div>
-            <div class="pdfToolWarn"><strong>Backend connected:</strong> PDFs are sent to the March Cloud Run Ghostscript service, compressed using the selected preset, and returned to the browser for download. If compression makes a file larger, the portal now keeps the original instead.</div>
-            <table class="protoTable" style="margin-top:12px">
-              <thead><tr><th>Preset</th><th>Backend target</th></tr></thead>
-              <tbody>
-                <tr><td>Screen / Email</td><td>Downsample images hard, remove metadata, keep vectors.</td></tr>
-                <tr><td>Review Issue</td><td>Medium image compression, preserve clarity.</td></tr>
-                <tr><td>Tender / Archive</td><td>Light compression, safest for formal issue PDFs.</td></tr>
-              </tbody>
-            </table>
-          </section>
-        </div>
-      </div>
-
-      <div class="pdfToolSection" id="pdfCombineSection">
-        <div class="pdfToolsHero">
-          <section class="protoPanel">
-            <h3>Combine PDFs</h3>
-            <input class="pdfToolInput" id="pdfCombineFiles" type="file" accept="application/pdf,.pdf" multiple onchange="handlePdfCombineFiles(this.files)">
-            <div class="pdfCombineDrop" id="pdfCombineDrop" onclick="triggerPdfCombineUpload()">
-              <div><strong>Drop multiple PDFs here</strong><span>or choose files from your computer</span><br><small>Drag files to reorder. Expand pages to rotate or delete before combining.</small></div>
-            </div>
-
-            <div class="pdfToolStats">
-              <div class="pdfToolStat"><small>PDFs</small><strong id="pdfCombineCount">0</strong></div>
-              <div class="pdfToolStat"><small>Total pages</small><strong id="pdfCombinePages">—</strong></div>
-              <div class="pdfToolStat"><small>Input size</small><strong id="pdfCombineSize">—</strong></div>
-            </div>
-
-            <div class="prototypeActions" style="margin-top:14px">
-              <button class="btn dark" onclick="combinePdfFiles()">Combine & Download</button>
-              <button class="btn" onclick="resetPdfCombine()">Clear Combine List</button>
-              <button class="btn" onclick="toast('Save combined PDF to Project Folder comes after Drive writeback')">Save to Project Folder</button>
-            </div>
-
-            <div class="pdfToolProgress"><span id="pdfCombineProgressBar"></span></div>
-            <div class="pdfToolResult" id="pdfCombineResult"></div>
-          </section>
-
-          <section class="protoPanel">
-            <h3>Combine order</h3>
-            <div id="pdfCombineList" class="pdfCombineList">
-              <div style="color:#777;font-size:13px;line-height:1.45">No PDFs selected yet. Add drawing sheets, reorder them, optionally rotate/delete pages, then combine.</div>
-            </div>
-            <div class="pdfToolWarn"><strong>Local processing:</strong> combining uses PDF-lib in the browser. Files are not sent to Cloud Run for this step. This is the right approach for privacy and cost; OCR/compression still use backend services when needed.</div>
-          </section>
-        </div>
+        <section class="protoPanel">
+          <h3>Preview</h3>
+          <div class="pdfToolPreview" id="pdfToolPreview"><div style="height:100%;display:flex;align-items:center;justify-content:center;color:#777;text-align:center;padding:22px">PDF preview will appear here after upload.</div></div>
+          <div class="pdfToolWarn"><strong>Backend connected:</strong> PDFs are sent to the March Cloud Run Ghostscript service, compressed using the selected preset, and returned to the browser for download.</div>
+          <table class="protoTable" style="margin-top:12px">
+            <thead><tr><th>Preset</th><th>Backend target</th></tr></thead>
+            <tbody>
+              <tr><td>Screen / Email</td><td>Downsample images hard, remove metadata, keep vectors.</td></tr>
+              <tr><td>Review Issue</td><td>Medium image compression, preserve clarity.</td></tr>
+              <tr><td>Tender / Archive</td><td>Light compression, safest for formal issue PDFs.</td></tr>
+            </tbody>
+          </table>
+        </section>
       </div>
     </main>
 
@@ -1026,7 +963,6 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <script>
 /*
   IMPORTANT:
@@ -3566,29 +3502,7 @@ function updateSpecAdminStats(){
 /* PDF Tools v1: browser UI + backend-ready compression workflow. */
 let pdfToolState = { file:null, url:'', resultUrl:'', resultName:'' };
 
-let pdfToolMode = 'compress';
-let pdfCombineState = { files:[], resultUrl:'', resultName:'' };
-
 function setupPdfTools(){
-  setupPdfCompressDrop();
-  setupPdfCombineDrop();
-}
-
-function setPdfToolMode(mode){
-  pdfToolMode = mode === 'combine' ? 'combine' : 'compress';
-  document.getElementById('pdfCompressSection')?.classList.toggle('active', pdfToolMode === 'compress');
-  document.getElementById('pdfCombineSection')?.classList.toggle('active', pdfToolMode === 'combine');
-  document.getElementById('pdfTabCompress')?.classList.toggle('active', pdfToolMode === 'compress');
-  document.getElementById('pdfTabCombine')?.classList.toggle('active', pdfToolMode === 'combine');
-}
-
-function triggerActivePdfUpload(){
-  setupPdfTools();
-  if(pdfToolMode === 'combine') triggerPdfCombineUpload();
-  else triggerPdfToolUpload();
-}
-
-function setupPdfCompressDrop(){
   const drop = document.getElementById('pdfToolDrop');
   if(!drop || drop.dataset.bound) return;
   drop.dataset.bound = '1';
@@ -3597,23 +3511,9 @@ function setupPdfCompressDrop(){
   drop.addEventListener('drop', e => handlePdfToolFile(e.dataTransfer.files && e.dataTransfer.files[0]));
 }
 
-function setupPdfCombineDrop(){
-  const drop = document.getElementById('pdfCombineDrop');
-  if(!drop || drop.dataset.bound) return;
-  drop.dataset.bound = '1';
-  ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('dragover'); }));
-  ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('dragover'); }));
-  drop.addEventListener('drop', e => handlePdfCombineFiles(e.dataTransfer.files));
-}
-
 function triggerPdfToolUpload(){
   setupPdfTools();
   document.getElementById('pdfToolFile')?.click();
-}
-
-function triggerPdfCombineUpload(){
-  setupPdfTools();
-  document.getElementById('pdfCombineFiles')?.click();
 }
 
 function handlePdfToolFile(file){
@@ -3655,11 +3555,6 @@ function setPdfProgress(pct){
   if(bar) bar.style.width = Math.max(0, Math.min(100, pct)) + '%';
 }
 
-function setPdfCombineProgress(pct){
-  const bar = document.getElementById('pdfCombineProgressBar');
-  if(bar) bar.style.width = Math.max(0, Math.min(100, pct)) + '%';
-}
-
 async function compressPdfTool(){
   const file = pdfToolState.file;
   if(!file){ toast('Choose a PDF first'); return; }
@@ -3672,7 +3567,7 @@ async function compressPdfTool(){
   if(!PDF_COMPRESS_API_URL){
     setPdfProgress(100);
     const result = document.getElementById('pdfToolResult');
-    result.innerHTML = `<strong>Backend not connected yet.</strong><br>Paste the Cloud Run <em>/compress</em> URL into <code>PDF_COMPRESS_API_URL</code>.`;
+    result.innerHTML = `<strong>Backend not connected yet.</strong><br>The Cloud Run/Ghostscript service is ready to deploy. Paste its <em>/compress</em> URL into <code>PDF_COMPRESS_API_URL</code> in this file, then this button will return a genuinely compressed PDF.`;
     result.classList.add('show');
     toast('Paste the Cloud Run URL into PDF_COMPRESS_API_URL');
     return;
@@ -3683,20 +3578,19 @@ async function compressPdfTool(){
   form.append('preset', preset);
 
   const result = document.getElementById('pdfToolResult');
-  let progressTimer = null;
   try{
     setPdfProgress(18);
     result.innerHTML = '<strong>Compressing PDF…</strong><br>Uploading to the Ghostscript backend.';
     result.classList.add('show');
 
-    progressTimer = setInterval(() => {
+    const progressTimer = setInterval(() => {
       const bar = document.getElementById('pdfToolProgressBar');
       const current = parseFloat((bar?.style.width || '18').replace('%','')) || 18;
       if(current < 86) setPdfProgress(current + 6);
     }, 450);
 
     const res = await fetch(PDF_COMPRESS_API_URL, { method:'POST', body:form });
-    if(progressTimer) clearInterval(progressTimer);
+    clearInterval(progressTimer);
 
     if(!res.ok){
       let message = 'Compression failed.';
@@ -3705,23 +3599,11 @@ async function compressPdfTool(){
     }
 
     const blob = await res.blob();
+    if(pdfToolState.resultUrl && pdfToolState.resultUrl !== pdfToolState.url) URL.revokeObjectURL(pdfToolState.resultUrl);
+    pdfToolState.resultUrl = URL.createObjectURL(blob);
+
     const originalSize = Number(res.headers.get('X-Original-Size')) || file.size;
     const compressedSize = Number(res.headers.get('X-Compressed-Size')) || blob.size;
-
-    if(pdfToolState.resultUrl && pdfToolState.resultUrl !== pdfToolState.url) URL.revokeObjectURL(pdfToolState.resultUrl);
-
-    if(compressedSize >= originalSize){
-      pdfToolState.resultUrl = pdfToolState.url;
-      pdfToolState.resultName = `${base}_original_retained.pdf`;
-      document.getElementById('pdfToolEstimate').textContent = formatBytes(originalSize);
-      setPdfProgress(100);
-      result.innerHTML = `<strong>Original retained.</strong><br>The compressed version was larger, so the portal kept the original file instead.<br>Original: ${formatBytes(originalSize)} · Attempted output: ${formatBytes(compressedSize)}`;
-      document.getElementById('pdfToolDownloadBtn').disabled = false;
-      toast('Original retained');
-      return;
-    }
-
-    pdfToolState.resultUrl = URL.createObjectURL(blob);
     const saving = originalSize ? Math.max(0, 100 - (compressedSize / originalSize * 100)) : 0;
 
     document.getElementById('pdfToolEstimate').textContent = formatBytes(compressedSize);
@@ -3730,7 +3612,6 @@ async function compressPdfTool(){
     document.getElementById('pdfToolDownloadBtn').disabled = false;
     toast('Compressed PDF ready');
   }catch(err){
-    if(progressTimer) clearInterval(progressTimer);
     setPdfProgress(0);
     result.innerHTML = `<strong>Compression failed.</strong><br>${escapeHtml(err.message || err)}`;
     result.classList.add('show');
@@ -3749,16 +3630,10 @@ function downloadPdfToolResult(){
 }
 
 function resetPdfTool(){
-  resetPdfCompress();
-  resetPdfCombine();
-}
-
-function resetPdfCompress(){
   if(pdfToolState.url) URL.revokeObjectURL(pdfToolState.url);
   if(pdfToolState.resultUrl && pdfToolState.resultUrl !== pdfToolState.url) URL.revokeObjectURL(pdfToolState.resultUrl);
   pdfToolState = { file:null, url:'', resultUrl:'', resultName:'' };
-  const fileInput = document.getElementById('pdfToolFile');
-  if(fileInput) fileInput.value = '';
+  document.getElementById('pdfToolFile').value = '';
   document.getElementById('pdfToolName').textContent = 'None selected';
   document.getElementById('pdfToolOriginal').textContent = '—';
   document.getElementById('pdfToolEstimate').textContent = '—';
@@ -3767,210 +3642,6 @@ function resetPdfCompress(){
   document.getElementById('pdfToolDownloadBtn').disabled = true;
   document.getElementById('pdfToolResult').classList.remove('show');
   setPdfProgress(0);
-}
-
-async function handlePdfCombineFiles(files){
-  setupPdfTools();
-  const list = Array.from(files || []).filter(f => f && (f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf')));
-  if(!list.length){ toast('Choose one or more PDFs'); return; }
-
-  const result = document.getElementById('pdfCombineResult');
-  result.innerHTML = '<strong>Reading PDFs…</strong><br>Checking page counts locally.';
-  result.classList.add('show');
-  setPdfCombineProgress(8);
-
-  for(const file of list){
-    try{
-      const bytes = await file.arrayBuffer();
-      const pdf = await PDFLib.PDFDocument.load(bytes, {ignoreEncryption:true});
-      const pages = pdf.getPageCount();
-      pdfCombineState.files.push({
-        id:'pdf_' + Date.now() + '_' + Math.random().toString(16).slice(2),
-        file,
-        bytes,
-        name:file.name,
-        size:file.size,
-        pages,
-        rotations:Array(pages).fill(0),
-        deleted:Array(pages).fill(false),
-        expanded:false
-      });
-      setPdfCombineProgress(Math.min(80, 8 + pdfCombineState.files.length * 8));
-    }catch(err){
-      toast('Could not read ' + file.name);
-    }
-  }
-
-  setPdfCombineProgress(0);
-  result.classList.remove('show');
-  renderPdfCombineList();
-}
-
-function renderPdfCombineList(){
-  const list = document.getElementById('pdfCombineList');
-  if(!list) return;
-  const totalFiles = pdfCombineState.files.length;
-  const totalPages = pdfCombineState.files.reduce((s,f)=>s+f.deleted.filter(x=>!x).length,0);
-  const totalSize = pdfCombineState.files.reduce((s,f)=>s+f.size,0);
-  document.getElementById('pdfCombineCount').textContent = totalFiles;
-  document.getElementById('pdfCombinePages').textContent = totalFiles ? totalPages : '—';
-  document.getElementById('pdfCombineSize').textContent = totalFiles ? formatBytes(totalSize) : '—';
-
-  if(!totalFiles){
-    list.innerHTML = '<div style="color:#777;font-size:13px;line-height:1.45">No PDFs selected yet. Add drawing sheets, reorder them, optionally rotate/delete pages, then combine.</div>';
-    return;
-  }
-
-  list.innerHTML = pdfCombineState.files.map((f,i) => `
-    <div class="pdfCombineItem" draggable="true" data-index="${i}" ondragstart="startPdfCombineDrag(event, ${i})" ondragover="event.preventDefault()" ondrop="dropPdfCombineItem(event, ${i})">
-      <div class="pdfCombineHandle" title="Drag to reorder">☰</div>
-      <div>
-        <h4>${i+1}. ${escapeHtml(f.name)}</h4>
-        <p>${f.pages} page${f.pages===1?'':'s'} · ${formatBytes(f.size)} · ${f.deleted.filter(Boolean).length ? f.deleted.filter(Boolean).length + ' deleted' : 'all pages included'}</p>
-        ${f.expanded ? renderPdfPageGrid(f, i) : ''}
-      </div>
-      <div class="prototypeActions">
-        <button class="btn" onclick="togglePdfCombineExpanded(${i})">${f.expanded ? 'Hide Pages' : 'Pages'}</button>
-        <button class="btn" onclick="movePdfCombineItem(${i}, -1)">↑</button>
-        <button class="btn" onclick="movePdfCombineItem(${i}, 1)">↓</button>
-        <button class="btn" onclick="removePdfCombineItem(${i})">Remove</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function renderPdfPageGrid(f, fileIndex){
-  let html = '<div class="pdfPageGrid">';
-  for(let p=0; p<f.pages; p++){
-    html += `<div class="pdfPageCard ${f.deleted[p] ? 'deleted' : ''}">
-      <div><div class="pageNo">${p+1}</div><small>${f.rotations[p] ? f.rotations[p] + '°' : '0°'} ${f.deleted[p] ? 'deleted' : ''}</small></div>
-      <div class="pageActions">
-        <button class="pdfMiniBtn" onclick="rotatePdfCombinePage(${fileIndex}, ${p}, 90)">↻</button>
-        <button class="pdfMiniBtn" onclick="rotatePdfCombinePage(${fileIndex}, ${p}, -90)">↺</button>
-        <button class="pdfMiniBtn" onclick="togglePdfCombinePageDeleted(${fileIndex}, ${p})">${f.deleted[p] ? 'Keep' : 'Delete'}</button>
-      </div>
-    </div>`;
-  }
-  return html + '</div>';
-}
-
-function startPdfCombineDrag(event, index){
-  event.dataTransfer.setData('text/plain', String(index));
-  event.currentTarget.classList.add('dragging');
-}
-
-function dropPdfCombineItem(event, targetIndex){
-  event.preventDefault();
-  const sourceIndex = Number(event.dataTransfer.getData('text/plain'));
-  document.querySelectorAll('.pdfCombineItem.dragging').forEach(el => el.classList.remove('dragging'));
-  if(isNaN(sourceIndex) || sourceIndex === targetIndex) return;
-  const [item] = pdfCombineState.files.splice(sourceIndex,1);
-  pdfCombineState.files.splice(targetIndex,0,item);
-  renderPdfCombineList();
-}
-
-function movePdfCombineItem(index, direction){
-  const target = index + direction;
-  if(target < 0 || target >= pdfCombineState.files.length) return;
-  const [item] = pdfCombineState.files.splice(index,1);
-  pdfCombineState.files.splice(target,0,item);
-  renderPdfCombineList();
-}
-
-function removePdfCombineItem(index){
-  pdfCombineState.files.splice(index,1);
-  renderPdfCombineList();
-}
-
-function togglePdfCombineExpanded(index){
-  const f = pdfCombineState.files[index];
-  if(!f) return;
-  f.expanded = !f.expanded;
-  renderPdfCombineList();
-}
-
-function rotatePdfCombinePage(fileIndex, pageIndex, delta){
-  const f = pdfCombineState.files[fileIndex];
-  if(!f) return;
-  f.rotations[pageIndex] = ((f.rotations[pageIndex] || 0) + delta + 360) % 360;
-  renderPdfCombineList();
-}
-
-function togglePdfCombinePageDeleted(fileIndex, pageIndex){
-  const f = pdfCombineState.files[fileIndex];
-  if(!f) return;
-  f.deleted[pageIndex] = !f.deleted[pageIndex];
-  renderPdfCombineList();
-}
-
-async function combinePdfFiles(){
-  if(!pdfCombineState.files.length){ toast('Add PDFs first'); return; }
-  if(!window.PDFLib || !PDFLib.PDFDocument){ toast('PDF library still loading. Try again in a moment.'); return; }
-
-  const result = document.getElementById('pdfCombineResult');
-  try{
-    setPdfCombineProgress(12);
-    result.innerHTML = '<strong>Combining PDFs…</strong><br>Copying selected pages locally in the browser.';
-    result.classList.add('show');
-
-    const out = await PDFLib.PDFDocument.create();
-    let copied = 0;
-    const totalPages = pdfCombineState.files.reduce((s,f)=>s+f.deleted.filter(x=>!x).length,0);
-    if(!totalPages) throw new Error('All pages are deleted. Keep at least one page.');
-
-    for(const f of pdfCombineState.files){
-      const src = await PDFLib.PDFDocument.load(f.bytes, {ignoreEncryption:true});
-      for(let i=0; i<f.pages; i++){
-        if(f.deleted[i]) continue;
-        const [page] = await out.copyPages(src, [i]);
-        const rotation = f.rotations[i] || 0;
-        if(rotation) page.setRotation(PDFLib.degrees(rotation));
-        out.addPage(page);
-        copied++;
-        setPdfCombineProgress(12 + (copied / totalPages) * 72);
-      }
-    }
-
-    out.setTitle('Combined PDF');
-    out.setCreator('MARCH Drawing Portal');
-    out.setProducer('MARCH Drawing Portal / PDF-lib');
-    const bytes = await out.save({useObjectStreams:true});
-    const blob = new Blob([bytes], {type:'application/pdf'});
-
-    if(pdfCombineState.resultUrl) URL.revokeObjectURL(pdfCombineState.resultUrl);
-    pdfCombineState.resultUrl = URL.createObjectURL(blob);
-    const first = pdfCombineState.files[0].name.replace(/\.pdf$/i,'');
-    pdfCombineState.resultName = `${first}_combined_${pdfCombineState.files.length}_pdfs.pdf`;
-
-    setPdfCombineProgress(100);
-    result.innerHTML = `<strong>Combined PDF ready.</strong><br>${pdfCombineState.files.length} file${pdfCombineState.files.length===1?'':'s'} · ${totalPages} page${totalPages===1?'':'s'} · Output: ${formatBytes(blob.size)}<br><button class="btn dark" style="margin-top:10px" onclick="downloadPdfCombineResult()">Download Combined PDF</button>`;
-    toast('Combined PDF ready');
-  }catch(err){
-    setPdfCombineProgress(0);
-    result.innerHTML = `<strong>Combine failed.</strong><br>${escapeHtml(err.message || err)}`;
-    result.classList.add('show');
-    toast('Combine failed');
-  }
-}
-
-function downloadPdfCombineResult(){
-  if(!pdfCombineState.resultUrl || !pdfCombineState.resultName){ toast('Combine PDFs first'); return; }
-  const a = document.createElement('a');
-  a.href = pdfCombineState.resultUrl;
-  a.download = pdfCombineState.resultName;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-}
-
-function resetPdfCombine(){
-  if(pdfCombineState.resultUrl) URL.revokeObjectURL(pdfCombineState.resultUrl);
-  pdfCombineState = { files:[], resultUrl:'', resultName:'' };
-  const input = document.getElementById('pdfCombineFiles');
-  if(input) input.value = '';
-  document.getElementById('pdfCombineResult')?.classList.remove('show');
-  setPdfCombineProgress(0);
-  renderPdfCombineList();
 }
 
 function formatBytes(bytes){
