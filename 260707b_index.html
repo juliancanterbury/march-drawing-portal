@@ -993,7 +993,6 @@
 
             <div class="prototypeActions" style="margin-top:14px">
               <button class="btn dark" onclick="combinePdfFiles()">Combine & Download</button>
-              <button class="btn" onclick="sortPdfCombineAlphanumeric()">Sort A–Z / Sheet No.</button>
               <button class="btn" onclick="resetPdfCombine()">Clear Combine List</button>
               <button class="btn" onclick="toast('Save combined PDF to Project Folder comes after Drive writeback')">Save to Project Folder</button>
             </div>
@@ -3570,21 +3569,6 @@ let pdfToolState = { file:null, url:'', resultUrl:'', resultName:'' };
 let pdfToolMode = 'compress';
 let pdfCombineState = { files:[], resultUrl:'', resultName:'' };
 
-function pdfNaturalName(value){
-  return String(value || '').replace(/\.pdf$/i,'').trim();
-}
-
-function comparePdfNamesAlphanumeric(a, b){
-  return pdfNaturalName(a.name).localeCompare(pdfNaturalName(b.name), undefined, {numeric:true, sensitivity:'base'});
-}
-
-function sortPdfCombineAlphanumeric(){
-  if(!pdfCombineState.files.length){ toast('Add PDFs first'); return; }
-  pdfCombineState.files.sort(comparePdfNamesAlphanumeric);
-  renderPdfCombineList();
-  toast('Sorted alphanumerically');
-}
-
 function setupPdfTools(){
   setupPdfCompressDrop();
   setupPdfCombineDrop();
@@ -3817,11 +3801,8 @@ async function handlePdfCombineFiles(files){
     }
   }
 
-  pdfCombineState.files.sort(comparePdfNamesAlphanumeric);
   setPdfCombineProgress(0);
-  result.innerHTML = '<strong>PDFs added.</strong><br>Files have been sorted alphanumerically by filename / sheet number. You can still drag or use ↑ ↓ to adjust manually.';
-  result.classList.add('show');
-  setTimeout(() => result.classList.remove('show'), 3200);
+  result.classList.remove('show');
   renderPdfCombineList();
 }
 
