@@ -936,7 +936,7 @@
         <section class="protoPanel">
           <h3>Preview</h3>
           <div class="pdfToolPreview" id="pdfToolPreview"><div style="height:100%;display:flex;align-items:center;justify-content:center;color:#777;text-align:center;padding:22px">PDF preview will appear here after upload.</div></div>
-          <div class="pdfToolWarn"><strong>Backend connected:</strong> PDFs are sent to the March Cloud Run Ghostscript service, compressed using the selected preset, and returned to the browser for download.</div>
+          <div class="pdfToolWarn"><strong>Backend note:</strong> GitHub Pages cannot run Ghostscript by itself. The next step is a small backend endpoint that accepts the PDF, runs the selected compression preset, then returns the compressed file.</div>
           <table class="protoTable" style="margin-top:12px">
             <thead><tr><th>Preset</th><th>Backend target</th></tr></thead>
             <tbody>
@@ -987,16 +987,6 @@ const DISCIPLINE_APIS = {
 const PROGRAMME_API_URL = "https://script.google.com/macros/s/AKfycbyfp28G7bAbjKlEEMXCaMD37m6pzo7p3mJT6RGJZG5pF29X1uqFUYhh-DZOZ350y_Bp/exec";
 
 const SPEC_API_URL = "https://script.google.com/macros/s/AKfycbzUAV0gzSiN0cgK4sUpovD9S7qyvtrfHaiPRw6brab8gegVi6x8h9ngXee9UxK7t5UV/exec";
-
-/* March Cloud backend endpoints. */
-const API = {
-  compress: "https://pdf-compressor-471882851221.australia-southeast1.run.app/compress",
-  ocr: "",
-  convert: "",
-  merge: "",
-  split: ""
-};
-const PDF_COMPRESS_API_URL = API.compress;
 
 const disciplines = Object.keys(DISCIPLINE_APIS);
 
@@ -3555,68 +3545,27 @@ function setPdfProgress(pct){
   if(bar) bar.style.width = Math.max(0, Math.min(100, pct)) + '%';
 }
 
-async function compressPdfTool(){
+function compressPdfTool(){
   const file = pdfToolState.file;
   if(!file){ toast('Choose a PDF first'); return; }
 
-  const preset = selectedPdfPreset();
-  const suffix = preset === 'screen' ? 'screen_email' : preset === 'archive' ? 'tender_archive' : 'review_issue';
-  const base = file.name.replace(/\.pdf$/i,'');
-  pdfToolState.resultName = `${base}_compressed_${suffix}.pdf`;
-
-  if(!PDF_COMPRESS_API_URL){
+  /* Placeholder until backend exists: creates a safe downloadable copy and records selected settings.
+     Replace this block with fetch(PDF_COMPRESS_API_URL, {method:'POST', body:formData}) when the backend is deployed. */
+  setPdfProgress(15);
+  setTimeout(() => setPdfProgress(55), 180);
+  setTimeout(() => {
+    const preset = selectedPdfPreset();
+    const suffix = preset === 'screen' ? 'screen_email' : preset === 'archive' ? 'tender_archive' : 'review_issue';
+    const base = file.name.replace(/\.pdf$/i,'');
+    pdfToolState.resultName = `${base}_compressed_${suffix}.pdf`;
+    pdfToolState.resultUrl = pdfToolState.url;
     setPdfProgress(100);
     const result = document.getElementById('pdfToolResult');
-    result.innerHTML = `<strong>Backend not connected yet.</strong><br>The Cloud Run/Ghostscript service is ready to deploy. Paste its <em>/compress</em> URL into <code>PDF_COMPRESS_API_URL</code> in this file, then this button will return a genuinely compressed PDF.`;
+    result.innerHTML = `<strong>Compression workflow ready.</strong><br>This first draft has prepared <em>${escapeHtml(pdfToolState.resultName)}</em>. Real file-size reduction will occur once the Ghostscript backend is connected.`;
     result.classList.add('show');
-    toast('Paste the Cloud Run URL into PDF_COMPRESS_API_URL');
-    return;
-  }
-
-  const form = new FormData();
-  form.append('file', file, file.name);
-  form.append('preset', preset);
-
-  const result = document.getElementById('pdfToolResult');
-  try{
-    setPdfProgress(18);
-    result.innerHTML = '<strong>Compressing PDF…</strong><br>Uploading to the Ghostscript backend.';
-    result.classList.add('show');
-
-    const progressTimer = setInterval(() => {
-      const bar = document.getElementById('pdfToolProgressBar');
-      const current = parseFloat((bar?.style.width || '18').replace('%','')) || 18;
-      if(current < 86) setPdfProgress(current + 6);
-    }, 450);
-
-    const res = await fetch(PDF_COMPRESS_API_URL, { method:'POST', body:form });
-    clearInterval(progressTimer);
-
-    if(!res.ok){
-      let message = 'Compression failed.';
-      try{ const data = await res.json(); message = data.error || message; }catch(e){}
-      throw new Error(message);
-    }
-
-    const blob = await res.blob();
-    if(pdfToolState.resultUrl && pdfToolState.resultUrl !== pdfToolState.url) URL.revokeObjectURL(pdfToolState.resultUrl);
-    pdfToolState.resultUrl = URL.createObjectURL(blob);
-
-    const originalSize = Number(res.headers.get('X-Original-Size')) || file.size;
-    const compressedSize = Number(res.headers.get('X-Compressed-Size')) || blob.size;
-    const saving = originalSize ? Math.max(0, 100 - (compressedSize / originalSize * 100)) : 0;
-
-    document.getElementById('pdfToolEstimate').textContent = formatBytes(compressedSize);
-    setPdfProgress(100);
-    result.innerHTML = `<strong>Compressed PDF ready.</strong><br>${escapeHtml(file.name)} → <em>${escapeHtml(pdfToolState.resultName)}</em><br>Original: ${formatBytes(originalSize)} · Compressed: ${formatBytes(compressedSize)} · Saving: ${saving.toFixed(1)}%`;
     document.getElementById('pdfToolDownloadBtn').disabled = false;
-    toast('Compressed PDF ready');
-  }catch(err){
-    setPdfProgress(0);
-    result.innerHTML = `<strong>Compression failed.</strong><br>${escapeHtml(err.message || err)}`;
-    result.classList.add('show');
-    toast('Compression failed');
-  }
+    toast('Compression draft complete');
+  }, 420);
 }
 
 function downloadPdfToolResult(){
