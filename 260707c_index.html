@@ -358,26 +358,6 @@
   .pdfMiniBtn{border:1px solid #bbb;background:white;border-radius:4px;padding:3px 5px;font-size:10px;cursor:pointer}
   @media(max-width:1050px){.pdfToolsHero{grid-template-columns:1fr}.pdfToolStats{grid-template-columns:1fr}}
 
-  /* Drawing Workspace v1: PDF viewer + markup + Apple Pencil + calibrated measuring */
-  .pdfWorkspaceShell{display:grid;grid-template-columns:300px minmax(520px,1fr) 330px;gap:14px;min-height:calc(100vh - 220px)}
-  .pdfWorkspacePanel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0}
-  .pdfWorkspacePanel h3{margin:0 0 12px;font-size:16px}
-  .pdfWorkspaceUpload{border:1px dashed #b9ad9d;background:#faf7f1;border-radius:12px;min-height:120px;padding:18px;display:flex;align-items:center;justify-content:center;text-align:center;color:#655;line-height:1.45;cursor:pointer;margin-bottom:12px}
-  .pdfWorkspaceUpload.dragover{background:#fff2d8;border-color:#111}
-  .pdfWorkspaceUpload strong{display:block;color:#111;font-size:18px;font-weight:400;margin-bottom:5px}
-  .toolGroup{border-top:1px solid #eee;padding-top:10px;margin-top:10px}.toolGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-  .toolBtn{border:1px solid #bbb;background:white;border-radius:7px;padding:8px 9px;font-size:11px;cursor:pointer;text-align:left;text-transform:uppercase;letter-spacing:.02em}.toolBtn.active{background:#111;color:#fff;border-color:#111}
-  .workspaceInput{width:100%;border:1px solid #ccc;border-radius:6px;padding:8px;background:#fff;font-size:12px}
-  .workspaceStageWrap{background:#d8d5cf;border:1px solid #bdb7ad;border-radius:12px;overflow:auto;position:relative;min-height:650px;display:flex;align-items:flex-start;justify-content:center;padding:24px}
-  .workspaceStage{position:relative;background:#fff;box-shadow:0 14px 40px rgba(0,0,0,.22);line-height:0;touch-action:none}.workspaceStage canvas{display:block;position:absolute;left:0;top:0;touch-action:none}
-  #pdfWorkspacePdfCanvas{position:relative;z-index:1;background:#fff}#pdfWorkspaceMarkupCanvas{z-index:2}
-  .workspaceTopbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}.workspaceTopbar .btn{padding:7px 9px}
-  .workspaceStatus{font-size:12px;color:#555;line-height:1.45;margin:8px 0}.markList{display:grid;gap:8px;max-height:420px;overflow:auto}
-  .markItem{border:1px solid #e1d8cb;background:#fff;border-radius:8px;padding:8px;font-size:12px;line-height:1.35}.markItem strong{display:block;margin-bottom:3px}.markMeta{color:#666;font-size:11px}
-  .measureReadout{border:1px solid #d9c7a7;background:#fff9eb;border-radius:8px;padding:10px;font-size:12px;line-height:1.45;margin-top:10px;color:#5b451b}.workspaceHint{border:1px solid #cadbc4;background:#f4faf1;border-radius:8px;padding:10px;font-size:12px;line-height:1.45;color:#304b2d;margin-top:10px}
-  @media(max-width:1200px){.pdfWorkspaceShell{grid-template-columns:1fr}.workspaceStageWrap{min-height:520px}.pdfWorkspacePanel{position:static}}
-
-
 </style>
 </head>
 <body>
@@ -941,7 +921,6 @@
       <div class="pdfToolTabs">
         <button class="pdfToolTab active" id="pdfTabCompress" onclick="setPdfToolMode('compress')">Compress</button>
         <button class="pdfToolTab" id="pdfTabCombine" onclick="setPdfToolMode('combine')">Combine PDFs</button>
-        <button class="pdfToolTab" id="pdfTabWorkspace" onclick="setPdfToolMode('workspace')">Drawing Workspace</button>
       </div>
 
       <div class="pdfToolSection active" id="pdfCompressSection">
@@ -1032,30 +1011,6 @@
           </section>
         </div>
       </div>
-
-      <div class="pdfToolSection" id="pdfWorkspaceSection">
-        <div class="pdfWorkspaceShell">
-          <section class="pdfWorkspacePanel">
-            <h3>Open Drawing</h3>
-            <input class="pdfToolInput" id="pdfWorkspaceFile" type="file" accept="application/pdf,.pdf" onchange="handlePdfWorkspaceFile(this.files && this.files[0])">
-            <div class="pdfWorkspaceUpload" id="pdfWorkspaceDrop" onclick="triggerPdfWorkspaceUpload()"><div><strong>Drop a PDF drawing here</strong><span>or choose a file</span><br><small>Markup and measurement are stored as an editable overlay.</small></div></div>
-            <div class="workspaceStatus" id="pdfWorkspaceFileInfo">No drawing loaded.</div>
-            <div class="toolGroup"><h3>Markup</h3><div class="toolGrid">
-              <button class="toolBtn active" id="wsToolPen" onclick="setWorkspaceTool('pen')">Pen</button><button class="toolBtn" id="wsToolHighlighter" onclick="setWorkspaceTool('highlighter')">Highlighter</button><button class="toolBtn" id="wsToolLine" onclick="setWorkspaceTool('line')">Line</button><button class="toolBtn" id="wsToolArrow" onclick="setWorkspaceTool('arrow')">Arrow</button><button class="toolBtn" id="wsToolRect" onclick="setWorkspaceTool('rect')">Rectangle</button><button class="toolBtn" id="wsToolCloud" onclick="setWorkspaceTool('cloud')">Cloud</button><button class="toolBtn" id="wsToolText" onclick="setWorkspaceTool('text')">Text</button><button class="toolBtn" id="wsToolPan" onclick="setWorkspaceTool('pan')">Pan</button>
-            </div></div>
-            <div class="toolGroup"><h3>Measurements</h3><div class="toolGrid">
-              <button class="toolBtn" id="wsToolCalibrate" onclick="setWorkspaceTool('calibrate')">Calibrate</button><button class="toolBtn" id="wsToolMeasure" onclick="setWorkspaceTool('measure')">Length</button><button class="toolBtn" id="wsToolArea" onclick="setWorkspaceTool('area')">Area</button><button class="toolBtn" id="wsToolCount" onclick="setWorkspaceTool('count')">Count</button>
-            </div><label style="font-size:11px;color:#666;display:block;margin-top:10px">Known calibration length in mm</label><input class="workspaceInput" id="wsKnownLength" type="number" value="1000" min="1" step="1"><label style="font-size:11px;color:#666;display:block;margin-top:8px">Or drawing scale</label><select class="workspaceInput" id="wsScaleSelect" onchange="setWorkspaceScaleFromSelect()"><option value="">Use calibration line</option><option value="20">1:20</option><option value="50">1:50</option><option value="100">1:100</option><option value="200">1:200</option></select><div class="measureReadout" id="wsMeasureReadout">Scale not calibrated. Draw a calibration line over a known dimension, or choose a scale.</div></div>
-            <div class="toolGroup"><h3>Actions</h3><div class="toolGrid"><button class="toolBtn" onclick="workspaceUndo()">Undo</button><button class="toolBtn" onclick="workspaceClearPage()">Clear Page</button><button class="toolBtn" onclick="downloadWorkspaceOverlayJson()">Export Overlay</button><button class="toolBtn" onclick="downloadWorkspaceSnapshot()">Snapshot PNG</button></div></div>
-            <div class="workspaceHint"><strong>Apple Pencil ready:</strong> the drawing canvas uses Pointer Events, so pen, touch and mouse all use the same editable markup layer.</div>
-          </section>
-          <section class="pdfWorkspacePanel">
-            <div class="workspaceTopbar"><div class="prototypeActions"><button class="btn" onclick="workspacePrevPage()">‹ Page</button><button class="btn" onclick="workspaceNextPage()">Page ›</button><button class="btn" onclick="workspaceZoom(-0.1)">−</button><button class="btn" onclick="workspaceZoom(0.1)">＋</button></div><div class="workspaceStatus" id="wsPageStatus">No PDF loaded</div></div>
-            <div class="workspaceStageWrap" id="workspaceStageWrap"><div class="workspaceStage" id="workspaceStage" style="display:none"><canvas id="pdfWorkspacePdfCanvas"></canvas><canvas id="pdfWorkspaceMarkupCanvas"></canvas></div><div id="workspaceEmpty" style="align-self:center;color:#777;text-align:center;line-height:1.45">Load a PDF drawing to begin markup and measurement.</div></div>
-          </section>
-          <section class="pdfWorkspacePanel"><h3>Overlay Register</h3><div class="workspaceStatus" id="wsOverlaySummary">No markups yet.</div><div class="markList" id="wsMarkupList"></div><div class="workspaceHint"><strong>Important:</strong> this first draft keeps markups separate from the PDF. That is the right long-term model: editable overlay now, flatten/export later.</div></section>
-        </div>
-      </div>
     </main>
 
 
@@ -1073,8 +1028,6 @@
 <div class="toast" id="toast"></div>
 
 <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script>if(window.pdfjsLib){pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";}</script>
 <script>
 /*
   IMPORTANT:
@@ -3635,24 +3588,19 @@ function sortPdfCombineAlphanumeric(){
 function setupPdfTools(){
   setupPdfCompressDrop();
   setupPdfCombineDrop();
-  setupPdfWorkspaceDrop();
 }
 
 function setPdfToolMode(mode){
-  pdfToolMode = mode === 'combine' ? 'combine' : (mode === 'workspace' ? 'workspace' : 'compress');
+  pdfToolMode = mode === 'combine' ? 'combine' : 'compress';
   document.getElementById('pdfCompressSection')?.classList.toggle('active', pdfToolMode === 'compress');
   document.getElementById('pdfCombineSection')?.classList.toggle('active', pdfToolMode === 'combine');
-  document.getElementById('pdfWorkspaceSection')?.classList.toggle('active', pdfToolMode === 'workspace');
   document.getElementById('pdfTabCompress')?.classList.toggle('active', pdfToolMode === 'compress');
   document.getElementById('pdfTabCombine')?.classList.toggle('active', pdfToolMode === 'combine');
-  document.getElementById('pdfTabWorkspace')?.classList.toggle('active', pdfToolMode === 'workspace');
-  if(pdfToolMode === 'workspace') renderWorkspacePage();
 }
 
 function triggerActivePdfUpload(){
   setupPdfTools();
   if(pdfToolMode === 'combine') triggerPdfCombineUpload();
-  else if(pdfToolMode === 'workspace') triggerPdfWorkspaceUpload();
   else triggerPdfToolUpload();
 }
 
@@ -3819,7 +3767,6 @@ function downloadPdfToolResult(){
 function resetPdfTool(){
   resetPdfCompress();
   resetPdfCombine();
-  resetPdfWorkspace();
 }
 
 function resetPdfCompress(){
@@ -4052,42 +3999,6 @@ function formatBytes(bytes){
   if(n < 1024*1024*1024) return (n/1024/1024).toFixed(1) + ' MB';
   return (n/1024/1024/1024).toFixed(2) + ' GB';
 }
-
-
-/* Drawing Workspace v1: PDF.js rendered base + editable overlay markups/measurements. */
-let workspaceState = {file:null,url:'',pdf:null,page:1,pages:0,zoom:1.15,tool:'pen',marks:{},drawing:false,activePath:[],start:null,temp:null,scaleMmPerPx:null,count:0};
-function workspacePageMarks(){const k=String(workspaceState.page||1);if(!workspaceState.marks[k]) workspaceState.marks[k]=[];return workspaceState.marks[k];}
-function setupPdfWorkspaceDrop(){const drop=document.getElementById('pdfWorkspaceDrop');if(!drop||drop.dataset.bound)return;drop.dataset.bound='1';['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('dragover');}));['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('dragover');}));drop.addEventListener('drop',e=>handlePdfWorkspaceFile(e.dataTransfer.files&&e.dataTransfer.files[0]));}
-function triggerPdfWorkspaceUpload(){setupPdfTools();document.getElementById('pdfWorkspaceFile')?.click();}
-async function handlePdfWorkspaceFile(file){setupPdfTools();if(!file)return;if(file.type!=='application/pdf'&&!file.name.toLowerCase().endsWith('.pdf')){toast('Please choose a PDF drawing');return;}resetPdfWorkspace(false);workspaceState.file=file;workspaceState.url=URL.createObjectURL(file);document.getElementById('pdfWorkspaceFileInfo').textContent=file.name+' · '+formatBytes(file.size);document.getElementById('pdfWorkspaceDrop').innerHTML=`<div><strong>${escapeHtml(file.name)}</strong><span>${formatBytes(file.size)} selected</span><br><small>Use pen, markup, calibration and measurement tools.</small></div>`;try{if(!window.pdfjsLib)throw new Error('PDF.js did not load. Check internet/CDN access.');const buf=await file.arrayBuffer();workspaceState.pdf=await pdfjsLib.getDocument({data:buf}).promise;workspaceState.pages=workspaceState.pdf.numPages;workspaceState.page=1;document.getElementById('workspaceStage').style.display='block';document.getElementById('workspaceEmpty').style.display='none';await renderWorkspacePage();toast('Drawing loaded');}catch(err){alert('Could not open PDF in workspace: '+err.message);}}
-function resetPdfWorkspace(clearInput=true){if(workspaceState.url)URL.revokeObjectURL(workspaceState.url);workspaceState={file:null,url:'',pdf:null,page:1,pages:0,zoom:1.15,tool:'pen',marks:{},drawing:false,activePath:[],start:null,temp:null,scaleMmPerPx:null,count:0};if(clearInput){const i=document.getElementById('pdfWorkspaceFile');if(i)i.value='';}const info=document.getElementById('pdfWorkspaceFileInfo');if(info)info.textContent='No drawing loaded.';const drop=document.getElementById('pdfWorkspaceDrop');if(drop)drop.innerHTML='<div><strong>Drop a PDF drawing here</strong><span>or choose a file</span><br><small>Markup and measurement are stored as an editable overlay.</small></div>';const stage=document.getElementById('workspaceStage');if(stage)stage.style.display='none';const empty=document.getElementById('workspaceEmpty');if(empty)empty.style.display='block';updateWorkspaceUI();}
-async function renderWorkspacePage(){if(!workspaceState.pdf||!document.getElementById('pdfWorkspacePdfCanvas'))return;const page=await workspaceState.pdf.getPage(workspaceState.page);const viewport=page.getViewport({scale:workspaceState.zoom});const pdfCanvas=document.getElementById('pdfWorkspacePdfCanvas');const markupCanvas=document.getElementById('pdfWorkspaceMarkupCanvas');const stage=document.getElementById('workspaceStage');pdfCanvas.width=markupCanvas.width=Math.floor(viewport.width);pdfCanvas.height=markupCanvas.height=Math.floor(viewport.height);pdfCanvas.style.width=markupCanvas.style.width=viewport.width+'px';pdfCanvas.style.height=markupCanvas.style.height=viewport.height+'px';stage.style.width=viewport.width+'px';stage.style.height=viewport.height+'px';const ctx=pdfCanvas.getContext('2d');ctx.clearRect(0,0,pdfCanvas.width,pdfCanvas.height);await page.render({canvasContext:ctx,viewport}).promise;bindWorkspaceCanvas();redrawWorkspaceOverlay();updateWorkspaceUI();}
-function bindWorkspaceCanvas(){const c=document.getElementById('pdfWorkspaceMarkupCanvas');if(!c||c.dataset.bound)return;c.dataset.bound='1';c.addEventListener('pointerdown',workspacePointerDown);c.addEventListener('pointermove',workspacePointerMove);c.addEventListener('pointerup',workspacePointerUp);c.addEventListener('pointercancel',workspacePointerUp);c.addEventListener('dblclick',workspaceDoubleClick);}
-function canvasPoint(e){const c=document.getElementById('pdfWorkspaceMarkupCanvas');const r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*(c.width/r.width),y:(e.clientY-r.top)*(c.height/r.height),pressure:e.pressure||.5};}
-function setWorkspaceTool(tool){workspaceState.tool=tool;['Pen','Highlighter','Line','Arrow','Rect','Cloud','Text','Pan','Calibrate','Measure','Area','Count'].forEach(n=>{const el=document.getElementById('wsTool'+n);if(el)el.classList.toggle('active',n.toLowerCase()===tool);});if(tool==='area')workspaceState.activePath=[];updateWorkspaceUI();}
-function setWorkspaceScaleFromSelect(){const v=Number(document.getElementById('wsScaleSelect')?.value||0);if(!v){workspaceState.scaleMmPerPx=null;updateWorkspaceUI();return;}workspaceState.scaleMmPerPx=(25.4/72/workspaceState.zoom)*v;updateWorkspaceUI();toast('Scale set to 1:'+v);}
-function workspacePointerDown(e){if(!workspaceState.pdf||workspaceState.tool==='pan')return;e.preventDefault();const p=canvasPoint(e);if(workspaceState.tool==='text'){const text=prompt('Markup text');if(text)addWorkspaceMark({type:'text',x:p.x,y:p.y,text});return;}if(workspaceState.tool==='count'){workspaceState.count+=1;addWorkspaceMark({type:'count',x:p.x,y:p.y,label:String(workspaceState.count)});return;}if(workspaceState.tool==='area'){workspaceState.activePath.push(p);redrawWorkspaceOverlay();return;}workspaceState.drawing=true;workspaceState.start=p;workspaceState.activePath=[p];e.target.setPointerCapture(e.pointerId);}
-function workspacePointerMove(e){if(!workspaceState.drawing)return;e.preventDefault();const p=canvasPoint(e);if(workspaceState.tool==='pen'||workspaceState.tool==='highlighter')workspaceState.activePath.push(p);else workspaceState.temp=p;redrawWorkspaceOverlay();drawWorkspaceTemp();}
-function workspacePointerUp(e){if(!workspaceState.drawing)return;const p=canvasPoint(e);const t=workspaceState.tool;let mark=null;if(t==='pen'||t==='highlighter')mark={type:t,points:workspaceState.activePath.slice()};if(t==='line'||t==='arrow'||t==='measure'||t==='calibrate')mark={type:t,x1:workspaceState.start.x,y1:workspaceState.start.y,x2:p.x,y2:p.y};if(t==='rect'||t==='cloud')mark={type:t,x1:workspaceState.start.x,y1:workspaceState.start.y,x2:p.x,y2:p.y};workspaceState.drawing=false;workspaceState.temp=null;workspaceState.activePath=[];workspaceState.start=null;if(mark){if(t==='calibrate'){const known=Number(document.getElementById('wsKnownLength')?.value||0);const px=dist(mark.x1,mark.y1,mark.x2,mark.y2);if(known>0&&px>0){workspaceState.scaleMmPerPx=known/px;toast('Calibration set');}}addWorkspaceMark(mark);}}
-function workspaceDoubleClick(){if(workspaceState.tool!=='area'||workspaceState.activePath.length<3)return;addWorkspaceMark({type:'area',points:workspaceState.activePath.slice()});workspaceState.activePath=[];}
-function addWorkspaceMark(mark){mark.id='M'+Date.now().toString(36);mark.page=workspaceState.page;mark.created=new Date().toISOString();workspacePageMarks().push(mark);redrawWorkspaceOverlay();updateWorkspaceUI();}
-function workspaceUndo(){const marks=workspacePageMarks();marks.pop();redrawWorkspaceOverlay();updateWorkspaceUI();}
-function workspaceClearPage(){if(confirm('Clear all markups on this page?')){workspaceState.marks[String(workspaceState.page)]=[];redrawWorkspaceOverlay();updateWorkspaceUI();}}
-function workspacePrevPage(){if(workspaceState.page>1){workspaceState.page--;renderWorkspacePage();}}
-function workspaceNextPage(){if(workspaceState.pdf&&workspaceState.page<workspaceState.pages){workspaceState.page++;renderWorkspacePage();}}
-function workspaceZoom(delta){workspaceState.zoom=Math.max(.45,Math.min(3,workspaceState.zoom+delta));if(workspaceState.pdf)renderWorkspacePage();}
-function redrawWorkspaceOverlay(){const c=document.getElementById('pdfWorkspaceMarkupCanvas');if(!c)return;const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);workspacePageMarks().forEach(m=>drawWorkspaceMark(ctx,m));if(workspaceState.tool==='area'&&workspaceState.activePath.length)drawPolyline(ctx,workspaceState.activePath,'#111',2,true);}
-function drawWorkspaceTemp(){const c=document.getElementById('pdfWorkspaceMarkupCanvas');if(!c||!workspaceState.start||!workspaceState.temp)return;const ctx=c.getContext('2d');drawWorkspaceMark(ctx,{type:workspaceState.tool,x1:workspaceState.start.x,y1:workspaceState.start.y,x2:workspaceState.temp.x,y2:workspaceState.temp.y,points:workspaceState.activePath});}
-function drawWorkspaceMark(ctx,m){ctx.save();ctx.lineCap='round';ctx.lineJoin='round';ctx.font='16px Arial';if(m.type==='pen')drawPolyline(ctx,m.points,'#d12b1f',2,false);else if(m.type==='highlighter'){ctx.globalAlpha=.32;drawPolyline(ctx,m.points,'#ffd400',12,false);}else if(m.type==='line'||m.type==='measure'||m.type==='calibrate'){drawLine(ctx,m.x1,m.y1,m.x2,m.y2,m.type==='calibrate'?'#1f6f43':'#0b5fad',2,false);labelMeasurement(ctx,m);}else if(m.type==='arrow')drawLine(ctx,m.x1,m.y1,m.x2,m.y2,'#d12b1f',2,true);else if(m.type==='rect')drawRect(ctx,m,'#d12b1f',2);else if(m.type==='cloud')drawCloud(ctx,m);else if(m.type==='text'){ctx.fillStyle='#d12b1f';ctx.fillText(m.text,m.x,m.y);}else if(m.type==='count'){ctx.fillStyle='#111';ctx.beginPath();ctx.arc(m.x,m.y,10,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='12px Arial';ctx.fillText(m.label,m.x,m.y+1);}else if(m.type==='area')drawArea(ctx,m);ctx.restore();}
-function drawPolyline(ctx,pts,colour,width,open){if(!pts||pts.length<1)return;ctx.strokeStyle=colour;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);pts.slice(1).forEach(p=>ctx.lineTo(p.x,p.y));ctx.stroke();}
-function drawLine(ctx,x1,y1,x2,y2,colour,width,arrow){ctx.strokeStyle=colour;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();if(arrow){const a=Math.atan2(y2-y1,x2-x1),l=12;ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-l*Math.cos(a-.45),y2-l*Math.sin(a-.45));ctx.moveTo(x2,y2);ctx.lineTo(x2-l*Math.cos(a+.45),y2-l*Math.sin(a+.45));ctx.stroke();}}
-function drawRect(ctx,m,colour,width){ctx.strokeStyle=colour;ctx.lineWidth=width;ctx.strokeRect(m.x1,m.y1,m.x2-m.x1,m.y2-m.y1);}function drawCloud(ctx,m){const x=Math.min(m.x1,m.x2),y=Math.min(m.y1,m.y2),w=Math.abs(m.x2-m.x1),h=Math.abs(m.y2-m.y1);ctx.strokeStyle='#d12b1f';ctx.lineWidth=2;ctx.setLineDash([10,6]);ctx.strokeRect(x,y,w,h);ctx.setLineDash([]);}function drawArea(ctx,m){const pts=m.points;if(!pts||pts.length<3)return;ctx.globalAlpha=.18;ctx.fillStyle='#0b5fad';ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);pts.slice(1).forEach(p=>ctx.lineTo(p.x,p.y));ctx.closePath();ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle='#0b5fad';ctx.lineWidth=2;ctx.stroke();const c=centroid(pts);ctx.fillStyle='#0b5fad';ctx.font='14px Arial';ctx.fillText(formatArea(m),c.x,c.y);}
-function labelMeasurement(ctx,m){if(m.type!=='measure'&&m.type!=='calibrate')return;const text=m.type==='calibrate'?'Calibration':formatLength(dist(m.x1,m.y1,m.x2,m.y2));ctx.fillStyle='#111';ctx.font='13px Arial';ctx.fillText(text,(m.x1+m.x2)/2+6,(m.y1+m.y2)/2-6);}function dist(x1,y1,x2,y2){return Math.hypot(x2-x1,y2-y1);}function polygonArea(pts){let a=0;for(let i=0;i<pts.length;i++){const p=pts[i],q=pts[(i+1)%pts.length];a+=p.x*q.y-q.x*p.y;}return Math.abs(a/2);}function centroid(pts){return pts.reduce((s,p)=>({x:s.x+p.x/pts.length,y:s.y+p.y/pts.length}),{x:0,y:0});}function formatLength(px){if(!workspaceState.scaleMmPerPx)return Math.round(px)+' px';const mm=px*workspaceState.scaleMmPerPx;return mm>=1000?(mm/1000).toFixed(2)+' m':Math.round(mm)+' mm';}function formatArea(m){if(!workspaceState.scaleMmPerPx)return Math.round(polygonArea(m.points))+' px²';const mm2=polygonArea(m.points)*workspaceState.scaleMmPerPx*workspaceState.scaleMmPerPx;return (mm2/1000000).toFixed(2)+' m²';}
-function updateWorkspaceUI(){const pageStatus=document.getElementById('wsPageStatus');if(pageStatus)pageStatus.textContent=workspaceState.pdf?`Page ${workspaceState.page} / ${workspaceState.pages} · ${Math.round(workspaceState.zoom*100)}%`:'No PDF loaded';const scale=document.getElementById('wsMeasureReadout');if(scale)scale.textContent=workspaceState.scaleMmPerPx?`Calibrated: ${workspaceState.scaleMmPerPx.toFixed(3)} mm per screen pixel at current zoom. Length/area tools will report architectural dimensions.`:'Scale not calibrated. Draw a calibration line over a known dimension, or choose a scale.';const marks=Object.values(workspaceState.marks).flat();const summary=document.getElementById('wsOverlaySummary');if(summary)summary.textContent=marks.length?`${marks.length} overlay item(s) across ${Object.keys(workspaceState.marks).length} page(s). Current tool: ${workspaceState.tool}.`:'No markups yet.';const list=document.getElementById('wsMarkupList');if(list)list.innerHTML=marks.slice().reverse().map(m=>`<div class="markItem"><strong>${escapeHtml(markLabel(m))}</strong><div class="markMeta">Page ${m.page} · ${new Date(m.created).toLocaleString()}</div></div>`).join('')||'<div style="font-size:13px;color:#777;line-height:1.45">Draw with pen, add text/clouds, calibrate, measure length or shade an area. Items will appear here.</div>';}
-function markLabel(m){if(m.type==='measure')return 'Length · '+formatLength(dist(m.x1,m.y1,m.x2,m.y2));if(m.type==='area')return 'Area · '+formatArea(m);if(m.type==='text')return 'Text · '+m.text;if(m.type==='count')return 'Count '+m.label;return m.type.charAt(0).toUpperCase()+m.type.slice(1);}
-function downloadWorkspaceOverlayJson(){if(!workspaceState.file){toast('Load a PDF first');return;}const data={source:workspaceState.file.name,created:new Date().toISOString(),scaleMmPerPx:workspaceState.scaleMmPerPx,marks:workspaceState.marks};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=pdfNaturalName(workspaceState.file.name)+'_overlay.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);}
-function downloadWorkspaceSnapshot(){const pdf=document.getElementById('pdfWorkspacePdfCanvas'),mark=document.getElementById('pdfWorkspaceMarkupCanvas');if(!pdf||!workspaceState.file){toast('Load a PDF first');return;}const out=document.createElement('canvas');out.width=pdf.width;out.height=pdf.height;const ctx=out.getContext('2d');ctx.drawImage(pdf,0,0);ctx.drawImage(mark,0,0);const a=document.createElement('a');a.href=out.toDataURL('image/png');a.download=pdfNaturalName(workspaceState.file.name)+'_page_'+workspaceState.page+'_markup.png';document.body.appendChild(a);a.click();a.remove();}
-
 
 init();
 </script>
