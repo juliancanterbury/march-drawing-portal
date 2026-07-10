@@ -1002,14 +1002,14 @@
       <div class="pdfToolSection" id="pdfCombineSection">
         <div class="pdfToolsHero">
           <section class="protoPanel">
-            <h3>Combine PDFs + Images</h3>
-            <input class="pdfToolInput" id="pdfCombineFiles" type="file" accept="application/pdf,.pdf,image/jpeg,.jpg,.jpeg,image/png,.png" multiple onchange="handlePdfCombineFiles(this.files)">
+            <h3>Combine PDFs</h3>
+            <input class="pdfToolInput" id="pdfCombineFiles" type="file" accept="application/pdf,.pdf" multiple onchange="handlePdfCombineFiles(this.files)">
             <div class="pdfCombineDrop" id="pdfCombineDrop" onclick="triggerPdfCombineUpload()">
-              <div><strong>Drop PDFs, JPGs or PNGs here</strong><span>or choose files from your computer</span><br><small>Each image becomes one PDF page. Drag files to reorder; expand pages to rotate or delete before combining.</small></div>
+              <div><strong>Drop multiple PDFs here</strong><span>or choose files from your computer</span><br><small>Drag files to reorder. Expand pages to rotate or delete before combining.</small></div>
             </div>
 
             <div class="pdfToolStats">
-              <div class="pdfToolStat"><small>Files</small><strong id="pdfCombineCount">0</strong></div>
+              <div class="pdfToolStat"><small>PDFs</small><strong id="pdfCombineCount">0</strong></div>
               <div class="pdfToolStat"><small>Total pages</small><strong id="pdfCombinePages">—</strong></div>
               <div class="pdfToolStat"><small>Input size</small><strong id="pdfCombineSize">—</strong></div>
             </div>
@@ -1028,9 +1028,9 @@
           <section class="protoPanel">
             <h3>Combine order</h3>
             <div id="pdfCombineList" class="pdfCombineList">
-              <div style="color:#777;font-size:13px;line-height:1.45">No files selected yet. Add PDFs, JPGs or PNGs, reorder them, optionally rotate/delete pages, then combine.</div>
+              <div style="color:#777;font-size:13px;line-height:1.45">No PDFs selected yet. Add drawing sheets, reorder them, optionally rotate/delete pages, then combine.</div>
             </div>
-            <div class="pdfToolWarn"><strong>Local processing:</strong> combining and image-to-PDF conversion use PDF-lib in the browser. Files are not sent to Cloud Run for this step. This is the right approach for privacy and cost; OCR/compression still use backend services when needed.</div>
+            <div class="pdfToolWarn"><strong>Local processing:</strong> combining uses PDF-lib in the browser. Files are not sent to Cloud Run for this step. This is the right approach for privacy and cost; OCR/compression still use backend services when needed.</div>
           </section>
         </div>
       </div>
@@ -3853,39 +3853,25 @@ function resetPdfCompress(){
 
 async function handlePdfCombineFiles(files){
   setupPdfTools();
-  const list = Array.from(files || []).filter(f => {
-    if(!f) return false;
-    const name = f.name.toLowerCase();
-    return f.type === 'application/pdf' || name.endsWith('.pdf') ||
-      f.type === 'image/jpeg' || name.endsWith('.jpg') || name.endsWith('.jpeg') ||
-      f.type === 'image/png' || name.endsWith('.png');
-  });
-  if(!list.length){ toast('Choose PDFs, JPGs or PNGs'); return; }
+  const list = Array.from(files || []).filter(f => f && (f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf')));
+  if(!list.length){ toast('Choose one or more PDFs'); return; }
 
   const result = document.getElementById('pdfCombineResult');
-  result.innerHTML = '<strong>Reading files…</strong><br>Checking PDFs and preparing images locally.';
+  result.innerHTML = '<strong>Reading PDFs…</strong><br>Checking page counts locally.';
   result.classList.add('show');
   setPdfCombineProgress(8);
 
   for(const file of list){
     try{
       const bytes = await file.arrayBuffer();
-      const name = file.name.toLowerCase();
-      const isPdf = file.type === 'application/pdf' || name.endsWith('.pdf');
-      const isPng = file.type === 'image/png' || name.endsWith('.png');
-      let pages = 1;
-      if(isPdf){
-        const pdf = await PDFLib.PDFDocument.load(bytes, {ignoreEncryption:true});
-        pages = pdf.getPageCount();
-      }
+      const pdf = await PDFLib.PDFDocument.load(bytes, {ignoreEncryption:true});
+      const pages = pdf.getPageCount();
       pdfCombineState.files.push({
         id:'pdf_' + Date.now() + '_' + Math.random().toString(16).slice(2),
         file,
         bytes,
         name:file.name,
         size:file.size,
-        kind:isPdf ? 'pdf' : 'image',
-        imageType:isPdf ? '' : (isPng ? 'png' : 'jpg'),
         pages,
         rotations:Array(pages).fill(0),
         deleted:Array(pages).fill(false),
@@ -3899,9 +3885,9 @@ async function handlePdfCombineFiles(files){
 
   pdfCombineState.files.sort(comparePdfNamesAlphanumeric);
   setPdfCombineProgress(0);
-  result.innerHTML = '<strong>Files added.</strong><br>PDFs and images have been sorted alphanumerically. Each JPG/PNG will become one page. You can still drag or use ↑ ↓ to adjust manually.';
+  result.innerHTML = '<strong>PDFs added.</strong><br>Files have been sorted alphanumerically by filename / sheet number. You can still drag or use ↑ ↓ to adjust manually.';
   result.classList.add('show');
-  setTimeout(() => result.classList.remove('show'), 3800);
+  setTimeout(() => result.classList.remove('show'), 3200);
   renderPdfCombineList();
 }
 
@@ -3916,7 +3902,7 @@ function renderPdfCombineList(){
   document.getElementById('pdfCombineSize').textContent = totalFiles ? formatBytes(totalSize) : '—';
 
   if(!totalFiles){
-    list.innerHTML = '<div style="color:#777;font-size:13px;line-height:1.45">No files selected yet. Add PDFs, JPGs or PNGs, reorder them, optionally rotate/delete pages, then combine.</div>';
+    list.innerHTML = '<div style="color:#777;font-size:13px;line-height:1.45">No PDFs selected yet. Add drawing sheets, reorder them, optionally rotate/delete pages, then combine.</div>';
     return;
   }
 
@@ -3925,7 +3911,7 @@ function renderPdfCombineList(){
       <div class="pdfCombineHandle" title="Drag to reorder">☰</div>
       <div>
         <h4>${i+1}. ${escapeHtml(f.name)}</h4>
-        <p>${f.kind === 'image' ? 'Image → 1 PDF page' : f.pages + ' page' + (f.pages===1?'':'s')} · ${formatBytes(f.size)} · ${f.deleted.filter(Boolean).length ? f.deleted.filter(Boolean).length + ' deleted' : 'all pages included'}</p>
+        <p>${f.pages} page${f.pages===1?'':'s'} · ${formatBytes(f.size)} · ${f.deleted.filter(Boolean).length ? f.deleted.filter(Boolean).length + ' deleted' : 'all pages included'}</p>
         ${f.expanded ? renderPdfPageGrid(f, i) : ''}
       </div>
       <div class="prototypeActions">
@@ -4009,7 +3995,7 @@ async function combinePdfFiles(){
   const result = document.getElementById('pdfCombineResult');
   try{
     setPdfCombineProgress(12);
-    result.innerHTML = '<strong>Combining files…</strong><br>Copying PDF pages and converting images locally in the browser.';
+    result.innerHTML = '<strong>Combining PDFs…</strong><br>Copying selected pages locally in the browser.';
     result.classList.add('show');
 
     const out = await PDFLib.PDFDocument.create();
@@ -4018,29 +4004,6 @@ async function combinePdfFiles(){
     if(!totalPages) throw new Error('All pages are deleted. Keep at least one page.');
 
     for(const f of pdfCombineState.files){
-      if(f.kind === 'image'){
-        if(f.deleted[0]) continue;
-        const image = f.imageType === 'png' ? await out.embedPng(f.bytes) : await out.embedJpg(f.bytes);
-        let width = image.width;
-        let height = image.height;
-        const rotation = f.rotations[0] || 0;
-        if(rotation === 90 || rotation === 270){
-          const temp = width; width = height; height = temp;
-        }
-        const page = out.addPage([width, height]);
-        if(rotation === 90){
-          page.drawImage(image, {x:width, y:0, width:height, height:width, rotate:PDFLib.degrees(90)});
-        }else if(rotation === 180){
-          page.drawImage(image, {x:width, y:height, width, height, rotate:PDFLib.degrees(180)});
-        }else if(rotation === 270){
-          page.drawImage(image, {x:0, y:height, width:height, height:width, rotate:PDFLib.degrees(270)});
-        }else{
-          page.drawImage(image, {x:0, y:0, width, height});
-        }
-        copied++;
-        setPdfCombineProgress(12 + (copied / totalPages) * 72);
-        continue;
-      }
       const src = await PDFLib.PDFDocument.load(f.bytes, {ignoreEncryption:true});
       for(let i=0; i<f.pages; i++){
         if(f.deleted[i]) continue;
@@ -4061,11 +4024,11 @@ async function combinePdfFiles(){
 
     if(pdfCombineState.resultUrl) URL.revokeObjectURL(pdfCombineState.resultUrl);
     pdfCombineState.resultUrl = URL.createObjectURL(blob);
-    const first = pdfCombineState.files[0].name.replace(/\.(pdf|jpe?g|png)$/i,'');
-    pdfCombineState.resultName = `${first}_combined_${pdfCombineState.files.length}_files.pdf`;
+    const first = pdfCombineState.files[0].name.replace(/\.pdf$/i,'');
+    pdfCombineState.resultName = `${first}_combined_${pdfCombineState.files.length}_pdfs.pdf`;
 
     setPdfCombineProgress(100);
-    result.innerHTML = `<strong>Combined PDF ready.</strong><br>${pdfCombineState.files.length} source file${pdfCombineState.files.length===1?'':'s'} · ${totalPages} page${totalPages===1?'':'s'} · Output: ${formatBytes(blob.size)}<br><button class="btn dark" style="margin-top:10px" onclick="downloadPdfCombineResult()">Download Combined PDF</button>`;
+    result.innerHTML = `<strong>Combined PDF ready.</strong><br>${pdfCombineState.files.length} file${pdfCombineState.files.length===1?'':'s'} · ${totalPages} page${totalPages===1?'':'s'} · Output: ${formatBytes(blob.size)}<br><button class="btn dark" style="margin-top:10px" onclick="downloadPdfCombineResult()">Download Combined PDF</button>`;
     toast('Combined PDF ready');
   }catch(err){
     setPdfCombineProgress(0);
